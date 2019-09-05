@@ -28,6 +28,7 @@ module TSOS {
 
         public init() {
             var sc;
+            var status;
             //
             // Load the command list.
 
@@ -95,6 +96,12 @@ module TSOS {
             sc = new ShellCommand(this.shellMoviequote,
                                   "moviequote",
                                   "- Displays a quote I (the OS) like!");
+            this.commandList[this.commandList.length] = sc;
+
+            //status
+            sc = new ShellCommand(this.shellStatus,
+                                  "status",
+                                  "<string> - Status followed by a string prints the string in the taskbar.");
             this.commandList[this.commandList.length] = sc;
 
             // ps  - list the running processes and their IDs
@@ -225,7 +232,8 @@ module TSOS {
         }
 
         public shellVer(args) {
-            _StdOut.putText(APP_NAME + " version " + APP_VERSION);
+            //_StdOut.putText(APP_NAME + " version " + APP_VERSION);
+            _StdOut.putText("You are using " + APP_NAME + " latest and greatest version!")
         }
 
 
@@ -282,7 +290,7 @@ module TSOS {
                         break;
 
                     case "man":
-                        _StdOut.putText("Man displays a list of helpful information for the topic specified.");
+                        _StdOut.putText("Man followed by a topic displays a list of helpful information for the topic specified.");
                         break;
 
                     case "trace":
@@ -294,7 +302,7 @@ module TSOS {
                          break;
 
                     case "prompt":
-                        _StdOut.putText("Prompt is set.");
+                        _StdOut.putText("Prompt followed by a string will set the prompt.");
                         break;
 
                     case "date":
@@ -306,9 +314,13 @@ module TSOS {
                         break;
 
                     case "moviequote":
-                        _StdOut.putText("OS will a fun movie quote.");
+                        _StdOut.putText("OS will supply a fun movie quote.");
                         break;
-                        
+
+                    case "status":
+                        _StdOut.putText("Type status followed by any sentence you want to have it show up in the taskbar.");
+                        break;
+
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
                 }
@@ -339,6 +351,19 @@ module TSOS {
             } else {
                 _StdOut.putText("Usage: trace <on | off>");
             }
+        }
+
+        //my function to save the status and then print it
+        public shellStatus(args) {
+           if(args.length > 0) { 
+            status = args.value;
+            var x = document.getElementById("divStatus");
+            x.innerHTML = args;
+
+           }
+           else {
+            _StdOut.putText("Usage: status <string> Please supply a string.");
+           }
         }
 
         public shellRot13(args) {

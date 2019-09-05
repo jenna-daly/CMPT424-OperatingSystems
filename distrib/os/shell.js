@@ -23,6 +23,7 @@ var TSOS;
         }
         Shell.prototype.init = function () {
             var sc;
+            var status;
             //
             // Load the command list.
             // ver
@@ -57,6 +58,9 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             //moviequote
             sc = new TSOS.ShellCommand(this.shellMoviequote, "moviequote", "- Displays a quote I (the OS) like!");
+            this.commandList[this.commandList.length] = sc;
+            //status
+            sc = new TSOS.ShellCommand(this.shellStatus, "status", "<string> - Status followed by a string prints the string in the taskbar.");
             this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -178,7 +182,8 @@ var TSOS;
             }
         };
         Shell.prototype.shellVer = function (args) {
-            _StdOut.putText(APP_NAME + " version " + APP_VERSION);
+            //_StdOut.putText(APP_NAME + " version " + APP_VERSION);
+            _StdOut.putText("You are using " + APP_NAME + " latest and greatest version!");
         };
         Shell.prototype.shellHelp = function (args) {
             _StdOut.putText("Commands:");
@@ -224,7 +229,7 @@ var TSOS;
                         _StdOut.putText("Cls clears screen.");
                         break;
                     case "man":
-                        _StdOut.putText("Man displays a list of helpful information for the topic specified.");
+                        _StdOut.putText("Man followed by a topic displays a list of helpful information for the topic specified.");
                         break;
                     case "trace":
                         _StdOut.putText("Trace will turn the OS trace on or off as specified.");
@@ -233,7 +238,7 @@ var TSOS;
                         _StdOut.putText("Rot13 will rotate the given string by 13 places.");
                         break;
                     case "prompt":
-                        _StdOut.putText("Prompt is set.");
+                        _StdOut.putText("Prompt followed by a string will set the prompt.");
                         break;
                     case "date":
                         _StdOut.putText("Displays the date and time.");
@@ -242,7 +247,10 @@ var TSOS;
                         _StdOut.putText("OS will return your location following this command.");
                         break;
                     case "moviequote":
-                        _StdOut.putText("OS will a fun movie quote.");
+                        _StdOut.putText("OS will supply a fun movie quote.");
+                        break;
+                    case "status":
+                        _StdOut.putText("Type status followed by any sentence you want to have it show up in the taskbar.");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
@@ -275,6 +283,17 @@ var TSOS;
             }
             else {
                 _StdOut.putText("Usage: trace <on | off>");
+            }
+        };
+        //my function to save the status and then print it
+        Shell.prototype.shellStatus = function (args) {
+            if (args.length > 0) {
+                status = args.value;
+                var x = document.getElementById("divStatus");
+                x.innerHTML = args;
+            }
+            else {
+                _StdOut.putText("Usage: status <string> Please supply a string.");
             }
         };
         Shell.prototype.shellRot13 = function (args) {

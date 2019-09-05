@@ -39,6 +39,14 @@
 
 <div id="divMain" style="width:100%;">
 
+
+   <!--Task Bar-->
+    <div id="divTaskBar" style="margin-left: 10px; border:3px; padding: 5px; border-style:solid; border-color:#FF0000;">    
+      <script>document.getElementById("divTaskBar").innerHTML ="Date and Time: " + Date();</script>
+   <!--Status to be updated by user--> 
+        <label id="divStatus"> Status </label>
+    </div>
+
    <div id="divButtonBar" style="margin:4px;">
       <input type="button"
              id = "btnStartOS"
@@ -98,6 +106,8 @@
          ></textarea>
       </label>
    </div>
+
+
 </div>
 
 <p class="footerText" style="clear:both;">
