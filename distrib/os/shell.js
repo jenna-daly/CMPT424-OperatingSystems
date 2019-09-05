@@ -89,13 +89,13 @@ var TSOS;
             }
             else {
                 // It's not found, so check for curses and apologies before declaring the command invalid.
-                if (this.curses.indexOf("[" + TSOS.Utils.rot13(cmd) + "]") >= 0) {
+                if (this.curses.indexOf("[" + TSOS.Utils.rot13(cmd) + "]") >= 0) { // Check for curses.
                     this.execute(this.shellCurse);
                 }
-                else if (this.apologies.indexOf("[" + cmd + "]") >= 0) {
+                else if (this.apologies.indexOf("[" + cmd + "]") >= 0) { // Check for apologies.
                     this.execute(this.shellApology);
                 }
-                else {
+                else { // It's just a bad command. {
                     this.execute(this.shellInvalidCommand);
                 }
             }
@@ -196,6 +196,27 @@ var TSOS;
                         _StdOut.putText("Help displays a list of (hopefully) valid commands.");
                         break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
+                    case "ver":
+                        _StdOut.putText("Ver displays the current version being used.");
+                        break;
+                    case "shutdown":
+                        _StdOut.putText("Shutdown will shutdown the OS but not the hardware simulation.");
+                        break;
+                    case "cls":
+                        _StdOut.putText("Cls clears screen.");
+                        break;
+                    case "man":
+                        _StdOut.putText("Man displays a list of helpful information for the topic specified.");
+                        break;
+                    case "trace":
+                        _StdOut.putText("Trace will turn the OS trace on or off as specified.");
+                        break;
+                    case "rot13":
+                        _StdOut.putText("Rot13 will rotate the given string by 13 places.");
+                        break;
+                    case "prompt":
+                        _StdOut.putText("Prompt is set.");
+                        break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
                 }
