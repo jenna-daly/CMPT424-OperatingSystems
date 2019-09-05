@@ -37,7 +37,6 @@ module TSOS {
                                   "- Displays the current version data.");
             this.commandList[this.commandList.length] = sc;
 
-
             // help
             sc = new ShellCommand(this.shellHelp,
                                   "help",
@@ -78,6 +77,24 @@ module TSOS {
             sc = new ShellCommand(this.shellPrompt,
                                   "prompt",
                                   "<string> - Sets the prompt.");
+            this.commandList[this.commandList.length] = sc;
+
+            //date
+            sc = new ShellCommand(this.shellDate,
+                                  "date",
+                                  "- Displays the current date and time");
+            this.commandList[this.commandList.length] = sc;
+
+            //whereami
+            sc = new ShellCommand(this.shellWhereami,
+                                  "whereami",
+                                  "- Displays your current location");
+            this.commandList[this.commandList.length] = sc;
+
+            //moviequote
+            sc = new ShellCommand(this.shellMoviequote,
+                                  "moviequote",
+                                  "- Displays a quote I (the OS) like!");
             this.commandList[this.commandList.length] = sc;
 
             // ps  - list the running processes and their IDs
@@ -212,7 +229,6 @@ module TSOS {
         }
 
 
-
         public shellHelp(args) {
             _StdOut.putText("Commands:");
             for (var i in _OsShell.commandList) {
@@ -231,6 +247,18 @@ module TSOS {
         public shellCls(args) {
             _StdOut.clearScreen();
             _StdOut.resetXY();
+        }
+
+        public shellDate(args) {
+            _StdOut.putText("Current date: " + new Date());
+        }
+
+        public shellWhereami(args) {
+            _StdOut.putText("On Earth staring at a computer");
+        }
+
+        public shellMoviequote(args) {
+            _StdOut.putText("Ah Ah Ah, You didn't say the magic word- Computer in Jurassic Park");
         }
 
         public shellMan(args) {
@@ -269,6 +297,18 @@ module TSOS {
                         _StdOut.putText("Prompt is set.");
                         break;
 
+                    case "date":
+                        _StdOut.putText("Displays the date and time.");
+                        break;
+
+                    case "whereami":
+                        _StdOut.putText("OS will return your location following this command.");
+                        break;
+
+                    case "moviequote":
+                        _StdOut.putText("OS will a fun movie quote.");
+                        break;
+                        
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
                 }

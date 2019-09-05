@@ -49,6 +49,15 @@ var TSOS;
             // prompt <string>
             sc = new TSOS.ShellCommand(this.shellPrompt, "prompt", "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
+            //date
+            sc = new TSOS.ShellCommand(this.shellDate, "date", "- Displays the current date and time");
+            this.commandList[this.commandList.length] = sc;
+            //whereami
+            sc = new TSOS.ShellCommand(this.shellWhereami, "whereami", "- Displays your current location");
+            this.commandList[this.commandList.length] = sc;
+            //moviequote
+            sc = new TSOS.ShellCommand(this.shellMoviequote, "moviequote", "- Displays a quote I (the OS) like!");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -188,6 +197,15 @@ var TSOS;
             _StdOut.clearScreen();
             _StdOut.resetXY();
         };
+        Shell.prototype.shellDate = function (args) {
+            _StdOut.putText("Current date: " + new Date());
+        };
+        Shell.prototype.shellWhereami = function (args) {
+            _StdOut.putText("On Earth staring at a computer");
+        };
+        Shell.prototype.shellMoviequote = function (args) {
+            _StdOut.putText("Ah Ah Ah, You didn't say the magic word- Computer in Jurassic Park");
+        };
         Shell.prototype.shellMan = function (args) {
             if (args.length > 0) {
                 var topic = args[0];
@@ -216,6 +234,15 @@ var TSOS;
                         break;
                     case "prompt":
                         _StdOut.putText("Prompt is set.");
+                        break;
+                    case "date":
+                        _StdOut.putText("Displays the date and time.");
+                        break;
+                    case "whereami":
+                        _StdOut.putText("OS will return your location following this command.");
+                        break;
+                    case "moviequote":
+                        _StdOut.putText("OS will a fun movie quote.");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
