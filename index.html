@@ -44,7 +44,7 @@
     <div id="divTaskBar" style="margin-left: 10px; border:3px; padding: 5px; border-style:solid; border-color:#FF0000;">    
       <script>document.getElementById("divTaskBar").innerHTML ="Date and Time: " + Date();</script>
    <!--Status to be updated by user--> 
-        <label id="divStatus"> Status </label>
+        <label id="divStatus"> | Status </label>
     </div>
 
    <div id="divButtonBar" style="margin:4px;">
@@ -75,7 +75,7 @@
              onclick="TSOS.Control.hostBtnReset_click(this);">
    </div>
 
-   <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left;">
+   <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left; overflow-y: scroll;">
       <canvas id="display"
               width="500px"
               height="500px"

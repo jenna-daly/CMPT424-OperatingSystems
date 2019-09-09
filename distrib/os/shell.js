@@ -149,6 +149,13 @@ var TSOS;
             }
             return retVal;
         };
+        Shell.prototype.scroll = function () {
+            var c = document.getElementById("display");
+            var ctx = c.getContext("2d");
+            var imgData = ctx.getImageData(10, 10, 530, 500);
+            ctx.clearRect(0, 0, 500, 500);
+            ctx.putImageData(imgData, 0, 0);
+        };
         //
         // Shell Command Functions.  Kinda not part of Shell() class exactly, but
         // called from here, so kept here to avoid violating the law of least astonishment.
@@ -290,7 +297,7 @@ var TSOS;
             if (args.length > 0) {
                 status = args.value;
                 var x = document.getElementById("divStatus");
-                x.innerHTML = args;
+                x.innerHTML = "| Status " + args;
             }
             else {
                 _StdOut.putText("Usage: status <string> Please supply a string.");
@@ -312,6 +319,13 @@ var TSOS;
             else {
                 _StdOut.putText("Usage: prompt <string>  Please supply a string.");
             }
+        };
+        Shell.prototype.backspace = function (event) {
+            //var keyCode = params[0];
+            //var key = event.keyCode;
+            var key = event.keyCode;
+            if (key == 8)
+                alert("backspace");
         };
         return Shell;
     }());

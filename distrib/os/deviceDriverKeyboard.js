@@ -62,6 +62,40 @@ var TSOS;
                 (keyCode == 32) || // space
                 (keyCode == 13)) { // enter
                 chr = String.fromCharCode(keyCode);
+                if (isShifted) {
+                    switch (keyCode) {
+                        case 48:
+                            chr = ")";
+                            break;
+                        case 49:
+                            chr = "!";
+                            break;
+                        case 50:
+                            chr = "@";
+                            break;
+                        case 51:
+                            chr = "#";
+                            break;
+                        case 52:
+                            chr = "$";
+                            break;
+                        case 53:
+                            chr = "%";
+                            break;
+                        case 54:
+                            chr = "^";
+                            break;
+                        case 55:
+                            chr = "&";
+                            break;
+                        case 56:
+                            chr = "*";
+                            break;
+                        case 57:
+                            chr = "(";
+                            break;
+                    }
+                }
                 _KernelInputQueue.enqueue(chr);
             }
         };
