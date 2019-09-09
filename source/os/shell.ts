@@ -105,6 +105,12 @@ module TSOS {
                                   "<string> - Status followed by a string prints the string in the taskbar.");
             this.commandList[this.commandList.length] = sc;
 
+            //BSOD
+            sc = new ShellCommand(this.shellPark,
+                                  "park",
+                                  "- Type at your own risk");
+            this.commandList[this.commandList.length] = sc;
+
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -280,6 +286,17 @@ module TSOS {
             _StdOut.putText("Ah Ah Ah, You didn't say the magic word- Computer in Jurassic Park");
         }
 
+        public shellPark(args) {
+           var BSOD = <HTMLCanvasElement>  document.getElementById("BSOD");
+           var c = <HTMLCanvasElement> document.getElementById("display");
+           var ctx = c.getContext("2d");
+           ctx.clearRect(0, 0, 500, 500);
+           ctx.drawImage(BSOD, 10, 0);
+           _Kernel.krnShutdown();
+           //_StdOut.putText("Coming soon");
+           
+        }
+
         public shellMan(args) {
             if (args.length > 0) {
                 var topic = args[0];
@@ -330,6 +347,10 @@ module TSOS {
 
                     case "status":
                         _StdOut.putText("Type status followed by any sentence you want to have it show up in the taskbar.");
+                        break;
+
+                    case "park":
+                        _StdOut.putText("Once more.. type for your own peril.");
                         break;
 
                     default:

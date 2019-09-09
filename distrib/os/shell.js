@@ -62,6 +62,9 @@ var TSOS;
             //status
             sc = new TSOS.ShellCommand(this.shellStatus, "status", "<string> - Status followed by a string prints the string in the taskbar.");
             this.commandList[this.commandList.length] = sc;
+            //BSOD
+            sc = new TSOS.ShellCommand(this.shellPark, "park", "- Type at your own risk");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -218,6 +221,15 @@ var TSOS;
         Shell.prototype.shellMoviequote = function (args) {
             _StdOut.putText("Ah Ah Ah, You didn't say the magic word- Computer in Jurassic Park");
         };
+        Shell.prototype.shellPark = function (args) {
+            var BSOD = document.getElementById("BSOD");
+            var c = document.getElementById("display");
+            var ctx = c.getContext("2d");
+            ctx.clearRect(0, 0, 500, 500);
+            ctx.drawImage(BSOD, 10, 0);
+            _Kernel.krnShutdown();
+            //_StdOut.putText("Coming soon");
+        };
         Shell.prototype.shellMan = function (args) {
             if (args.length > 0) {
                 var topic = args[0];
@@ -258,6 +270,9 @@ var TSOS;
                         break;
                     case "status":
                         _StdOut.putText("Type status followed by any sentence you want to have it show up in the taskbar.");
+                        break;
+                    case "park":
+                        _StdOut.putText("Once more.. type for your own peril.");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
