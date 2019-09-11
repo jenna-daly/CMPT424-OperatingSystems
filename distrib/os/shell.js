@@ -24,6 +24,7 @@ var TSOS;
         Shell.prototype.init = function () {
             var sc;
             var status;
+            var statusOne;
             //
             // Load the command list.
             // ver
@@ -152,13 +153,13 @@ var TSOS;
             }
             return retVal;
         };
-        Shell.prototype.scroll = function () {
-            var c = document.getElementById("display");
-            var ctx = c.getContext("2d");
-            var imgData = ctx.getImageData(10, 10, 530, 500);
-            ctx.clearRect(0, 0, 500, 500);
-            ctx.putImageData(imgData, 0, 0);
-        };
+        //public scroll() {
+        //  var c = <HTMLCanvasElement> document.getElementById("display");
+        //   var ctx = c.getContext("2d");
+        //   var imgData = ctx.getImageData(10, 10, 530, 500);
+        //   ctx.clearRect(0, 0, 500, 500);
+        //   ctx.putImageData(imgData, 0, 0);
+        //}
         //
         // Shell Command Functions.  Kinda not part of Shell() class exactly, but
         // called from here, so kept here to avoid violating the law of least astonishment.
@@ -218,9 +219,11 @@ var TSOS;
         Shell.prototype.shellWhereami = function (args) {
             _StdOut.putText("On Earth staring at a computer");
         };
+        //prints out a movie quoute as a feature
         Shell.prototype.shellMoviequote = function (args) {
             _StdOut.putText("Ah Ah Ah, You didn't say the magic word- Computer in Jurassic Park");
         };
+        //when park is typed, show image as BSOD simulation
         Shell.prototype.shellPark = function (args) {
             var BSOD = document.getElementById("BSOD");
             var c = document.getElementById("display");
@@ -310,9 +313,13 @@ var TSOS;
         //my function to save the status and then print it
         Shell.prototype.shellStatus = function (args) {
             if (args.length > 0) {
-                status = args.value;
+                //status = args.value;
+                status = " ";
                 var x = document.getElementById("divStatus");
-                x.innerHTML = "| Status " + args;
+                for (var i = 0; i < args.length; i++) {
+                    status += args[i] + " ";
+                }
+                x.innerHTML = "| Status " + status;
             }
             else {
                 _StdOut.putText("Usage: status <string> Please supply a string.");

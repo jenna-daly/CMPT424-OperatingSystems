@@ -30,6 +30,7 @@ module TSOS {
         public init() {
             var sc;
             var status;
+            var statusOne;
             //
             // Load the command list.
 
@@ -206,14 +207,14 @@ module TSOS {
         }
 
 
-        public scroll() {
-           var c = <HTMLCanvasElement> document.getElementById("display");
-           var ctx = c.getContext("2d");
+        //public scroll() {
+        //  var c = <HTMLCanvasElement> document.getElementById("display");
+        //   var ctx = c.getContext("2d");
 
-           var imgData = ctx.getImageData(10, 10, 530, 500);
-           ctx.clearRect(0, 0, 500, 500);
-           ctx.putImageData(imgData, 0, 0);
-        }
+        //   var imgData = ctx.getImageData(10, 10, 530, 500);
+        //   ctx.clearRect(0, 0, 500, 500);
+        //   ctx.putImageData(imgData, 0, 0);
+        //}
 
         //
         // Shell Command Functions.  Kinda not part of Shell() class exactly, but
@@ -282,10 +283,12 @@ module TSOS {
             _StdOut.putText("On Earth staring at a computer");
         }
 
+        //prints out a movie quoute as a feature
         public shellMoviequote(args) {
             _StdOut.putText("Ah Ah Ah, You didn't say the magic word- Computer in Jurassic Park");
         }
 
+        //when park is typed, show image as BSOD simulation
         public shellPark(args) {
            var BSOD = <HTMLCanvasElement>  document.getElementById("BSOD");
            var c = <HTMLCanvasElement> document.getElementById("display");
@@ -388,9 +391,13 @@ module TSOS {
         //my function to save the status and then print it
         public shellStatus(args) {
            if(args.length > 0) { 
-            status = args.value;
+            //status = args.value;
+            status = " ";
             var x = document.getElementById("divStatus");
-            x.innerHTML = "| Status " + args;
+            for(let i =0; i < args.length; i++) {
+              status += args[i] + " ";
+            }
+            x.innerHTML = "| Status " + status;
 
            }
            else {

@@ -83,6 +83,14 @@ var TSOS;
                 _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                 _FontHeightMargin;
             // TODO: Handle scrolling. (iProject 1)
+            if (this.currentYPosition > 500) {
+                var c = document.getElementById("display");
+                var ctx = c.getContext("2d");
+                var imgData = ctx.getImageData(0, 10, 530, 530);
+                this.clearScreen();
+                //ctx.clearRect(0, 0, 500, 500);
+                ctx.putImageData(imgData, 0, 0);
+            }
         };
         return Console;
     }());
