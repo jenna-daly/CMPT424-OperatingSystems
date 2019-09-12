@@ -206,16 +206,6 @@ module TSOS {
             return retVal;
         }
 
-
-        //public scroll() {
-        //  var c = <HTMLCanvasElement> document.getElementById("display");
-        //   var ctx = c.getContext("2d");
-
-        //   var imgData = ctx.getImageData(10, 10, 530, 500);
-        //   ctx.clearRect(0, 0, 500, 500);
-        //   ctx.putImageData(imgData, 0, 0);
-        //}
-
         //
         // Shell Command Functions.  Kinda not part of Shell() class exactly, but
         // called from here, so kept here to avoid violating the law of least astonishment.

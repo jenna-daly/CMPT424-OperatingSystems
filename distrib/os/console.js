@@ -86,10 +86,17 @@ var TSOS;
             if (this.currentYPosition > 500) {
                 var c = document.getElementById("display");
                 var ctx = c.getContext("2d");
-                var imgData = ctx.getImageData(0, 10, 530, 530);
+                //var imgData = ctx.getImageData(0, this.currentFontSize, 530, 530);
+                //this.clearScreen();
+                //ctx.putImageData(imgData, 0, 0);
+                var imgData = ctx.getImageData(0, 0, c.width, c.height);
                 this.clearScreen();
-                //ctx.clearRect(0, 0, 500, 500);
-                ctx.putImageData(imgData, 0, 0);
+                ctx.putImageData(imgData, 0, -(_DefaultFontSize +
+                    _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                    _FontHeightMargin));
+                this.currentYPosition -= (_DefaultFontSize +
+                    _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                    _FontHeightMargin);
             }
         };
         return Console;

@@ -91,10 +91,21 @@ module TSOS {
                 var c = <HTMLCanvasElement> document.getElementById("display");
                 var ctx = c.getContext("2d");
 
-                var imgData = ctx.getImageData(0, 10, 530, 530);
+                //var imgData = ctx.getImageData(0, this.currentFontSize, 530, 530);
+                //this.clearScreen();
+                //ctx.putImageData(imgData, 0, 0);
+                
+                //to get scroll working, instead of capturing what the canvas doesn't display, I capture
+                //all of the canvas, then clear the screen and move the data up and subtract out where //the current y is so that it can fit and the original data does not show, then move //back the current y to the bottom
+                var imgData = ctx.getImageData(0, 0, c.width, c.height);
                 this.clearScreen();
-                //ctx.clearRect(0, 0, 500, 500);
-                ctx.putImageData(imgData, 0, 0);
+                ctx.putImageData(imgData, 0, -(_DefaultFontSize + 
+                                     _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                                     _FontHeightMargin));
+                this.currentYPosition -= (_DefaultFontSize + 
+                                     _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                                     _FontHeightMargin);
+   
             }
         }
     }
