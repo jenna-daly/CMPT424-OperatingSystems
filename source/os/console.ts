@@ -66,18 +66,15 @@ module TSOS {
                 }
 
                 //autocomplete: I compare the letters typed by the user to the commands and on a new
-                //line, output commands that start w the entry. I use 2 for loops and then save all 
-                //commands in a string to then print 
+                //line, output commands that start w the entry. I compare using substring and then save //all commands in a string to then print and reset the buffer.
                 else if(chr === String.fromCharCode(9)) {
                  var possibleCommands = "";
                    for(let i =0; i <  _OsShell.commandList.length; i++) {
-                      for(let j=0; j< this.buffer.length; j++) {
-                        if(_OsShell.commandList[i].command.charAt(j) === this.buffer.charAt(j)) {
+                       if(_OsShell.commandList[i].command.substring(0, this.buffer.length) === this.buffer.substring(0,this.buffer.length)) {
                           possibleCommands += " " + _OsShell.commandList[i].command;
                           
-                      }         
+                       }         
                     }
-                  }
                   this.advanceLine();
                   this.putText(possibleCommands);
                   this.advanceLine();
