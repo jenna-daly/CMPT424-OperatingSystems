@@ -187,7 +187,7 @@ var TSOS;
         };
         Shell.prototype.shellVer = function (args) {
             //_StdOut.putText(APP_NAME + " version " + APP_VERSION);
-            _StdOut.putText("You are using " + APP_NAME + " latest and greatest version!");
+            _StdOut.putText("You are using the latest and greatest version of Jurassic OS!");
         };
         Shell.prototype.shellHelp = function (args) {
             _StdOut.putText("Commands:");

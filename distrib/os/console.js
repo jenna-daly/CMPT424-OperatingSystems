@@ -45,6 +45,43 @@ var TSOS;
                     // ... and reset our buffer.
                     this.buffer = "";
                 }
+                //handle backspace by saving input-1 to buffer when backspace event occurs
+                //then we need to print the new string, but first we need to hide or clear the previously
+                //entered text, so I clearRect from x = 0, y = the y position and the margin minus //additional font info, then width of x pos, and height of the font size and margin
+                else if (chr === String.fromCharCode(8)) {
+                    var newStr;
+                    var oldStr = this.buffer;
+                    newStr = oldStr.substring(0, oldStr.length - 1);
+                    this.buffer = newStr;
+                    _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);
+                    //the final step is to put back the cursor where we left off and reprint the string
+                    this.currentXPosition = 0;
+                    this.putText(">" + newStr);
+                }
+                //autocomplete: I compare the letters typed by the user to the commands and on a new
+                //line, output commands that start w the entry. I use 2 for loops and then save all 
+                //commands in a string to then print 
+                else if (chr === String.fromCharCode(9)) {
+                    var possibleCommands = "";
+                    for (var i = 0; i < _OsShell.commandList.length; i++) {
+                        for (var j = 0; j < this.buffer.length; j++) {
+                            if (_OsShell.commandList[i].command.charAt(j) === this.buffer.charAt(j)) {
+                                possibleCommands += " " + _OsShell.commandList[i].command;
+                            }
+                        }
+                    }
+                    this.advanceLine();
+                    this.putText(possibleCommands);
+                    this.advanceLine();
+                    this.putText(">");
+                    possibleCommands = "";
+                    this.buffer = "";
+                }
+                //if(_OsShell.commandList[i].command.includes(this.buffer)) {
+                //if(_OsShell.commandList[i].command.search(this.buffer) != -1 ) {
+                else if (chr === String.fromCharCode(38)) {
+                    alert("test");
+                }
                 else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -89,6 +126,8 @@ var TSOS;
                 //var imgData = ctx.getImageData(0, this.currentFontSize, 530, 530);
                 //this.clearScreen();
                 //ctx.putImageData(imgData, 0, 0);
+                //to get scroll working, instead of capturing what the canvas doesn't display, I capture
+                //all of the canvas, then clear the screen and move the data up and subtract out where //the current y is so that it can fit and the original data does not show, then move //back the current y to the bottom
                 var imgData = ctx.getImageData(0, 0, c.width, c.height);
                 this.clearScreen();
                 ctx.putImageData(imgData, 0, -(_DefaultFontSize +

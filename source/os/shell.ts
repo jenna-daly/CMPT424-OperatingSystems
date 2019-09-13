@@ -241,7 +241,7 @@ module TSOS {
 
         public shellVer(args) {
             //_StdOut.putText(APP_NAME + " version " + APP_VERSION);
-            _StdOut.putText("You are using " + APP_NAME + " latest and greatest version!")
+            _StdOut.putText("You are using the latest and greatest version of Jurassic OS!")
         }
 
 

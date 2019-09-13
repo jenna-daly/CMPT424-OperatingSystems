@@ -33,15 +33,23 @@
    <!-- Uncomment the line below to enable GLaDOS testing. -->
    <script type="text/javascript" src="http://alanclasses.github.io/TSOS/test/glados-ip0.js"></script>
    
+
+   <!--<style type = "text/css">
+     body {
+      background-image: url("Background.jpg");
+      background-size: cover;
+     }
+   </style>-->
+
 </head>
 
 <body onload="onDocumentLoad()">
 
 <div id="divMain" style="width:100%;">
 
-
+<h1 style="text-align: center; color: white; background-color: black;"> Jurassic OS </h1>
    <!--Task Bar-->
-    <div id="divTaskBar" style="margin-left: 10px; border:3px; padding: 5px; border-style:solid; border-color:#FF0000;">    
+    <div id="divTaskBar" style="margin-left: 10px; border:3px; padding: 5px; border-style:solid; border-color:#FF0000; color: white;">    
       <script>document.getElementById("divTaskBar").innerHTML ="Date and Time: " + Date();</script>
    <!--Status to be updated by user--> 
         <label id="divStatus"> | Status </label>
@@ -87,8 +95,8 @@
       </canvas>
    </div>
 
-   <div id="divLog" style="margin-left:520px;">
-      <label>
+   <div id="divLog" style="margin-left:520px; color: white;">
+      <label style="background-color: black;">
          Host Log
          <br>
          <textarea name="taHostLog"
@@ -99,8 +107,8 @@
       </label>
    </div>
 
-   <div id="divUserProgramInput" style="margin-left:520px;">
-      <label>
+   <div id="divUserProgramInput" style="margin-left:520px; color: white;">
+      <label style="background-color: black;">
          User Program Input
          <br>
          <textarea name="taProgramInput"
@@ -114,7 +122,7 @@
 
 </div>
 
-<p class="footerText" style="clear:both;">
+<p class="footerText" style="clear:both; color: white;">
    <br>
    Copyright &copy; 2008 - 2016 No Rights Reserved.
    <br>
