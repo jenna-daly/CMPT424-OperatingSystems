@@ -64,7 +64,10 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellStatus, "status", "<string> - Status followed by a string prints the string in the taskbar.");
             this.commandList[this.commandList.length] = sc;
             //BSOD
-            sc = new TSOS.ShellCommand(this.shellPark, "park", "- Type at your own risk");
+            sc = new TSOS.ShellCommand(this.shellPark, "park", "- Type at your own risk.");
+            this.commandList[this.commandList.length] = sc;
+            //load command
+            sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Validates input- only hex digits and spaces allowed.");
             this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -226,6 +229,29 @@ var TSOS;
             _Kernel.krnShutdown();
             //_StdOut.putText("Coming soon");
         };
+        //validates user input
+        Shell.prototype.shellLoad = function (args) {
+            var validateText = document.getElementById("taProgramInput").value;
+            var allowedChars = [' ', 'a', 'b', 'c', 'd', 'e', 'f', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            var isValid = false;
+            for (var i = 0; i < validateText.length; i++) {
+                if (allowedChars.indexOf(validateText[i]) > -1) {
+                    isValid = true;
+                    //_StdOut.putText("Input is allowed.");
+                }
+                else {
+                    isValid = false;
+                    //_StdOut.putText("Input is not valid. Use only hex digits and spaces.");
+                    break;
+                }
+            }
+            if (isValid == true) {
+                _StdOut.putText("Input is allowed.");
+            }
+            else {
+                _StdOut.putText("Input is not valid. Use only hex digits and spaces.");
+            }
+        };
         Shell.prototype.shellMan = function (args) {
             if (args.length > 0) {
                 var topic = args[0];
@@ -269,6 +295,9 @@ var TSOS;
                         break;
                     case "park":
                         _StdOut.putText("Once more.. type for your own peril.");
+                        break;
+                    case "load":
+                        _StdOut.putText("OS will validate input. Allows hex digits and spaces only.");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
@@ -334,13 +363,6 @@ var TSOS;
             else {
                 _StdOut.putText("Usage: prompt <string>  Please supply a string.");
             }
-        };
-        Shell.prototype.backspace = function (event) {
-            //var keyCode = params[0];
-            //var key = event.keyCode;
-            var key = event.keyCode;
-            if (key == 8)
-                alert("backspace");
         };
         return Shell;
     }());

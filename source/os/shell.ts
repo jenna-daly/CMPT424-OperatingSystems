@@ -109,7 +109,13 @@ module TSOS {
             //BSOD
             sc = new ShellCommand(this.shellPark,
                                   "park",
-                                  "- Type at your own risk");
+                                  "- Type at your own risk.");
+            this.commandList[this.commandList.length] = sc;
+
+            //load command
+            sc = new ShellCommand(this.shellLoad,
+                                  "load",
+                                  "- Validates input- only hex digits and spaces allowed.");
             this.commandList[this.commandList.length] = sc;
 
             // ps  - list the running processes and their IDs
@@ -280,14 +286,41 @@ module TSOS {
 
         //when park is typed, show image as BSOD simulation
         public shellPark(args) {
-           var BSOD = <HTMLCanvasElement>  document.getElementById("BSOD");
-           var c = <HTMLCanvasElement> document.getElementById("display");
-           var ctx = c.getContext("2d");
-           ctx.clearRect(0, 0, 500, 500);
-           ctx.drawImage(BSOD, 10, 0);
-           _Kernel.krnShutdown();
-           //_StdOut.putText("Coming soon");
+            var BSOD = <HTMLCanvasElement>  document.getElementById("BSOD");
+            var c = <HTMLCanvasElement> document.getElementById("display");
+            var ctx = c.getContext("2d");
+            ctx.clearRect(0, 0, 500, 500);
+            ctx.drawImage(BSOD, 10, 0);
+            _Kernel.krnShutdown();
+            //_StdOut.putText("Coming soon");
            
+        }
+
+        //validates user input
+        public shellLoad(args) {
+            var validateText = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
+            var allowedChars = [' ', 'a', 'b', 'c', 'd', 'e', 'f', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            let isValid: boolean = false;
+            for(let i=0; i< validateText.length; i++) {
+                if(allowedChars.indexOf(validateText[i]) > -1 ) {
+                    isValid = true;
+                    //_StdOut.putText("Input is allowed.");
+                }
+                else {
+                    isValid = false;
+                    //_StdOut.putText("Input is not valid. Use only hex digits and spaces.");
+                    break;
+                }
+
+
+            }
+
+            if(isValid == true) {
+                _StdOut.putText("Input is allowed.");
+            }
+            else{
+                _StdOut.putText("Input is not valid. Use only hex digits and spaces.");
+            }
         }
 
         public shellMan(args) {
@@ -344,6 +377,10 @@ module TSOS {
 
                     case "park":
                         _StdOut.putText("Once more.. type for your own peril.");
+                        break;
+
+                    case "load":
+                        _StdOut.putText("OS will validate input. Allows hex digits and spaces only.");
                         break;
 
                     default:
@@ -411,13 +448,6 @@ module TSOS {
             } else {
                 _StdOut.putText("Usage: prompt <string>  Please supply a string.");
             }
-       }
-
-        public backspace(event) {
-            //var keyCode = params[0];
-            //var key = event.keyCode;
-            var key = event.keyCode;
-            if(key == 8) alert("backspace");
        }
         
     }
