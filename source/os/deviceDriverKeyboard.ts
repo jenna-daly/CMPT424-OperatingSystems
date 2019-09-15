@@ -51,7 +51,8 @@ module TSOS {
                         (keyCode == 13)                     ||   // enter 
                         (keyCode == 8)                      ||   // backspace
                         (keyCode == 9)                      ||   //tab
-                        (keyCode == 38)) {                       //up arrow            
+                        (keyCode == 38)                     ||   //up arrow
+                        (keyCode ==40)) {                        //down arrow            
  
                 chr = String.fromCharCode(keyCode);
 

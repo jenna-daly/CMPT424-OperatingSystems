@@ -10,17 +10,24 @@
 var TSOS;
 (function (TSOS) {
     var Console = /** @class */ (function () {
-        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer) {
+        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer, 
+        //creating an empty array to save all commands in for command history
+        //and a var to hold the index
+        recallHistory, arrow) {
             if (currentFont === void 0) { currentFont = _DefaultFontFamily; }
             if (currentFontSize === void 0) { currentFontSize = _DefaultFontSize; }
             if (currentXPosition === void 0) { currentXPosition = 0; }
             if (currentYPosition === void 0) { currentYPosition = _DefaultFontSize; }
             if (buffer === void 0) { buffer = ""; }
+            if (recallHistory === void 0) { recallHistory = []; }
+            if (arrow === void 0) { arrow = 0; }
             this.currentFont = currentFont;
             this.currentFontSize = currentFontSize;
             this.currentXPosition = currentXPosition;
             this.currentYPosition = currentYPosition;
             this.buffer = buffer;
+            this.recallHistory = recallHistory;
+            this.arrow = arrow;
         }
         Console.prototype.init = function () {
             this.clearScreen();
@@ -42,6 +49,8 @@ var TSOS;
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
+                    this.recallHistory.push(this.buffer);
+                    this.arrow = this.recallHistory.length;
                     // ... and reset our buffer.
                     this.buffer = "";
                 }
@@ -74,10 +83,25 @@ var TSOS;
                     possibleCommands = "";
                     this.buffer = "";
                 }
-                //if(_OsShell.commandList[i].command.includes(this.buffer)) {
-                //if(_OsShell.commandList[i].command.search(this.buffer) != -1 ) {
+                //the next two else ifs deal with the up and down arrow to get our history
+                //the buffers are not collectively saved, so I made an array to save them when
+                //the user presses enter and then I reference them from the top and decrement
+                //for up arrow, and add when the down arrow is triggered
                 else if (chr === String.fromCharCode(38)) {
-                    alert("test");
+                    if (this.arrow > 0) {
+                        _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);
+                        this.buffer = this.recallHistory[--this.arrow];
+                        this.currentXPosition = 0;
+                        this.putText(">" + this.buffer);
+                    }
+                }
+                else if (chr === String.fromCharCode(40)) {
+                    if ((this.recallHistory.length - 1) > this.arrow) {
+                        _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);
+                        this.buffer = this.recallHistory[++this.arrow];
+                        this.currentXPosition = 0;
+                        this.putText(">" + this.buffer);
+                    }
                 }
                 else {
                     // This is a "normal" character, so ...

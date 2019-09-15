@@ -17,7 +17,11 @@ module TSOS {
                     public currentFontSize = _DefaultFontSize,
                     public currentXPosition = 0,
                     public currentYPosition = _DefaultFontSize,
-                    public buffer = "") {
+                    public buffer = "",
+                    //creating an empty array to save all commands in for command history
+                    //and a var to hold the index
+                    public recallHistory = [],
+                    public arrow = 0) {
         }
 
         public init(): void {
@@ -43,8 +47,14 @@ module TSOS {
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
+                   
+                    this.recallHistory.push(this.buffer);
+                    this.arrow = this.recallHistory.length;
+
                     // ... and reset our buffer.
+
                     this.buffer = "";
+
                 } 
 
                 //handle backspace by saving input-1 to buffer when backspace event occurs
@@ -60,7 +70,6 @@ module TSOS {
 
                    //the final step is to put back the cursor where we left off and reprint the string
                    this.currentXPosition = 0;
-
                    this.putText(">" + newStr);
                 
                 }
@@ -83,11 +92,33 @@ module TSOS {
                   this.buffer="";
                 }
 
-                     //if(_OsShell.commandList[i].command.includes(this.buffer)) {
-                     //if(_OsShell.commandList[i].command.search(this.buffer) != -1 ) {
-
+                //the next two else ifs deal with the up and down arrow to get our history
+                //the buffers are not collectively saved, so I made an array to save them when
+                //the user presses enter and then I reference them from the top and decrement
+                //for up arrow, and add when the down arrow is triggered
                 else if(chr === String.fromCharCode(38)) {
-                  alert("test");
+                  if(this.arrow > 0) {
+                     _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize +  _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +_FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);
+
+                     this.buffer = this.recallHistory[--this.arrow];
+
+                     this.currentXPosition = 0;
+                     this.putText(">" + this.buffer);
+                    
+                  }
+                }
+
+                else if(chr === String.fromCharCode(40)) {
+                   if((this.recallHistory.length - 1) > this.arrow) {
+                      _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize +  _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +_FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);
+
+                      this.buffer = this.recallHistory[++this.arrow];
+
+                      this.currentXPosition = 0;
+                      this.putText(">" + this.buffer);
+
+                   }
+
                 }
 
                 else {
