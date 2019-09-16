@@ -95,6 +95,7 @@ var TSOS;
                         this.putText(">" + this.buffer);
                     }
                 }
+                //down arrow for command history
                 else if (chr === String.fromCharCode(40)) {
                     if ((this.recallHistory.length - 1) > this.arrow) {
                         _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);

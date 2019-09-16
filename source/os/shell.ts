@@ -300,6 +300,8 @@ module TSOS {
         public shellLoad(args) {
             var validateText = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
             var allowedChars = [' ', 'a', 'b', 'c', 'd', 'e', 'f', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            //note: tried to use regex var allowedChars = /[a-fA-F0-9]/; however could not figure out //what to use instead of indexOf, so I am leaving the manual array.. will look into it to
+            //clear up the code
             let isValid: boolean = false;
             for(let i=0; i< validateText.length; i++) {
                 if(allowedChars.indexOf(validateText[i].toLowerCase()) > -1 ) {
@@ -417,20 +419,23 @@ module TSOS {
 
         //my function to save the status and then print it
         public shellStatus(args) {
-           if(args.length > 0) { 
-            //status = args.value;
-            status = " ";
-            var x = document.getElementById("divStatus");
-            for(let i =0; i < args.length; i++) {
-              status += args[i] + " ";
-            }
-            x.innerHTML = "| Status " + status;
+            if(args.length > 0) { 
+                //status = args.value;
+                status = " ";
+                var x = document.getElementById("divStatus");
+                for(let i =0; i < args.length; i++) {
+                    status += args[i] + " ";
+                }
+                x.innerHTML = "| Status " + status;
 
-           }
-           else {
-            _StdOut.putText("Usage: status <string> Please supply a string.");
+            }
+            else {
+                _StdOut.putText("Usage: status <string> Please supply a string.");
            }
         }
+
+        //line wrap implementation
+        //public lineWrap() {  }
 
 
         public shellRot13(args) {

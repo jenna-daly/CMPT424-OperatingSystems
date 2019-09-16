@@ -233,6 +233,8 @@ var TSOS;
         Shell.prototype.shellLoad = function (args) {
             var validateText = document.getElementById("taProgramInput").value;
             var allowedChars = [' ', 'a', 'b', 'c', 'd', 'e', 'f', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            //note: tried to use regex var allowedChars = /[a-fA-F0-9]/; however could not figure out //what to use instead of indexOf, so I am leaving the manual array.. will look into it to
+            //clear up the code
             var isValid = false;
             for (var i = 0; i < validateText.length; i++) {
                 if (allowedChars.indexOf(validateText[i].toLowerCase()) > -1) {
@@ -347,6 +349,8 @@ var TSOS;
                 _StdOut.putText("Usage: status <string> Please supply a string.");
             }
         };
+        //line wrap implementation
+        //public lineWrap() {  }
         Shell.prototype.shellRot13 = function (args) {
             if (args.length > 0) {
                 // Requires Utils.ts for rot13() function.

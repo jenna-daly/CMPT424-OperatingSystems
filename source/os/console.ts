@@ -61,35 +61,35 @@ module TSOS {
                 //then we need to print the new string, but first we need to hide or clear the previously
                 //entered text, so I clearRect from x = 0, y = the y position and the margin minus //additional font info, then width of x pos, and height of the font size and margin
                 else if(chr === String.fromCharCode(8)) {
-                   var newStr;
-                   var oldStr = this.buffer;
-                   newStr = oldStr.substring(0, oldStr.length - 1);
-                   this.buffer = newStr;
+                    var newStr;
+                    var oldStr = this.buffer;
+                    newStr = oldStr.substring(0, oldStr.length - 1);
+                    this.buffer = newStr;
                    
-                   _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize +  _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +_FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);
+                    _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize +  _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +_FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);
 
-                   //the final step is to put back the cursor where we left off and reprint the string
-                   this.currentXPosition = 0;
-                   this.putText(">" + newStr);
+                    //the final step is to put back the cursor where we left off and reprint the string
+                    this.currentXPosition = 0;
+                    this.putText(">" + newStr);
                 
                 }
 
                 //autocomplete: I compare the letters typed by the user to the commands and on a new
                 //line, output commands that start w the entry. I compare using substring and then save //all commands in a string to then print and reset the buffer.
                 else if(chr === String.fromCharCode(9)) {
-                 var possibleCommands = "";
-                   for(let i =0; i <  _OsShell.commandList.length; i++) {
-                       if(_OsShell.commandList[i].command.substring(0, this.buffer.length) === this.buffer.substring(0,this.buffer.length)) {
-                          possibleCommands += " " + _OsShell.commandList[i].command;
+                    var possibleCommands = "";
+                    for(let i =0; i <  _OsShell.commandList.length; i++) {
+                        if(_OsShell.commandList[i].command.substring(0, this.buffer.length) === this.buffer.substring(0,this.buffer.length)) {
+                            possibleCommands += " " + _OsShell.commandList[i].command;
                           
-                       }         
+                        }         
                     }
-                  this.advanceLine();
-                  this.putText(possibleCommands);
-                  this.advanceLine();
-                  this.putText(">");
-                  possibleCommands="";
-                  this.buffer="";
+                    this.advanceLine();
+                    this.putText(possibleCommands);
+                    this.advanceLine();
+                    this.putText(">");
+                    possibleCommands="";
+                    this.buffer="";
                 }
 
                 //the next two else ifs deal with the up and down arrow to get our history
@@ -97,25 +97,26 @@ module TSOS {
                 //the user presses enter and then I reference them from the top and decrement
                 //for up arrow, and add when the down arrow is triggered
                 else if(chr === String.fromCharCode(38)) {
-                  if(this.arrow > 0) {
-                     _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize +  _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +_FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);
+                    if(this.arrow > 0) {
+                        _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize +  _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +_FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);
 
-                     this.buffer = this.recallHistory[--this.arrow];
+                        this.buffer = this.recallHistory[--this.arrow];
 
-                     this.currentXPosition = 0;
-                     this.putText(">" + this.buffer);
+                        this.currentXPosition = 0;
+                        this.putText(">" + this.buffer);
                     
-                  }
+                    }
                 }
 
+                //down arrow for command history
                 else if(chr === String.fromCharCode(40)) {
-                   if((this.recallHistory.length - 1) > this.arrow) {
-                      _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize +  _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +_FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);
+                    if((this.recallHistory.length - 1) > this.arrow) {
+                        _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize +  _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +_FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);
 
-                      this.buffer = this.recallHistory[++this.arrow];
+                        this.buffer = this.recallHistory[++this.arrow];
 
-                      this.currentXPosition = 0;
-                      this.putText(">" + this.buffer);
+                        this.currentXPosition = 0;
+                        this.putText(">" + this.buffer);
 
                    }
 
@@ -142,11 +143,14 @@ module TSOS {
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
             //         Consider fixing that.
             if (text !== "") {
+
+
                 // Draw the text at the current X and Y coordinates.
                 _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
                 // Move the current X position.
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
                 this.currentXPosition = this.currentXPosition + offset;
+
             }
          }
 
@@ -173,7 +177,7 @@ module TSOS {
                 
                 //to get scroll working, instead of capturing what the canvas doesn't display, I capture
                 //all of the canvas, then clear the screen and move the data up and subtract out where //the current y is so that it can fit and the original data does not show, then move //back the current y to the bottom
-
+ 
                 var imgData = ctx.getImageData(0, 0, c.width, c.height);
                 this.clearScreen();
                 ctx.putImageData(imgData, 0, -(_DefaultFontSize + 
