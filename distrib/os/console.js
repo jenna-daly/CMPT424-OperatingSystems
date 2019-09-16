@@ -90,7 +90,8 @@ var TSOS;
                 else if (chr === String.fromCharCode(38)) {
                     if (this.arrow > 0) {
                         _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);
-                        this.buffer = this.recallHistory[--this.arrow];
+                        this.arrow = this.arrow - 1;
+                        this.buffer = this.recallHistory[this.arrow];
                         this.currentXPosition = 0;
                         this.putText(">" + this.buffer);
                     }
@@ -99,7 +100,8 @@ var TSOS;
                 else if (chr === String.fromCharCode(40)) {
                     if ((this.recallHistory.length - 1) > this.arrow) {
                         _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);
-                        this.buffer = this.recallHistory[++this.arrow];
+                        this.arrow = this.arrow + 1;
+                        this.buffer = this.recallHistory[this.arrow];
                         this.currentXPosition = 0;
                         this.putText(">" + this.buffer);
                     }
@@ -131,6 +133,31 @@ var TSOS;
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
             //         Consider fixing that.
             if (text !== "") {
+                /*var words = text.split(' ');
+                var oneLine = '';
+                var c = <HTMLCanvasElement> document.getElementById("display");
+                var ctx = c.getContext("2d");
+
+                for(let i=0; i<words.length; i++) {
+                    var fitLine = oneLine + words[i];
+                    var getWidth = ctx.measureText(fitLine);
+                    var newWidth = getWidth.width;
+                    if(newWidth > 500) {
+                        ctx.fillText(fitLine, this.currentXPosition, this.currentYPosition);
+                        this.currentYPosition += _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                        _FontHeightMargin;
+                        if(i<words.length-1) {
+                            _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                            _FontHeightMargin;
+                            fitLine = ' ' + words[i];
+                        }
+                    }
+                    else{
+                        oneLine = fitLine;
+                        _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize +  _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +_FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);
+                        ctx.fillText(fitLine, this.currentXPosition, this.currentYPosition);
+                    }
+                }*/
                 // Draw the text at the current X and Y coordinates.
                 _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
                 // Move the current X position.
