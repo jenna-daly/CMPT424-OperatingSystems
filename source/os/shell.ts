@@ -291,20 +291,18 @@ module TSOS {
             var ctx = c.getContext("2d");
             ctx.clearRect(0, 0, 500, 500);
             ctx.drawImage(BSOD, 10, 0);
-            _Kernel.krnShutdown();
-            //_StdOut.putText("Coming soon");
-           
+            _Kernel.krnShutdown();           
         }
 
         //validates user input
         public shellLoad(args) {
             var validateText = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
-            var allowedChars = [' ', 'a', 'b', 'c', 'd', 'e', 'f', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            var allowedChars = [' ', 'a', 'b', 'c', 'd', 'e', 'f', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
             //note: tried to use regex var allowedChars = /[a-fA-F0-9]/; however could not figure out //what to use instead of indexOf, so I am leaving the manual array.. will look into it to
             //clear up the code
             let isValid: boolean = false;
             for(let i=0; i< validateText.length; i++) {
-                if(allowedChars.indexOf(validateText[i].toLowerCase()) > -1 ) {
+                if(allowedChars.indexOf(validateText[i]) > -1 ) {
                     isValid = true;
                     //_StdOut.putText("Input is allowed.");
                 }
@@ -420,7 +418,6 @@ module TSOS {
         //my function to save the status and then print it
         public shellStatus(args) {
             if(args.length > 0) { 
-                //status = args.value;
                 status = " ";
                 var x = document.getElementById("divStatus");
                 for(let i =0; i < args.length; i++) {
@@ -433,10 +430,6 @@ module TSOS {
                 _StdOut.putText("Usage: status <string> Please supply a string.");
            }
         }
-
-        //line wrap implementation
-        //public lineWrap() {  }
-
 
         public shellRot13(args) {
             if (args.length > 0) {
