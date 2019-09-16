@@ -119,6 +119,14 @@ module TSOS {
                         this.putText(">" + this.buffer);
 
                    }
+                   //else leave an empty input
+                    else{
+                        _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize +  _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +_FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);
+
+                        this.currentXPosition = 0;
+                        this.buffer="";
+                        this.putText(">");
+                   }
 
                 }
 
@@ -143,7 +151,6 @@ module TSOS {
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
             //         Consider fixing that.
             if (text !== "") {
-
 
                 // Draw the text at the current X and Y coordinates.
                 _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);

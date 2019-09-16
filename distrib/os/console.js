@@ -103,6 +103,13 @@ var TSOS;
                         this.currentXPosition = 0;
                         this.putText(">" + this.buffer);
                     }
+                    //else leave an empty input
+                    else {
+                        _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);
+                        this.currentXPosition = 0;
+                        this.buffer = "";
+                        this.putText(">");
+                    }
                 }
                 else {
                     // This is a "normal" character, so ...
