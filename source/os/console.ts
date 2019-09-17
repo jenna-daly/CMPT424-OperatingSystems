@@ -152,40 +152,36 @@ module TSOS {
             //
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
             //         Consider fixing that.
+
             if (text !== "") {
+                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+                var oneLine = "";
+                var testWidth = 0;
+                var i=0;
 
+                if(this.currentXPosition + offset > 490) {
+                    while(testWidth < 480) {
+                        oneLine = text.substring(0,i);
+                        testWidth = _DrawingContext.measureText(this.currentFont, this.currentFontSize, oneLine);
 
-                /*var words = text.split(' ');
-                var oneLine = '';
-                var c = <HTMLCanvasElement> document.getElementById("display");
-                var ctx = c.getContext("2d");
-
-                for(let i=0; i<words.length; i++) {
-                    var fitLine = oneLine + words[i];
-                    var getWidth = ctx.measureText(fitLine);
-                    var newWidth = getWidth.width;
-                    if(newWidth > 500) {
-                        ctx.fillText(fitLine, this.currentXPosition, this.currentYPosition);
-                        this.currentYPosition += _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
-                        _FontHeightMargin;
-                        if(i<words.length-1) {
-                            _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
-                            _FontHeightMargin;
-                            fitLine = ' ' + words[i];
+                        if(testWidth > 480) {
+                            _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, oneLine);
+                            this.advanceLine();
+                            this.putText(text.substring(i));
                         }
-                    }
-                    else{
-                        oneLine = fitLine;
-                        _DrawingContext.clearRect(0, this.currentYPosition + _FontHeightMargin - (_DefaultFontSize +  _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +_FontHeightMargin), this.currentXPosition, this.currentFontSize + _FontHeightMargin);
-                        ctx.fillText(fitLine, this.currentXPosition, this.currentYPosition);
-                    }
-                }*/
+                        else{
+                            i=i+1;
+                        }
+                    }   
+                }
+                  
+                else {
                 // Draw the text at the current X and Y coordinates.
                 _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
                 // Move the current X position.
-                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
                 this.currentXPosition = this.currentXPosition + offset;
-
+                    
+                }
             }
          }
 
