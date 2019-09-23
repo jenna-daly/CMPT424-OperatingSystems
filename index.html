@@ -15,7 +15,9 @@
    <script type="text/javascript" src="distrib/host/control.js"></script>
    <script type="text/javascript" src="distrib/host/devices.js"></script>
    <script type="text/javascript" src="distrib/host/cpu.js"></script>
-
+   <script type="text/javascript" src="distrib/host/memory.js"></script>
+   <script type="text/javascript" src="distrib/host/memoryAccessor.js"></script>
+   
    <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
    <script type="text/javascript" src="distrib/os/interrupt.js"></script>
    <script type="text/javascript" src="distrib/os/canvastext.js"></script>
@@ -101,7 +103,33 @@
          <br>
          <textarea name="taHostLog"
                    id  ="taHostLog"
-                   rows="26"
+                   rows="12"
+                   cols="48"
+         ></textarea>
+      </label>
+   </div>
+   
+   <div id="divMemory" style="float: right; margin-right: 200px; color: white;">
+      <label style="background-color: black;">
+         Memory
+         <br>
+         <!--<textarea name="taMemory"
+                   id  ="taMemory"
+                   rows="8"
+                   cols="48"
+         ></textarea>-->
+      </label>
+      <table name = "taMemory" id= "taMemory"></table>
+
+   </div>
+
+   <div id="divPCB" style="float: right; margin-right: 200px; color: white;">
+      <label style="background-color: black;">
+         PCB
+         <br>
+         <textarea name="taPCB"
+                   id  ="taPCB"
+                   rows="8"
                    cols="48"
          ></textarea>
       </label>
@@ -119,6 +147,17 @@
       </label>
    </div>
 
+   <div id="divCPU" style="margin-left:520px; color: white;">
+      <label style="background-color: black;">
+         CPU
+         <br>
+         <textarea name="taCPU"
+                   id  ="taCPU"
+                   rows="8"
+                   cols="48"
+         ></textarea>
+      </label>
+   </div>
 
 </div>
 
