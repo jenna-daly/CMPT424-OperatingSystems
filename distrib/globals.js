@@ -54,6 +54,8 @@ var _Memory;
 var _MemoryAccessor;
 //	Software	(OS)	
 var _MemoryManager = null;
+//var memorysize = 
+//use in display and global
 var onDocumentLoad = function () {
     TSOS.Control.hostInit();
 };

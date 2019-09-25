@@ -47,7 +47,10 @@ module TSOS {
             switch(opcode) {
                 //load the accumulator w a constant
                 case "A9":
-
+                    this.PC += 2;
+                    this.Acc = this.Acc;
+                    this.Yreg = this.Yreg;
+                    this.Zflag = this.Zflag;
                     break;
                 //load the accumulator from memory
                 case "AD":

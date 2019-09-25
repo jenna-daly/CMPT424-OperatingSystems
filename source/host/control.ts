@@ -55,6 +55,9 @@ module TSOS {
                 _GLaDOS = new Glados();
                 _GLaDOS.init();
             }
+            _Memory = new Memory();
+            _Memory.init();
+            this.memoryLog();
         }
 
         public static hostLog(msg: string, source: string = "?"): void {
@@ -74,6 +77,24 @@ module TSOS {
             // TODO in the future: Optionally update a log database or some streaming service.
         }
 
+        //seems like writing to the html elements happens here. I created an array initialized to 0's, now I want to print it
+        //using this function
+        public static memoryLog() {
+            var accessMemory = document.getElementById("taMemory");
+            var containMem = "";
+            var maxRowCount = 8; //8 memory spaces across
+            var memoryLocation = 0; //increment memory index w this var
+
+            for(let i=0; i < (256/8); i++) {
+                containMem += "<tr>";
+                for(let j=0; j< maxRowCount; j++) {
+                    containMem += "<td>" + _Memory.memoryArray[memoryLocation] + "</td>"; 
+                    memoryLocation = memoryLocation + 1;
+                }
+                containMem += "</tr>";
+            }
+            accessMemory.innerHTML = containMem;
+        }
 
         //
         // Host Events

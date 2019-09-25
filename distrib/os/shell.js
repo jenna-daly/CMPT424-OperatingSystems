@@ -247,7 +247,8 @@ var TSOS;
                 }
             }
             if (isValid == true) {
-                _StdOut.putText("Input is allowed.");
+                _StdOut.putText("Program loaded successfuly with PID 0.");
+                _Kernel.updateMemory();
             }
             else {
                 _StdOut.putText("Input is not valid. Use only hex digits and spaces.");
