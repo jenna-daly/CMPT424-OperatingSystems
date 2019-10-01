@@ -72,8 +72,12 @@ var	_MemoryAccessor:	TSOS.MemoryAccessor;
 //	Software	(OS)	
 var	_MemoryManager:	any	=	null;	
 
-//var memorysize = 
-//use in display and global
+//one place to store memory size
+var _MemorySize = 256;
+
+//var to assign unique PID
+var _PID: number = 0;
+
 
 var onDocumentLoad = function() {
 	TSOS.Control.hostInit();

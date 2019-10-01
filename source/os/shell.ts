@@ -22,6 +22,7 @@ module TSOS {
         public commandList = [];
         public curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
         public apologies = "[sorry]";
+        public PID = 0;
 
         constructor() {
 
@@ -116,6 +117,12 @@ module TSOS {
             sc = new ShellCommand(this.shellLoad,
                                   "load",
                                   "- Validates input- only hex digits and spaces allowed.");
+            this.commandList[this.commandList.length] = sc;
+
+            //load command
+            sc = new ShellCommand(this.shellRun,
+                                  "run",
+                                  "<pid> - runs program as specified by pid.");
             this.commandList[this.commandList.length] = sc;
 
             // ps  - list the running processes and their IDs
@@ -315,12 +322,26 @@ module TSOS {
             }
 
             if(isValid == true) {
-                _StdOut.putText("Program loaded successfuly with PID 0.");
-                _Kernel.updateMemory();
+                _StdOut.putText("Program loaded successfuly with PID " + _PID);
+                //_Kernel.updateMemory();
+                //_Kernel.accessCPU();
+                TSOS.Control.updateMemory();
+                TSOS.Control.accessCPU();
+                TSOS.Control.accessPCB();
+                _PID += 1;
+            
             }
             else{
                 _StdOut.putText("Input is not valid. Use only hex digits and spaces.");
             }
+        }
+
+        public shellRun(args) {
+            //_StdOut.putText("Coming soon"); 
+            _CPU.cycle();
+            TSOS.Control.accessCPU();
+            TSOS.Control.accessPCB();
+
         }
 
         public shellMan(args) {
@@ -381,6 +402,10 @@ module TSOS {
 
                     case "load":
                         _StdOut.putText("OS will validate input. Allows hex digits and spaces only.");
+                        break;
+
+                    case "run":
+                        _StdOut.putText("Program will run as specified by pid.");
                         break;
 
                     default:

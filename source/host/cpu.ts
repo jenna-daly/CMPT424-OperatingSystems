@@ -43,24 +43,28 @@ module TSOS {
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
-           /* var opcode = ;
+            var validInput = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
+            var newInput = validInput.split(" ");
+            var i = 0;
+            
+            var opcode = newInput[i];
             switch(opcode) {
                 //load the accumulator w a constant
                 case "A9":
                     this.PC += 2;
-                    this.Acc = this.Acc;
-                    this.Yreg = this.Yreg;
-                    this.Zflag = this.Zflag;
+                    this.Acc = parseInt(newInput[i+1]);
                     break;
                 //load the accumulator from memory
-                case "AD":
+                /*case "AD":
 
                     break;
                 //store the accumulator in memory
                 case "8D":
 
                     break;
-            }*/
+                default:
+                    _OsShell.putPrompt();*/
+            }
 
             //else call an error to isr and write it to the console
         }

@@ -1,5 +1,7 @@
 ///<reference path="../globals.ts" />
 ///<reference path="../os/canvastext.ts" />
+///<reference path="../os/PCB.ts" />
+
 
 /* ------------
      Control.ts
@@ -85,7 +87,7 @@ module TSOS {
             var maxRowCount = 8; //8 memory spaces across
             var memoryLocation = 0; //increment memory index w this var
 
-            for(let i=0; i < (256/8); i++) {
+            for(let i=0; i < (_MemorySize/8); i++) {
                 containMem += "<tr>";
                 for(let j=0; j< maxRowCount; j++) {
                     containMem += "<td>" + _Memory.memoryArray[memoryLocation] + "</td>"; 
@@ -95,6 +97,65 @@ module TSOS {
             }
             accessMemory.innerHTML = containMem;
         }
+
+        public static updateMemory() {
+            var validate = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
+            //code to put into memory the user entered op codes
+            var space = " ";
+            var newString = "";
+            for(let i =0; i< validate.length; i++) {
+                if(space.indexOf(validate[i]) < 0) {
+                    newString += validate[i]; 
+                }
+            }
+        
+            //this loop breaks my code.. so I need to figure out how to store the newString in an array or else I can use substring
+            /*for(let i=0; i< _MemorySize; i+2) {
+                _Memory.memoryArray[i] = newString.substring(i, i+2);
+            }*/
+    
+            var accessMemory = document.getElementById("taMemory");
+          
+            var containMem = "";
+            var maxRowCount = 8; //8 memory spaces across
+            var memoryLocation = 0; //increment memory index w this var
+            var s = 0; //substring indexing
+                                    
+            for(let i=0; i < (_MemorySize/8); i++) {
+                containMem += "<tr>";
+                for(let j=0; j< maxRowCount; j++) {
+                    containMem += "<td>" + newString.substring(s,s+2) + "</td>"; 
+                    memoryLocation = memoryLocation + 1;
+                    s = s +2;
+                    }
+                containMem += "</tr>";
+                }
+                accessMemory.innerHTML = containMem;
+      
+            }
+    
+
+        //PCB
+        public static accessPCB() {
+            var accessBlock = document.getElementById("taPCB");
+            var containPCB = "<th>PID</th><th>State</th><th>PC</th><th>IR</th><th>Acc</th><th>X Reg</th><th>Y Reg</th><th>Z Flag</th></tr>";
+            //for iProject2 there is only one loaded process, so I am just making a loop once, for the next project I will need the loop to go furthur
+            for(let i=0; i<1; i++) {
+                containPCB += "<tr><td>" + _PID + "</td></tr>";
+            }
+            accessBlock.innerHTML = containPCB;
+        }
+
+        //CPU
+        public static accessCPU() {
+            var accessCPU = document.getElementById("taCPU");
+            var containCPU = "<th>PC</th><th>IR</th><th>Acc</th><th>X Reg</th><th>Y Reg</th><th>Z Flag</th></tr>"
+            for(let i = 0; i < 1; i++){
+                containCPU += "<tr><td>" + _CPU.PC + "</td><td>" + _CPU.Acc + "</td><td>" + "Acc </td><td>" + _CPU.Xreg + "</td><td>" + _CPU.Yreg + "</td><td>" + _CPU.Zflag + "</td></tr>";
+            }
+            accessCPU.innerHTML = containCPU;
+        }
+
 
         //
         // Host Events

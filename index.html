@@ -129,11 +129,16 @@
       <label style="background-color: black;">
          PCB
          <br>
-         <textarea name="taPCB"
-                   id  ="taPCB"
-                   rows="8"
-                   cols="48"
-         ></textarea>
+         <table name = "taPCB" id = "taPCB" style="display: block; height: 100px; background: #000; border: 1px solid white; overflow-y: scroll"><tr>
+            <th>PID</th>
+            <th>State</th>
+            <th>PC</th>
+            <th>IR</th>
+            <th>Acc</th>
+            <th>X Reg</th>
+            <th>Y Reg</th>
+            <th>Z Flag</th>
+         </tr></table>
       </label>
    </div>
 
@@ -153,11 +158,22 @@
       <label style="background-color: black;">
          CPU
          <br>
-         <textarea name="taCPU"
-                   id  ="taCPU"
-                   rows="8"
-                   cols="48"
-         ></textarea>
+         <table name = "taCPU" id = "taCPU" style="display: block; height: 100px; background: #000; border: 1px solid white; overflow-y: scroll"><tr>
+               <th>PC</th>
+               <th>IR</th>
+               <th>Acc</th>
+               <th>X Reg</th>
+               <th>Y Reg</th>
+               <th>Z Flag</th>
+            </tr>
+         <tr>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+         </tr></table>
       </label>
    </div>
 

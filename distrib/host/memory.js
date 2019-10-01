@@ -10,7 +10,7 @@ var TSOS;
         }
         Memory.prototype.init = function () {
             //set up array
-            for (var i = 0; i < 256; i++) {
+            for (var i = 0; i < _MemorySize; i++) {
                 this.memoryArray[i] = "00";
             }
         };

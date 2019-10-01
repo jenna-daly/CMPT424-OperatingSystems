@@ -13,7 +13,7 @@ module TSOS {
 
     public init(): void {
         //set up array
-        for(let i=0; i < 256; i++) {
+        for(let i=0; i < _MemorySize; i++) {
             this.memoryArray[i]= "00";
         }
       }  
