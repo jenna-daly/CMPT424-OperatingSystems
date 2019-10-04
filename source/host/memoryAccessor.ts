@@ -10,11 +10,16 @@ module TSOS {
 
         }  
 
-    public getMemory(loc){      
+    //get memory at position loc
+    public getMemory(loc){ 
+        //console.log(_Memory.memoryArray[1] + "loc");     
         return _Memory.memoryArray[loc];
+        
     }
 
-    public setMemory(){
+    //making a function to write memory
+    public setMemory(loc, posNow){
+        _Memory.memoryArray[loc] = _Memory.memoryArray[posNow]; 
 
     }
 

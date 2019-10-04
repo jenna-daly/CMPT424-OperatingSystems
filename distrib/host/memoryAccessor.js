@@ -5,10 +5,14 @@ var TSOS;
     var MemoryAccessor = /** @class */ (function () {
         function MemoryAccessor() {
         }
+        //get memory at position loc
         MemoryAccessor.prototype.getMemory = function (loc) {
+            //console.log(_Memory.memoryArray[1] + "loc");     
             return _Memory.memoryArray[loc];
         };
-        MemoryAccessor.prototype.setMemory = function () {
+        //making a function to write memory
+        MemoryAccessor.prototype.setMemory = function (loc, posNow) {
+            _Memory.memoryArray[loc] = _Memory.memoryArray[posNow];
         };
         return MemoryAccessor;
     }());

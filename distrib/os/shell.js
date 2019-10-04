@@ -258,13 +258,15 @@ var TSOS;
                 var validInput = document.getElementById("taProgramInput").value;
                 var newInput = validInput.split(" ");
                 //console.log(newInput);
+                //have to reset 
+                _CPU.init();
+                //save to memory
                 _MemoryManager.createArr(0, newInput);
+                //update our counters / displays
                 TSOS.Control.updateMemory();
                 TSOS.Control.accessCPU();
                 TSOS.Control.accessPCB();
                 _PID += 1;
-                //have to reset 
-                _CPU.init();
             }
             else {
                 _StdOut.putText("Input is not valid. Use only hex digits and spaces.");

@@ -47,93 +47,86 @@ var TSOS;
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
-            //do not do this every cycle.. works to test op codes but need to load memory once somewhere else
-            /*var validInput = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
-            var newInput = validInput.split(" ");
-            var i = 0;
-            var newMemory = new Array();
-
-            for(let i = 0; i < _MemorySize; i++) {
-                if(i > newInput.length) {
-                    newMemory[i] = "00";
-                }
-                else {
-                    newMemory[i] = newInput[i];
-                }
-            }*/
-            //var opcode = newMemory[i];
             //access memory through memory accessor
             var opcode = _MemoryAccessor.getMemory(this.PC);
+            //console.log(this.PC + " TEST");
             switch (opcode) {
                 //future fix: add functions instead of doing all the work in the case statement
                 //load the accumulator w a constant
                 case "A9":
+                    //note to self: my codes weren't working bc I am using this.PC, but I was changing acc AFTER I incremented the counter, so it was not giving me the correct value
+                    this.Acc = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                    console.log(_MemoryAccessor.getMemory(this.PC + 1) + "value");
                     this.PC += 2;
-                    this.Acc = parseInt(_MemoryAccessor.getMemory(this.PC + 1));
+                    //this.Acc = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
                     this.IR = "A9";
                     //parseInt(_MemoryAccessor.getMemory(this.PC+1)); 
                     //i = i + 2;
                     break;
                 //load the accumulator from memory
-                /*case "AD":
+                case "AD":
+                    var memoryLocation = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                    this.Acc = _MemoryAccessor.getMemory[memoryLocation];
                     this.PC += 3;
-                    var memoryLocation = parseInt(newMemory[i+1], 16)
-                    this.Acc = newMemory[memoryLocation];
-                    break;*/
+                    break;
                 //store the accumulator in memory
-                /*case "8D":
-                     this.PC += 3;
-                     var getAccLocation = parseInt(newMemory[i+1], 16);
-                     newMemory[getAccLocation] = this.Acc;
-                     break;
-                 //add with carry
-                 case "6D":
-                     var memoryLocation = parseInt(newMemory[i+1], 16);
-                     this.Acc = parseInt(newMemory[memoryLocation],16) + this.Acc;
-                     break;
-                 //load the X reg w a constant
-                 case "A2":
-                     this.PC += 2;
-                     this.Xreg = parseInt(newMemory[i+1], 16);
-                     i = i + 2;
-                     break;
-                 //load the X reg from memory
-                 case "AE":
-                     this.PC += 3;
-                     this.Xreg = newMemory[parseInt(newMemory[i+1], 16)];
-                     break;
-                 //load the Y reg w a constant
-                 case "A0":
-                     this.PC += 2;
-                     this.Yreg = parseInt(newMemory[i+1], 16);
-                     i = i + 2;
-                     break;
-                 //load the Y reg from memory
-                 case "AC":
-                     this.PC += 3;
-                     this.Yreg = newMemory[parseInt(newMemory[i+1], 16)];
-                     break;
-                 //No op
-                 case "EA":
-                     this.PC += 1;
-                     break;
-                 //break; system call
-                 case "00":
-                     break;
-                 //compare a byte in memory to X reg; set Z flag if equal
-                 case "EC":
-                     break;
-                 //branch n bytes if Z flag is 0
-                 case "D0":
-                     break;
-                 //increment value of a byte
-                 case "EE":
-                     break;
-                 //system call
-                 case "FF":
-                     break;
-                 default:
-                     _OsShell.putPrompt();*/
+                case "8D":
+                    var getAccLocation = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                    _MemoryAccessor.getMemory[getAccLocation] = this.Acc;
+                    this.PC += 3;
+                    break;
+                //add with carry
+                case "6D":
+                    var memoryLocation = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                    this.Acc = parseInt(_MemoryAccessor.getMemory[memoryLocation], 16) + this.Acc;
+                    this.PC += 3;
+                    break;
+                //load the X reg w a constant
+                case "A2":
+                    this.Xreg = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                    this.PC += 2;
+                    //i = i + 2;
+                    break;
+                //load the X reg from memory
+                case "AE":
+                    this.Xreg = _MemoryAccessor.getMemory[parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16)];
+                    this.PC += 3;
+                    break;
+                //load the Y reg w a constant
+                case "A0":
+                    this.Yreg = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                    this.PC += 2;
+                    //i = i + 2;
+                    break;
+                //load the Y reg from memory
+                case "AC":
+                    this.Yreg = _MemoryAccessor.getMemory[parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16)];
+                    this.PC += 3;
+                    break;
+                //No op
+                case "EA":
+                    this.PC += 1;
+                    break;
+                //break; system call
+                case "00":
+                    break;
+                //compare a byte in memory to X reg; set Z flag if equal
+                case "EC":
+                    this.PC += 3;
+                    break;
+                //branch n bytes if Z flag is 0
+                case "D0":
+                    this.PC += 2;
+                    break;
+                //increment value of a byte
+                case "EE":
+                    this.PC += 2;
+                    break;
+                //system call
+                case "FF":
+                    break;
+                default:
+                    _OsShell.putPrompt();
             }
             //else call an error to isr and write it to the console
         };
