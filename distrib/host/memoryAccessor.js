@@ -5,6 +5,11 @@ var TSOS;
     var MemoryAccessor = /** @class */ (function () {
         function MemoryAccessor() {
         }
+        MemoryAccessor.prototype.getMemory = function (loc) {
+            return _Memory.memoryArray[loc];
+        };
+        MemoryAccessor.prototype.setMemory = function () {
+        };
         return MemoryAccessor;
     }());
     TSOS.MemoryAccessor = MemoryAccessor;

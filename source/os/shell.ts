@@ -2,7 +2,7 @@
 ///<reference path="../utils.ts" />
 ///<reference path="shellCommand.ts" />
 ///<reference path="userCommand.ts" />
-
+///<reference path="memoryManager.ts" />
 
 /* ------------
    Shell.ts
@@ -325,10 +325,19 @@ module TSOS {
                 _StdOut.putText("Program loaded successfuly with PID " + _PID);
                 //_Kernel.updateMemory();
                 //_Kernel.accessCPU();
+
+                var validInput = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
+                var newInput = validInput.split(" ");
+                //console.log(newInput);
+
+                _MemoryManager.createArr(0, newInput);                
+
                 TSOS.Control.updateMemory();
                 TSOS.Control.accessCPU();
                 TSOS.Control.accessPCB();
                 _PID += 1;
+                //have to reset 
+                _CPU.init();
             
             }
             else{
@@ -337,7 +346,8 @@ module TSOS {
         }
 
         public shellRun(args) {
-            //_StdOut.putText("Coming soon"); 
+            //_StdOut.putText("Coming soon");
+            //_MemoryAccessor.getMemory();
             _CPU.cycle();
             TSOS.Control.accessCPU();
             TSOS.Control.accessPCB();

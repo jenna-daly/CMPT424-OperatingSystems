@@ -124,10 +124,16 @@ module TSOS {
             for(let i=0; i < (_MemorySize/8); i++) {
                 containMem += "<tr>";
                 for(let j=0; j< maxRowCount; j++) {
-                    containMem += "<td>" + newString.substring(s,s+2) + "</td>"; 
-                    memoryLocation = memoryLocation + 1;
-                    s = s +2;
+                    if(s < newString.length) {
+                        containMem += "<td>" + newString.substring(s,s+2) + "</td>"; 
+                        memoryLocation = memoryLocation + 1;
+                        s = s +2;
                     }
+                    else{
+                        containMem += "<td>" + "00" + "</td>"; 
+
+                    }
+                }
                 containMem += "</tr>";
                 }
                 accessMemory.innerHTML = containMem;
@@ -141,7 +147,7 @@ module TSOS {
             var containPCB = "<th>PID</th><th>State</th><th>PC</th><th>IR</th><th>Acc</th><th>X Reg</th><th>Y Reg</th><th>Z Flag</th></tr>";
             //for iProject2 there is only one loaded process, so I am just making a loop once, for the next project I will need the loop to go furthur
             for(let i=0; i<1; i++) {
-                containPCB += "<tr><td>" + _PID + "</td></tr>";
+                containPCB += "<tr><td>" + _PID + "</td><td>" + "Resident" + "</td></tr>" ;
             }
             accessBlock.innerHTML = containPCB;
         }
@@ -151,7 +157,7 @@ module TSOS {
             var accessCPU = document.getElementById("taCPU");
             var containCPU = "<th>PC</th><th>IR</th><th>Acc</th><th>X Reg</th><th>Y Reg</th><th>Z Flag</th></tr>"
             for(let i = 0; i < 1; i++){
-                containCPU += "<tr><td>" + _CPU.PC + "</td><td>" + _CPU.Acc + "</td><td>" + "Acc </td><td>" + _CPU.Xreg + "</td><td>" + _CPU.Yreg + "</td><td>" + _CPU.Zflag + "</td></tr>";
+                containCPU += "<tr><td>" + _CPU.PC + "</td><td>" + _CPU.IR + "</td><td>" + _CPU.Acc + "</td><td>" + _CPU.Xreg + "</td><td>" + _CPU.Yreg + "</td><td>" + _CPU.Zflag + "</td></tr>";
             }
             accessCPU.innerHTML = containCPU;
         }
@@ -174,6 +180,11 @@ module TSOS {
             // ... Create and initialize the CPU (because it's part of the hardware)  ...
             _CPU = new Cpu();  // Note: We could simulate multi-core systems by instantiating more than one instance of the CPU here.
             _CPU.init();       //       There's more to do, like dealing with scheduling and such, but this would be a start. Pretty cool.
+            
+            //per iProject 2 instructions, create and initialize memory, create memory accessor
+            _Memory	= new Memory();	
+            _Memory.init();	
+            _MemoryAccessor	= new MemoryAccessor();	    
 
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(Devices.hostClockPulse, CPU_CLOCK_INTERVAL);

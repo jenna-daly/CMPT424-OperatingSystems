@@ -56,6 +56,7 @@ var _MemoryAccessor;
 var _MemoryManager = null;
 //one place to store memory size
 var _MemorySize = 256;
+var _MemoryArray = [];
 //var to assign unique PID
 var _PID = 0;
 var onDocumentLoad = function () {

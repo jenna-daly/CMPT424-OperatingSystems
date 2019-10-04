@@ -6,10 +6,17 @@ module TSOS {
 
     export class MemoryAccessor {
 
-        constructor(
-            ) {
+        constructor() {
 
         }  
+
+    public getMemory(loc){      
+        return _Memory.memoryArray[loc];
+    }
+
+    public setMemory(){
+
+    }
 
     }
 }

@@ -75,6 +75,13 @@ var	_MemoryManager:	any	=	null;
 //one place to store memory size
 var _MemorySize = 256;
 
+
+
+
+
+
+
+var _MemoryArray : any = [];
 //var to assign unique PID
 var _PID: number = 0;
 
