@@ -55,75 +55,93 @@ module TSOS {
                 case "A9":
                     //note to self: my codes weren't working bc I am using this.PC, but I was changing acc AFTER I incremented the counter, so it was not giving me the correct value
                     this.Acc = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
-                    console.log(_MemoryAccessor.getMemory(this.PC+1) + "value");
-                    this.PC += 2;
-                    //this.Acc = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
-                   
+                    //console.log(_MemoryAccessor.getMemory(this.PC+1) + "value");
+                    this.PC += 2;    
                     this.IR = "A9";
-                    //parseInt(_MemoryAccessor.getMemory(this.PC+1)); 
-                    //i = i + 2;
                     break;
                 //load the accumulator from memory
                 case "AD":
                     var memoryLocation = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16)
-                    this.Acc = _MemoryAccessor.getMemory[memoryLocation];
+                    this.Acc = _MemoryAccessor.getMemory(memoryLocation);
                     this.PC += 3; 
+                    this.IR = "AD";
                     break;
                 //store the accumulator in memory
                case "8D":
                     var getAccLocation = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
                     _MemoryAccessor.getMemory[getAccLocation] = this.Acc; 
                     this.PC += 3;
+                    this.IR = "8D";
                     break;
                 //add with carry
                 case "6D":
-                    var memoryLocation = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
-                    this.Acc = parseInt(_MemoryAccessor.getMemory[memoryLocation],16) + this.Acc;
+                    this.Acc = this.Acc + parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
                     this.PC += 3;
+                    this.IR = "6D";
                     break;
                 //load the X reg w a constant
                 case "A2":
                     this.Xreg = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
                     this.PC += 2;
-                    //i = i + 2;
+                    this.IR = "A2";
                     break;
                 //load the X reg from memory
                 case "AE":
-                    this.Xreg = _MemoryAccessor.getMemory[parseInt(_MemoryAccessor.getMemory(this.PC+1), 16)];
+                    var MemoryX = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
+                    this.Xreg = _MemoryAccessor.getMemory(MemoryX);
                     this.PC += 3;
+                    this.IR = "AE";
                     break;
                 //load the Y reg w a constant
                 case "A0":
                     this.Yreg = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
                     this.PC += 2;
-                    //i = i + 2;
+                    this.IR = "A0";
                     break;
                 //load the Y reg from memory
                 case "AC":
-                    this.Yreg = _MemoryAccessor.getMemory[parseInt(_MemoryAccessor.getMemory(this.PC+1), 16)];
+                    var MemoryY = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16)
+                    this.Yreg = _MemoryAccessor.getMemory(MemoryY);
                     this.PC += 3;
+                    this.IR = "AC";
                     break;
                 //No op
                 case "EA":
                     this.PC += 1;
+                    this.IR = "EA";
                     break;
                 //break; system call
                 case "00":
+                    this.IR = "00";
                     break;
                 //compare a byte in memory to X reg; set Z flag if equal
                 case "EC":
+                    var byteOne = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
+                    if(_MemoryAccessor.getMemory(byteOne) > this.Xreg) {
+                        this.Zflag = 1;
+                    }
+                    else{
+                        this.Zflag = 0;
+                    }
                     this.PC += 3;
+                    this.IR = "EC";
                     break;
                 //branch n bytes if Z flag is 0
                 case "D0":
+                    if(this.Zflag == 0) {
+                        this.PC = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
+                    }
                     this.PC += 2;
+                    this.IR = "D0";
                     break;
                 //increment value of a byte
                 case "EE":
                     this.PC += 2;
+                    this.IR = "EE";
                     break;
                 //system call
                 case "FF":
+                    this.IR = "FF";
                     break;
                 default:
                     _OsShell.putPrompt();

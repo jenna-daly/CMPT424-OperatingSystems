@@ -18,10 +18,10 @@ module TSOS {
     }
 
     //making a function to write memory
-    public setMemory(loc, posNow){
+    /*public setMemory(loc, posNow){
         _Memory.memoryArray[loc] = _Memory.memoryArray[posNow]; 
 
-    }
+    }*/
 
     }
 }

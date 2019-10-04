@@ -10,10 +10,6 @@ var TSOS;
             //console.log(_Memory.memoryArray[1] + "loc");     
             return _Memory.memoryArray[loc];
         };
-        //making a function to write memory
-        MemoryAccessor.prototype.setMemory = function (loc, posNow) {
-            _Memory.memoryArray[loc] = _Memory.memoryArray[posNow];
-        };
         return MemoryAccessor;
     }());
     TSOS.MemoryAccessor = MemoryAccessor;

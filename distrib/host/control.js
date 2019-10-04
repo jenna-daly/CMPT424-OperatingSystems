@@ -86,13 +86,13 @@ var TSOS;
         Control.updateMemory = function () {
             var validate = document.getElementById("taProgramInput").value;
             //code to put into memory the user entered op codes
-            var space = " ";
+            /*var space = " ";
             var newString = "";
-            for (var i = 0; i < validate.length; i++) {
-                if (space.indexOf(validate[i]) < 0) {
+            for(let i =0; i< validate.length; i++) {
+                if(space.indexOf(validate[i]) < 0) {
                     newString += validate[i];
                 }
-            }
+            }*/
             //this loop breaks my code.. so I need to figure out how to store the newString in an array or else I can use substring
             /*for(let i=0; i< _MemorySize; i+2) {
                 _Memory.memoryArray[i] = newString.substring(i, i+2);
@@ -105,10 +105,10 @@ var TSOS;
             for (var i = 0; i < (_MemorySize / 8); i++) {
                 containMem += "<tr>";
                 for (var j = 0; j < maxRowCount; j++) {
-                    if (s < newString.length) {
-                        containMem += "<td>" + newString.substring(s, s + 2) + "</td>";
+                    if (s < _Memory.memoryArray.length) {
+                        containMem += "<td>" + _Memory.memoryArray[s] + "</td>";
                         memoryLocation = memoryLocation + 1;
-                        s = s + 2;
+                        s = s + 1;
                     }
                     else {
                         containMem += "<td>" + "00" + "</td>";

@@ -99,15 +99,17 @@ module TSOS {
         }
 
         public static updateMemory() {
-            var validate = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
+            //I was using this to go through the input, but now that Memory Manager works to save the array, should not be needed..
+            //keeping commented here until I am sure there are no bugs
+            //var validate = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
             //code to put into memory the user entered op codes
-            var space = " ";
+            /*var space = " ";
             var newString = "";
             for(let i =0; i< validate.length; i++) {
                 if(space.indexOf(validate[i]) < 0) {
                     newString += validate[i]; 
                 }
-            }
+            }*/
         
             //this loop breaks my code.. so I need to figure out how to store the newString in an array or else I can use substring
             /*for(let i=0; i< _MemorySize; i+2) {
@@ -124,10 +126,10 @@ module TSOS {
             for(let i=0; i < (_MemorySize/8); i++) {
                 containMem += "<tr>";
                 for(let j=0; j< maxRowCount; j++) {
-                    if(s < newString.length) {
-                        containMem += "<td>" + newString.substring(s,s+2) + "</td>"; 
+                    if(s < _Memory.memoryArray.length) {
+                        containMem += "<td>" + _Memory.memoryArray[s] + "</td>"; 
                         memoryLocation = memoryLocation + 1;
-                        s = s +2;
+                        s = s + 1;
                     }
                     else{
                         containMem += "<td>" + "00" + "</td>"; 
