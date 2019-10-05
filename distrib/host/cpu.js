@@ -81,7 +81,12 @@ var TSOS;
                     //console.log(getAccLocation + " decoded location");
                     //this gives back the hex value of acc, before I was getting dec value
                     var decToHex = this.Acc.toString(16).toUpperCase();
-                    _Memory.memoryArray[getAccLocation] = decToHex;
+                    if (decToHex.length == 1) {
+                        _Memory.memoryArray[getAccLocation] = "0" + decToHex;
+                    }
+                    else {
+                        _Memory.memoryArray[getAccLocation] = decToHex;
+                    }
                     //console.log(_Memory.memoryArray[getAccLocation] + " location in memory ");
                     TSOS.Control.updateMemory();
                     this.PC += 3;
@@ -145,7 +150,15 @@ var TSOS;
                 //branch n bytes if Z flag is 0
                 case "D0":
                     if (this.Zflag == 0) {
-                        this.PC = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                        //this is troublesome
+                        //var bytestobranch = _MemoryAccessor.getMemory(this.PC+1);
+                        //if(bytestobranch + this.PC > 255) {
+                        //this.PC = (bytestobranch + this.PC) % 255;
+                        this.PC = this.PC + parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                        /*}
+                        else{
+                            this.PC = (bytestobranch + this.PC);
+                        }*/
                     }
                     else {
                         this.PC += 2;
@@ -155,8 +168,14 @@ var TSOS;
                 //increment value of a byte
                 case "EE":
                     var incrementThis = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
-                    var incrementedDone = parseInt(_MemoryAccessor.getMemory(incrementThis) + 1, 16);
-                    _Memory.memoryArray[incrementThis] = incrementedDone.toString(16);
+                    var incrementedDone = parseInt(_MemoryAccessor.getMemory(incrementThis), 16);
+                    incrementedDone += 1;
+                    if (incrementedDone.toString().length == 1) {
+                        _Memory.memoryArray[incrementThis] = "0" + incrementedDone.toString(16);
+                    }
+                    else {
+                        _Memory.memoryArray[incrementThis] = incrementedDone.toString(16);
+                    }
                     TSOS.Control.updateMemory();
                     this.PC += 3;
                     this.IR = "EE";
@@ -168,9 +187,13 @@ var TSOS;
                     }
                     else if (this.Xreg == 2) {
                         var storedLoc = this.Yreg;
+                        var newStr = "";
                         while (_Memory.memoryArray[storedLoc] != "00") {
-                            _StdOut.putText(parseInt(_Memory.memoryArray[storedLoc], 16));
+                            //to string did not work it returned numbers, I found from char code to go from hex to ascii and it worked
+                            _StdOut.putText(String.fromCharCode(parseInt(_Memory.memoryArray[storedLoc], 16)));
+                            storedLoc += 1;
                         }
+                        _StdOut.putText(newStr);
                     }
                     this.IR = "FF";
                     this.PC += 1;
