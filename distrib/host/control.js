@@ -104,8 +104,17 @@ var TSOS;
             var maxRowCount = 8; //8 memory spaces across
             var memoryLocation = 0; //increment memory index w this var
             var s = 0; //substring indexing
+            var memoryHex = 0;
             for (var i = 0; i < (_MemorySize / 8); i++) {
-                containMem += "<tr>";
+                //loading the labels for each memory row
+                if (memoryHex == 0) {
+                    containMem += "<tr><td> 0x00" + (memoryHex + 8).toString(16).toUpperCase() + "</td>";
+                    memoryHex += 8;
+                }
+                else {
+                    containMem += "<tr><td> 0x0" + (memoryHex + 8).toString(16).toUpperCase() + "</td>";
+                    memoryHex += 8;
+                }
                 for (var j = 0; j < maxRowCount; j++) {
                     if (s < _Memory.memoryArray.length) {
                         containMem += "<td>" + _Memory.memoryArray[s] + "</td>";

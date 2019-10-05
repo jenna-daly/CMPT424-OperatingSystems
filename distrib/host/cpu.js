@@ -18,7 +18,7 @@
 var TSOS;
 (function (TSOS) {
     var Cpu = /** @class */ (function () {
-        function Cpu(PC, IR, Acc, Xreg, Yreg, Zflag, isExecuting) {
+        function Cpu(PC, IR, Acc, Xreg, Yreg, Zflag, isExecuting, PCBVals) {
             if (PC === void 0) { PC = 0; }
             if (IR === void 0) { IR = "IR"; }
             if (Acc === void 0) { Acc = 0; }
@@ -26,6 +26,7 @@ var TSOS;
             if (Yreg === void 0) { Yreg = 0; }
             if (Zflag === void 0) { Zflag = 0; }
             if (isExecuting === void 0) { isExecuting = false; }
+            if (PCBVals === void 0) { PCBVals = new Array(); }
             this.PC = PC;
             this.IR = IR;
             this.Acc = Acc;
@@ -33,6 +34,7 @@ var TSOS;
             this.Yreg = Yreg;
             this.Zflag = Zflag;
             this.isExecuting = isExecuting;
+            this.PCBVals = PCBVals;
         }
         Cpu.prototype.init = function () {
             this.PC = 0;
@@ -42,6 +44,7 @@ var TSOS;
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
+            this.PCBVals = null;
         };
         Cpu.prototype.cycle = function () {
             _Kernel.krnTrace('CPU cycle');
@@ -117,6 +120,7 @@ var TSOS;
                 //break; system call
                 case "00":
                     this.IR = "00";
+                    _CPU.isExecuting = false;
                     break;
                 //compare a byte in memory to X reg; set Z flag if equal
                 case "EC":

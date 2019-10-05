@@ -27,7 +27,8 @@ module TSOS {
                     public Xreg: number = 0,
                     public Yreg: number = 0,
                     public Zflag: number = 0,
-                    public isExecuting: boolean = false) {
+                    public isExecuting: boolean = false,
+                    public PCBVals= new Array()) {
 
         }
 
@@ -39,6 +40,7 @@ module TSOS {
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
+            this.PCBVals = null;
         }
 
         public cycle(): void {
@@ -116,6 +118,7 @@ module TSOS {
                 //break; system call
                 case "00":
                     this.IR = "00";
+                    _CPU.isExecuting = false;
                     break;
                 //compare a byte in memory to X reg; set Z flag if equal
                 case "EC":

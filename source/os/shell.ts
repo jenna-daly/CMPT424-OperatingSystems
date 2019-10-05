@@ -32,6 +32,8 @@ module TSOS {
             var sc;
             var status;
             var statusOne;
+
+            TSOS.Control.updateMemory();
             //
             // Load the command list.
 
@@ -358,6 +360,7 @@ module TSOS {
             _CPU.cycle();
             TSOS.Control.accessCPU();
             TSOS.Control.accessPCB(args);
+            _CPU.isExecuting = true;
         }
         else{
             _StdOut.putText("Usage: run <PID> Please supply a PID.");

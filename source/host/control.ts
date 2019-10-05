@@ -122,9 +122,18 @@ module TSOS {
             var maxRowCount = 8; //8 memory spaces across
             var memoryLocation = 0; //increment memory index w this var
             var s = 0; //substring indexing
+            var memoryHex = 0;
                                     
             for(let i=0; i < (_MemorySize/8); i++) {
-                containMem += "<tr>";
+            //loading the labels for each memory row
+            if(memoryHex == 0) {
+                containMem += "<tr><td> 0x00" + (memoryHex+8).toString(16).toUpperCase() + "</td>";
+                memoryHex += 8;
+            }
+            else{
+                containMem += "<tr><td> 0x0" + (memoryHex+8).toString(16).toUpperCase() + "</td>";
+                memoryHex += 8; 
+            }
                 for(let j=0; j< maxRowCount; j++) {
                     if(s < _Memory.memoryArray.length) {
                         containMem += "<td>" + _Memory.memoryArray[s] + "</td>"; 
@@ -149,7 +158,7 @@ module TSOS {
             var containPCB = "<th>PID</th><th>State</th><th>PC</th><th>IR</th><th>Acc</th><th>X Reg</th><th>Y Reg</th><th>Z Flag</th></tr>";
             //for iProject2 there is only one loaded process, so I am just making a loop once, for the next project I will need the loop to go furthur
             for(let i=0; i<1; i++) {
-                containPCB += "<tr><td>" + pidNum + "</td><td>" + "Resident" + "</td></tr>" ;
+                containPCB += "<tr><td>" + pidNum + "</td><td>" + "Resident" +  "</td></tr>" ;
             }
             accessBlock.innerHTML = containPCB;
         }
