@@ -138,7 +138,7 @@ var TSOS;
                 //compare a byte in memory to X reg; set Z flag if equal
                 case "EC":
                     var byteOne = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
-                    if (parseInt(_MemoryAccessor.getMemory(byteOne), 16) > this.Xreg) {
+                    if (parseInt(_MemoryAccessor.getMemory(byteOne), 16) == this.Xreg) {
                         this.Zflag = 1;
                     }
                     else {
@@ -149,12 +149,18 @@ var TSOS;
                     break;
                 //branch n bytes if Z flag is 0
                 case "D0":
+                    console.log("ZFLAG " + this.Zflag);
                     if (this.Zflag == 0) {
-                        //this is troublesome
-                        //var bytestobranch = _MemoryAccessor.getMemory(this.PC+1);
+                        //this is troublesome and not working 
+                        var bytestobranch = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                        console.log(bytestobranch + "BYTES");
+                        console.log(this.PC + "INDEX");
+                        this.PC = ((bytestobranch + this.PC) % 255) + 1;
+                        console.log(this.PC + "PC AFTER BRANCH");
                         //if(bytestobranch + this.PC > 255) {
                         //this.PC = (bytestobranch + this.PC) % 255;
-                        this.PC = this.PC + parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                        //this.PC = this.PC + parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
+                        //this.PC = ((this.PC + 2 + bytestobranch) % 255);
                         /*}
                         else{
                             this.PC = (bytestobranch + this.PC);
