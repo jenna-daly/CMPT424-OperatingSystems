@@ -48,7 +48,7 @@ module TSOS {
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             this.runEachOP();
-            
+            Control.accessCPU();
             console.log(this.IR);
             //access memory through memory accessor
            
@@ -78,8 +78,9 @@ module TSOS {
                case "8D":
                     var getAccLocation = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
                     //console.log(getAccLocation + " decoded location");
-                    //_MemoryAccessor.getMemory[getAccLocation] = this.Acc; 
-                    _Memory.memoryArray[getAccLocation] = this.Acc;
+                    //this gives back the hex value of acc, before I was getting dec value
+                    var decToHex = this.Acc.toString(16).toUpperCase();
+                    _Memory.memoryArray[getAccLocation] = decToHex;
                     //console.log(_Memory.memoryArray[getAccLocation] + " location in memory ");
                     TSOS.Control.updateMemory();
                     this.PC += 3;
@@ -131,7 +132,7 @@ module TSOS {
                 //compare a byte in memory to X reg; set Z flag if equal
                 case "EC":
                     var byteOne = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
-                    if(_MemoryAccessor.getMemory(byteOne) > this.Xreg) {
+                    if(parseInt(_MemoryAccessor.getMemory(byteOne), 16) > this.Xreg) {
                         this.Zflag = 1;
                     }
                     else{
@@ -152,18 +153,40 @@ module TSOS {
                     break;
                 //increment value of a byte
                 case "EE":
-                    this.PC += 2;
+                    var incrementThis = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
+                    var incrementedDone = parseInt(_MemoryAccessor.getMemory(incrementThis) + 1, 16);
+                    _Memory.memoryArray[incrementThis] = incrementedDone.toString(16);
+                    TSOS.Control.updateMemory();
+                    this.PC += 3;
                     this.IR = "EE";
                     break;
                 //system call
                 case "FF":
+                    if(this.Xreg == 1) {
+                        _StdOut.putText(this.Yreg.toString());
+                    }
+                    else if(this.Xreg == 2) {
+                        var storedLoc = this.Yreg;
+                        
+                        while(_Memory.memoryArray[storedLoc] != "00") {
+                            _StdOut.putText(parseInt(_Memory.memoryArray[storedLoc] , 16));
+                        }
+    
+                    }
+    
                     this.IR = "FF";
                     this.PC += 1;
                     break;
                 default:
                     _OsShell.putPrompt();
             }
-        
+
+
+
+
+
+
+
             //else call an error to isr and write it to the console
         }
 
