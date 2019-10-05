@@ -262,10 +262,11 @@ var TSOS;
                 _CPU.init();
                 //save to memory
                 _MemoryManager.createArr(0, newInput);
+                var currentPID = _PID;
                 //update our counters / displays
                 TSOS.Control.updateMemory();
                 TSOS.Control.accessCPU();
-                TSOS.Control.accessPCB();
+                TSOS.Control.accessPCB(currentPID);
                 _PID += 1;
             }
             else {
@@ -275,9 +276,14 @@ var TSOS;
         Shell.prototype.shellRun = function (args) {
             //_StdOut.putText("Coming soon");
             //_MemoryAccessor.getMemory();
-            _CPU.cycle();
-            TSOS.Control.accessCPU();
-            TSOS.Control.accessPCB();
+            if (args.length > 0) {
+                _CPU.cycle();
+                TSOS.Control.accessCPU();
+                TSOS.Control.accessPCB(args);
+            }
+            else {
+                _StdOut.putText("Usage: run <PID> Please supply a PID.");
+            }
         };
         Shell.prototype.shellMan = function (args) {
             if (args.length > 0) {

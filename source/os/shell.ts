@@ -310,7 +310,7 @@ module TSOS {
             //clear up the code
             let isValid: boolean = false;
             for(let i=0; i< validateText.length; i++) {
-                if(allowedChars.indexOf(validateText[i]) > -1 ) {
+                if(allowedChars.indexOf(validateText[i]) > -1) {
                     isValid = true;
                     //_StdOut.putText("Input is allowed.");
                 }
@@ -336,10 +336,11 @@ module TSOS {
                 //save to memory
                 _MemoryManager.createArr(0, newInput);  
 
+                var currentPID = _PID;
                 //update our counters / displays
                 TSOS.Control.updateMemory();
                 TSOS.Control.accessCPU();
-                TSOS.Control.accessPCB();
+                TSOS.Control.accessPCB(currentPID);
                 _PID += 1;
                 
                 
@@ -353,9 +354,14 @@ module TSOS {
         public shellRun(args) {
             //_StdOut.putText("Coming soon");
             //_MemoryAccessor.getMemory();
+        if(args.length > 0) {
             _CPU.cycle();
             TSOS.Control.accessCPU();
-            TSOS.Control.accessPCB();
+            TSOS.Control.accessPCB(args);
+        }
+        else{
+            _StdOut.putText("Usage: run <PID> Please supply a PID.");
+        }
 
         }
 

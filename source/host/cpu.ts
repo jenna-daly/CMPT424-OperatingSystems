@@ -69,12 +69,15 @@ module TSOS {
                 //store the accumulator in memory
                case "8D":
                     var getAccLocation = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
-                    _MemoryAccessor.getMemory[getAccLocation] = this.Acc; 
+                    //_MemoryAccessor.getMemory[getAccLocation] = this.Acc; 
+                    _Memory.memoryArray[getAccLocation] = this.Acc;
+                    TSOS.Control.updateMemory();
                     this.PC += 3;
                     this.IR = "8D";
                     break;
                 //add with carry
                 case "6D":
+                    //is it add at the address that follows or add the next number??
                     this.Acc = this.Acc + parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
                     this.PC += 3;
                     this.IR = "6D";
@@ -157,4 +160,4 @@ module TSOS {
 //cycle routine now, fetch from memory, tell memory accessor, accessor goes to memory obj, 0F little endian 15 
 
 //create and initialize object
-//shell load, copy into memory memacc.write, shell load call kernel load memory, store array in mem.ts, mem acc read and write
+//shell load, copy into memory memacc write, shell load call kernel load memory, store array in mem.ts, mem acc read and write

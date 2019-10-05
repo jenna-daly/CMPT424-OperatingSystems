@@ -140,52 +140,6 @@ module TSOS {
         }
 
 
-        /*public updateMemory() {
-        var validate = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
-        //code to put into memory the user entered op codes
-        var space = " ";
-        var newString = "";
-        for(let i =0; i< validate.length; i++) {
-            if(space.indexOf(validate[i]) < 0) {
-                newString += validate[i]; 
-            }
-        }
-    
-        //this loop breaks my code.. so I need to figure out how to store the newString in an array or else I can use substring
-        for(let i=0; i< _Memory.memoryArray.length; i+2) {
-            _Memory.memoryArray[i] = newString.substring(i, i+2);
-        }
-
-        /*var accessMemory = document.getElementById("taMemory");
-      
-        var containMem = "";
-        var maxRowCount = 8; //8 memory spaces across
-        var memoryLocation = 0; //increment memory index w this var
-        var s = 0; //substring indexing
-                                
-        for(let i=0; i < (_MemorySize/8); i++) {
-            containMem += "<tr>";
-            for(let j=0; j< maxRowCount; j++) {
-                containMem += "<td>" + newString.substring(s,s+2) + "</td>"; 
-                memoryLocation = memoryLocation + 1;
-                s = s +2;
-                }
-            containMem += "</tr>";
-            }
-            accessMemory.innerHTML = containMem;
-  
-        }*/
-
-        //moved this to control
-        /*public accessCPU() {
-            var accessCPU = document.getElementById("taCPU");
-            var containCPU = "<th>PC</th><th>IR</th><th>Acc</th><th>X Reg</th><th>Y Reg</th><th>Z Flag</th></tr>"
-            for(let i = 0; i < 1; i++){
-                containCPU += "<tr><td>" + _CPU.PC + "</td><td>" + _CPU.Acc + "</td><td>" + _CPU.Xreg + "</td><td>" + _CPU.Yreg + "</td><td>" + _CPU.Zflag + "</td></tr>";
-            }
-            accessCPU.innerHTML = containCPU;
-        }*/
-
         //
         // System Calls... that generate software interrupts via tha Application Programming Interface library routines.
         //

@@ -84,7 +84,9 @@ var TSOS;
             accessMemory.innerHTML = containMem;
         };
         Control.updateMemory = function () {
-            var validate = document.getElementById("taProgramInput").value;
+            //I was using this to go through the input, but now that Memory Manager works to save the array, should not be needed..
+            //keeping commented until I am sure there are no bugs
+            //var validate = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
             //code to put into memory the user entered op codes
             /*var space = " ";
             var newString = "";
@@ -119,12 +121,12 @@ var TSOS;
             accessMemory.innerHTML = containMem;
         };
         //PCB
-        Control.accessPCB = function () {
+        Control.accessPCB = function (pidNum) {
             var accessBlock = document.getElementById("taPCB");
             var containPCB = "<th>PID</th><th>State</th><th>PC</th><th>IR</th><th>Acc</th><th>X Reg</th><th>Y Reg</th><th>Z Flag</th></tr>";
             //for iProject2 there is only one loaded process, so I am just making a loop once, for the next project I will need the loop to go furthur
             for (var i = 0; i < 1; i++) {
-                containPCB += "<tr><td>" + _PID + "</td><td>" + "Resident" + "</td></tr>";
+                containPCB += "<tr><td>" + pidNum + "</td><td>" + "Resident" + "</td></tr>";
             }
             accessBlock.innerHTML = containPCB;
         };
