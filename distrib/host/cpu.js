@@ -81,12 +81,12 @@ var TSOS;
                     //console.log(getAccLocation + " decoded location");
                     //this gives back the hex value of acc, before I was getting dec value
                     var decToHex = this.Acc.toString(16).toUpperCase();
-                    if (decToHex.length == 1) {
+                    /*if(decToHex.length == 1) {
                         _Memory.memoryArray[getAccLocation] = "0" + decToHex;
                     }
-                    else {
-                        _Memory.memoryArray[getAccLocation] = decToHex;
-                    }
+                    else {*/
+                    _Memory.memoryArray[getAccLocation] = decToHex;
+                    //}
                     //console.log(_Memory.memoryArray[getAccLocation] + " location in memory ");
                     TSOS.Control.updateMemory();
                     this.PC += 3;
@@ -170,12 +170,13 @@ var TSOS;
                     var incrementThis = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
                     var incrementedDone = parseInt(_MemoryAccessor.getMemory(incrementThis), 16);
                     incrementedDone += 1;
-                    if (incrementedDone.toString().length == 1) {
+                    /*if(incrementedDone.toString().length == 1) {
                         _Memory.memoryArray[incrementThis] = "0" + incrementedDone.toString(16);
+
                     }
-                    else {
-                        _Memory.memoryArray[incrementThis] = incrementedDone.toString(16);
-                    }
+                    else{*/
+                    _Memory.memoryArray[incrementThis] = incrementedDone.toString(16);
+                    //}
                     TSOS.Control.updateMemory();
                     this.PC += 3;
                     this.IR = "EE";
