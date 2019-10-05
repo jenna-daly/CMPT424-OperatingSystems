@@ -50,7 +50,11 @@ var TSOS;
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
+            this.runEachOP();
+            console.log(this.IR);
             //access memory through memory accessor
+        };
+        Cpu.prototype.runEachOP = function () {
             var opcode = _MemoryAccessor.getMemory(this.PC);
             //console.log(this.PC + " TEST");
             switch (opcode) {
@@ -73,8 +77,10 @@ var TSOS;
                 //store the accumulator in memory
                 case "8D":
                     var getAccLocation = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                    //console.log(getAccLocation + " decoded location");
                     //_MemoryAccessor.getMemory[getAccLocation] = this.Acc; 
                     _Memory.memoryArray[getAccLocation] = this.Acc;
+                    //console.log(_Memory.memoryArray[getAccLocation] + " location in memory ");
                     TSOS.Control.updateMemory();
                     this.PC += 3;
                     this.IR = "8D";
@@ -139,7 +145,9 @@ var TSOS;
                     if (this.Zflag == 0) {
                         this.PC = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
                     }
-                    this.PC += 2;
+                    else {
+                        this.PC += 2;
+                    }
                     this.IR = "D0";
                     break;
                 //increment value of a byte
@@ -150,6 +158,7 @@ var TSOS;
                 //system call
                 case "FF":
                     this.IR = "FF";
+                    this.PC += 1;
                     break;
                 default:
                     _OsShell.putPrompt();

@@ -108,11 +108,11 @@ var TSOS;
             for (var i = 0; i < (_MemorySize / 8); i++) {
                 //loading the labels for each memory row
                 if (memoryHex == 0) {
-                    containMem += "<tr><td> 0x00" + (memoryHex + 8).toString(16).toUpperCase() + "</td>";
+                    containMem += "<tr><td> 0x00" + (memoryHex).toString(16).toUpperCase() + "</td>";
                     memoryHex += 8;
                 }
                 else {
-                    containMem += "<tr><td> 0x0" + (memoryHex + 8).toString(16).toUpperCase() + "</td>";
+                    containMem += "<tr><td> 0x0" + (memoryHex).toString(16).toUpperCase() + "</td>";
                     memoryHex += 8;
                 }
                 for (var j = 0; j < maxRowCount; j++) {
