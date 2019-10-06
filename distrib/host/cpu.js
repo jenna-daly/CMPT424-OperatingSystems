@@ -73,14 +73,15 @@ var TSOS;
                     break;
                 //load the accumulator from memory
                 case "AD":
-                    var memoryLocation = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                    var memoryLocation = this.littleEndianAddress(); //parseInt(_MemoryAccessor.getMemory(this.PC+1), 16)
                     this.Acc = _MemoryAccessor.getMemory(memoryLocation);
                     this.PC += 3;
                     this.IR = "AD";
                     break;
                 //store the accumulator in memory
                 case "8D":
-                    var getAccLocation = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                    //var getAccLocation = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
+                    var getAccLocation = this.littleEndianAddress();
                     //console.log(getAccLocation + " decoded location");
                     //this gives back the hex value of acc, before I was getting dec value
                     var decToHex = this.Acc.toString(16).toUpperCase();
@@ -98,7 +99,7 @@ var TSOS;
                 //add with carry
                 case "6D":
                     //is it add at the address that follows or add the next number??
-                    this.Acc = this.Acc + parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                    this.Acc = this.Acc + this.littleEndianAddress(); //parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
                     this.PC += 3;
                     this.IR = "6D";
                     break;
@@ -110,7 +111,7 @@ var TSOS;
                     break;
                 //load the X reg from memory
                 case "AE":
-                    var MemoryX = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                    var MemoryX = this.littleEndianAddress(); //parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
                     this.Xreg = _MemoryAccessor.getMemory(MemoryX);
                     this.PC += 3;
                     this.IR = "AE";
@@ -123,7 +124,7 @@ var TSOS;
                     break;
                 //load the Y reg from memory
                 case "AC":
-                    var MemoryY = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                    var MemoryY = this.littleEndianAddress(); //parseInt(_MemoryAccessor.getMemory(this.PC+1), 16)
                     this.Yreg = _MemoryAccessor.getMemory(MemoryY);
                     this.PC += 3;
                     this.IR = "AC";
@@ -140,7 +141,7 @@ var TSOS;
                     break;
                 //compare a byte in memory to X reg; set Z flag if equal
                 case "EC":
-                    var byteOne = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                    var byteOne = this.littleEndianAddress(); //parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
                     if (parseInt(_MemoryAccessor.getMemory(byteOne), 16) == this.Xreg) {
                         this.Zflag = 1;
                     }
@@ -178,7 +179,7 @@ var TSOS;
                     break;
                 //increment value of a byte
                 case "EE":
-                    var incrementThis = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                    var incrementThis = this.littleEndianAddress(); //parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
                     var incrementedDone = parseInt(_MemoryAccessor.getMemory(incrementThis), 16);
                     incrementedDone += 1;
                     /*if(incrementedDone.toString().length == 1) {
@@ -217,6 +218,13 @@ var TSOS;
             }
             this.storeinPCB();
         };
+        Cpu.prototype.littleEndianAddress = function () {
+            var inputOne = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+            var inputTwo = parseInt(_MemoryAccessor.getMemory(this.PC + 2), 16);
+            var newValue = inputTwo + inputOne;
+            return newValue;
+        };
+        //take values CPU generates and dispaly save them in the PCB so we can display it in control.ts
         Cpu.prototype.storeinPCB = function () {
             _PCBStored = [];
             var status;

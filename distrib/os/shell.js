@@ -269,7 +269,8 @@ var TSOS;
                 TSOS.Control.accessCPU();
                 //TSOS.Control.accessPCB();
                 _PID += 1;
-                //new TSOS.Pcb(currentPID); 
+                //clear array to start fresh if there is data, push the two things we know- PID and resident status
+                _PCBStored = [];
                 _PCBStored.push(_currentPID);
                 _PCBStored.push("Resident");
                 TSOS.Control.accessPCB();
