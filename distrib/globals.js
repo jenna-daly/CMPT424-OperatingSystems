@@ -54,11 +54,16 @@ var _Memory;
 var _MemoryAccessor;
 //	Software	(OS)	
 var _MemoryManager = null;
+//PCB updates, declaring global array to store values in
+var _Pcb;
+var _PCBStored = [];
 //one place to store memory size
 var _MemorySize = 256;
 var _MemoryArray = [];
 //var to assign unique PID
 var _PID = 0;
+//var to store PID before it is incremented
+var _currentPID = 0;
 var onDocumentLoad = function () {
     TSOS.Control.hostInit();
 };

@@ -338,13 +338,17 @@ module TSOS {
                 //save to memory
                 _MemoryManager.createArr(0, newInput);  
 
-                var currentPID = _PID;
+                _currentPID = _PID;
                 //update our counters / displays
                 TSOS.Control.updateMemory();
                 TSOS.Control.accessCPU();
-                TSOS.Control.accessPCB(currentPID);
+                //TSOS.Control.accessPCB();
                 _PID += 1;
-                
+
+                //new TSOS.Pcb(currentPID); 
+                _PCBStored.push(_currentPID);
+                _PCBStored.push("Resident");
+                TSOS.Control.accessPCB();
                 
             
             }
@@ -359,8 +363,10 @@ module TSOS {
         if(args.length > 0) {
             _CPU.cycle();
             TSOS.Control.accessCPU();
-            TSOS.Control.accessPCB(args);
+            _PCBStored.push("Running");
+            TSOS.Control.accessPCB();
             _CPU.isExecuting = true;
+
         }
         else{
             _StdOut.putText("Usage: run <PID> Please supply a PID.");

@@ -263,12 +263,16 @@ var TSOS;
                 _CPU.init();
                 //save to memory
                 _MemoryManager.createArr(0, newInput);
-                var currentPID = _PID;
+                _currentPID = _PID;
                 //update our counters / displays
                 TSOS.Control.updateMemory();
                 TSOS.Control.accessCPU();
-                TSOS.Control.accessPCB(currentPID);
+                //TSOS.Control.accessPCB();
                 _PID += 1;
+                //new TSOS.Pcb(currentPID); 
+                _PCBStored.push(_currentPID);
+                _PCBStored.push("Resident");
+                TSOS.Control.accessPCB();
             }
             else {
                 _StdOut.putText("Input is not valid. Use only hex digits and spaces.");
@@ -280,7 +284,8 @@ var TSOS;
             if (args.length > 0) {
                 _CPU.cycle();
                 TSOS.Control.accessCPU();
-                TSOS.Control.accessPCB(args);
+                _PCBStored.push("Running");
+                TSOS.Control.accessPCB();
                 _CPU.isExecuting = true;
             }
             else {

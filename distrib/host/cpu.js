@@ -52,11 +52,14 @@ var TSOS;
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             this.runEachOP();
             TSOS.Control.accessCPU();
+            this.storeinPCB();
+            TSOS.Control.accessPCB();
             console.log(this.IR);
             //access memory through memory accessor
         };
         Cpu.prototype.runEachOP = function () {
             var opcode = _MemoryAccessor.getMemory(this.PC);
+            this.isExecuting = true;
             //console.log(this.PC + " TEST");
             switch (opcode) {
                 //future fix: add functions instead of doing all the work in the case statement
@@ -133,7 +136,7 @@ var TSOS;
                 //break; system call
                 case "00":
                     this.IR = "00";
-                    _CPU.isExecuting = false;
+                    this.isExecuting = false;
                     break;
                 //compare a byte in memory to X reg; set Z flag if equal
                 case "EC":
@@ -155,13 +158,15 @@ var TSOS;
                         var bytestobranch = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
                         console.log(bytestobranch + "BYTES");
                         console.log(this.PC + "INDEX");
-                        this.PC = ((bytestobranch + this.PC) % 255) + 1;
+                        this.PC = ((bytestobranch + this.PC + 2) % 255);
+                        //this.PC = ((bytestobranch + this.PC + 2) % 255);
                         console.log(this.PC + "PC AFTER BRANCH");
-                        //if(bytestobranch + this.PC > 255) {
-                        //this.PC = (bytestobranch + this.PC) % 255;
-                        //this.PC = this.PC + parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
-                        //this.PC = ((this.PC + 2 + bytestobranch) % 255);
-                        /*}
+                        /*if(bytestobranch + this.PC > 255) {
+                            this.PC = (bytestobranch + this.PC) % 255;
+                            this.PC = this.PC + parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
+                            this.PC = ((this.PC + 2 + bytestobranch) % 255);
+                   
+                        }
                         else{
                             this.PC = (bytestobranch + this.PC);
                         }*/
@@ -207,8 +212,21 @@ var TSOS;
                     break;
                 default:
                     _OsShell.putPrompt();
+                    this.isExecuting = false;
+                //else call an error to isr and write it to the console
             }
-            //else call an error to isr and write it to the console
+            this.storeinPCB();
+        };
+        Cpu.prototype.storeinPCB = function () {
+            _PCBStored = [];
+            var status;
+            if (this.isExecuting == false) {
+                status = "Completed";
+            }
+            else {
+                status = "Running";
+            }
+            _PCBStored.push(_currentPID, status, this.PC, this.IR, this.Acc, this.Xreg, this.Yreg, this.Zflag);
         };
         return Cpu;
     }());

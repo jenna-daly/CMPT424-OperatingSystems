@@ -12,7 +12,7 @@ module TSOS {
           public Xreg: number = 0,
           public Yreg: number = 0,
           public Zflag: number = 0,
-          public isExecuting: boolean = false,
+          //public isExecuting: boolean = false,
           public State: string = "Resident") {
 
         }
@@ -24,9 +24,14 @@ module TSOS {
         this.Xreg = 0;
         this.Yreg = 0;
         this.Zflag = 0;
-        this.isExecuting = false;
+        //this.isExecuting = false;
         this.State = "Resident";
 
       }  
+
+      public storeNewVals(){
+    
+
+      }
     }
 }

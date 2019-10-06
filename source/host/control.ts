@@ -153,15 +153,20 @@ module TSOS {
     
 
         //PCB
-        public static accessPCB(pidNum) {
+        public static accessPCB() {
             var accessBlock = document.getElementById("taPCB");
-            var containPCB = "<th>PID</th><th>State</th><th>PC</th><th>IR</th><th>Acc</th><th>X Reg</th><th>Y Reg</th><th>Z Flag</th></tr>";
+            var containPCB = "<th>PID</th><th>State</th><th>PC</th><th>IR</th><th>Acc</th><th>X Reg</th><th>Y Reg</th><th>Z Flag</th></tr><tr>";
             //for iProject2 there is only one loaded process, so I am just making a loop once, for the next project I will need the loop to go furthur
-            for(let i=0; i<1; i++) {
+            /*for(let i=0; i<1; i++) {
                 containPCB += "<tr><td>" + pidNum + "</td><td>" + "Resident" +  "</td></tr>" ;
             }
-            accessBlock.innerHTML = containPCB;
+            accessBlock.innerHTML = containPCB;*/
+            for(let i=0; i< _PCBStored.length; i++) {
+                containPCB += "<td>" + _PCBStored[i] + "</td>" ;
+            }
+            accessBlock.innerHTML = "</tr>" + containPCB;
         }
+
 
         //CPU
         public static accessCPU() {

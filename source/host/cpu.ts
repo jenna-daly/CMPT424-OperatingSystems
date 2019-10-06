@@ -49,13 +49,16 @@ module TSOS {
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             this.runEachOP();
             Control.accessCPU();
+            this.storeinPCB();
+            Control.accessPCB();
             console.log(this.IR);
             //access memory through memory accessor
            
         }
 
         public runEachOP() {
-            var opcode = _MemoryAccessor.getMemory(this.PC); 
+            var opcode = _MemoryAccessor.getMemory(this.PC);
+            this.isExecuting = true; 
             //console.log(this.PC + " TEST");
             switch(opcode) {
                 //future fix: add functions instead of doing all the work in the case statement
@@ -132,7 +135,7 @@ module TSOS {
                 //break; system call
                 case "00":
                     this.IR = "00";
-                    _CPU.isExecuting = false;
+                    this.isExecuting = false;
                     break;
                 //compare a byte in memory to X reg; set Z flag if equal
                 case "EC":
@@ -154,19 +157,21 @@ module TSOS {
                         var bytestobranch = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
                         console.log(bytestobranch + "BYTES");
                         console.log(this.PC + "INDEX");
-                   
-                        this.PC = ((bytestobranch + this.PC) % 255) + 1;
+                        this.PC = ((bytestobranch + this.PC + 2) % 255);
+
+                        //this.PC = ((bytestobranch + this.PC + 2) % 255);
                         console.log(this.PC + "PC AFTER BRANCH");
 
-                        //if(bytestobranch + this.PC > 255) {
-                            //this.PC = (bytestobranch + this.PC) % 255;
-                        //this.PC = this.PC + parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
-                        //this.PC = ((this.PC + 2 + bytestobranch) % 255);
+                        /*if(bytestobranch + this.PC > 255) {
+                            this.PC = (bytestobranch + this.PC) % 255;
+                            this.PC = this.PC + parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
+                            this.PC = ((this.PC + 2 + bytestobranch) % 255);
                    
-                        /*}
+                        }
                         else{
                             this.PC = (bytestobranch + this.PC); 
                         }*/
+   
                     }
                     else{
                         this.PC += 2;
@@ -210,15 +215,25 @@ module TSOS {
                     break;
                 default:
                     _OsShell.putPrompt();
+                    this.isExecuting = false;
+                    //else call an error to isr and write it to the console
             }
+            this.storeinPCB();
+        }
 
+        public storeinPCB(){
+            _PCBStored = [];
+            var status;
+            if(this.isExecuting == false) {
+                status = "Completed";
+            }
+            else{
+                status = "Running";
+            }
+    
+            _PCBStored.push(_currentPID, status, this.PC, this.IR, this.Acc, this.Xreg, this.Yreg, this.Zflag);
+          
 
-
-
-
-
-
-            //else call an error to isr and write it to the console
         }
 
     }
