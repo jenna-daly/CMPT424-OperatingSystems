@@ -160,13 +160,16 @@ var TSOS;
                 case "D0":
                     //console.log("ZFLAG " + this.Zflag);
                     if (this.Zflag == 0) {
-                        //this is troublesome and not working 
+                        //this is troublesome and not working properly past counting0
                         var bytestobranch = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
                         //console.log(bytestobranch + "BYTES");
                         //console.log(this.PC + "INDEX");
                         // this.PC = ((bytestobranch + this.PC + 2) % 255);
                         //console.log(this.PC + "PC AFTER BRANCH");
                         //console.log(_MemoryAccessor.getMemory(this.PC));
+                        console.log(this.PC + " this is the pc 21");
+                        var newVar = this.PC + bytestobranch;
+                        console.log(newVar + " this val is values added");
                         if (this.PC + bytestobranch > 255) {
                             this.PC = (this.PC + bytestobranch) - 255 + 1; //(bytestobranch + this.PC + 1) % 255; //(this.PC + bytestobranch) - 255;
                             console.log(this.PC + "PC AFTER BRANCH");
@@ -240,7 +243,7 @@ var TSOS;
             else {
                 status = "Running";
             }
-            _PCBStored.push(_currentPID, status, this.PC, this.IR, this.Acc, this.Xreg, this.Yreg, this.Zflag);
+            _PCBStored.push(_currentPID, status, this.PC.toString(16).toUpperCase(), this.IR, this.Acc.toString(16).toUpperCase(), this.Xreg.toString(16).toUpperCase(), this.Yreg.toString(16).toUpperCase(), this.Zflag.toString(16).toUpperCase());
         };
         return Cpu;
     }());

@@ -129,6 +129,9 @@ module TSOS {
                     _krnKeyboardDriver.isr(params);   // Kernel mode device driver
                     _StdIn.handleInput();
                     break;
+                //case OPCODE_NOTFOUND:
+                //    _StdOut.putText("Op code does not exist. Please insert a valid op code at index " + _CPU.PC);
+
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
             }

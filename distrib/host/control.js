@@ -148,7 +148,7 @@ var TSOS;
             var accessCPU = document.getElementById("taCPU");
             var containCPU = "<th>PC</th><th>IR</th><th>Acc</th><th>X Reg</th><th>Y Reg</th><th>Z Flag</th></tr>";
             for (var i = 0; i < 1; i++) {
-                containCPU += "<tr><td>" + _CPU.PC + "</td><td>" + _CPU.IR + "</td><td>" + _CPU.Acc + "</td><td>" + _CPU.Xreg + "</td><td>" + _CPU.Yreg + "</td><td>" + _CPU.Zflag + "</td></tr>";
+                containCPU += "<tr><td>" + _CPU.PC.toString(16).toUpperCase() + "</td><td>" + _CPU.IR + "</td><td>" + _CPU.Acc.toString(16).toUpperCase() + "</td><td>" + _CPU.Xreg.toString(16).toUpperCase() + "</td><td>" + _CPU.Yreg.toString(16).toUpperCase() + "</td><td>" + _CPU.Zflag.toString(16).toUpperCase() + "</td></tr>";
             }
             accessCPU.innerHTML = containCPU;
         };
