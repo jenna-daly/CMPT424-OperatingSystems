@@ -104,7 +104,7 @@ var TSOS;
                 //add with carry
                 case "6D":
                     //is it add at the address that follows or add the next number??
-                    this.Acc = this.Acc + this.littleEndianAddress(); //parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
+                    this.Acc = this.Acc + _MemoryAccessor.getMemory(this.littleEndianAddress()); //parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
                     this.PC += 3;
                     this.IR = "6D";
                     break;
