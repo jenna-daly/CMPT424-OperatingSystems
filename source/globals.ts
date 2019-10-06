@@ -80,9 +80,8 @@ var _PCBStored: any = [];
 var _MemorySize = 256;
 
 
-
-
-
+//var to tell OS whether single step is used or not
+var _SingleStepRunning = false;
 
 
 var _MemoryArray : any = [];

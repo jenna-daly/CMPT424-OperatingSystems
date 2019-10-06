@@ -30,7 +30,12 @@ module TSOS {
       }  
 
       public storeNewVals(){
-    
+        /*_PID;
+        this.PC = _PCBStored[2];
+        this.Acc = _PCBStored[3];
+        this.Xreg = _PCBStored[4];
+        this.Yreg = _PCBStored[5];
+        this.Zflag = _PCBStored[6];*/
 
       }
     }

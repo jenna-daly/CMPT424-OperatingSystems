@@ -47,13 +47,19 @@ module TSOS {
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
-            this.runEachOP();
+
+            //this.runEachOP();
             Control.accessCPU();
             this.storeinPCB();
             Control.accessPCB();
-            console.log(this.IR);
+            this.runEachOP();
+            //console.log(this.IR);
             //access memory through memory accessor
-           
+            //cycle is called when CPU is executing.. we make it false until the arrow is pressed, runs, repeat
+            if(_SingleStepRunning) {
+                this.isExecuting = false;
+            }
+   
         }
 
         public runEachOP() {
@@ -153,26 +159,26 @@ module TSOS {
                     break;
                 //branch n bytes if Z flag is 0
                 case "D0":
-                    console.log("ZFLAG " + this.Zflag);
+                    //console.log("ZFLAG " + this.Zflag);
                     if(this.Zflag == 0) {
                         //this is troublesome and not working 
                         var bytestobranch = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
-                        console.log(bytestobranch + "BYTES");
-                        console.log(this.PC + "INDEX");
-                        this.PC = ((bytestobranch + this.PC + 2) % 255);
+                        //console.log(bytestobranch + "BYTES");
+                        //console.log(this.PC + "INDEX");
 
-                        //this.PC = ((bytestobranch + this.PC + 2) % 255);
-                        console.log(this.PC + "PC AFTER BRANCH");
+                        // this.PC = ((bytestobranch + this.PC + 2) % 255);
+                        
+                        //console.log(this.PC + "PC AFTER BRANCH");
+                        //console.log(_MemoryAccessor.getMemory(this.PC));
 
-                        /*if(bytestobranch + this.PC > 255) {
-                            this.PC = (bytestobranch + this.PC) % 255;
-                            this.PC = this.PC + parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
-                            this.PC = ((this.PC + 2 + bytestobranch) % 255);
-                   
+                        if(this.PC + bytestobranch > 255) {
+                            this.PC = (this.PC + bytestobranch) - 255 + 1; //(bytestobranch + this.PC + 1) % 255; //(this.PC + bytestobranch) - 255;
+                            console.log(this.PC + "PC AFTER BRANCH");
                         }
                         else{
-                            this.PC = (bytestobranch + this.PC); 
-                        }*/
+                            this.PC = this.PC + bytestobranch + 2;
+                            console.log(this.PC + "PC AFTER BRANCH");
+                        }
    
                     }
                     else{
@@ -199,14 +205,15 @@ module TSOS {
                 //system call
                 case "FF":
                     if(this.Xreg == 1) {
-                        _StdOut.putText(this.Yreg.toString());
+                        _StdOut.putText(this.Yreg.toString(16));
                     }
                     else if(this.Xreg == 2) {
                         var storedLoc = this.Yreg;
                         var newStr = "";
                         while(_Memory.memoryArray[storedLoc] != "00") {
                             //to string did not work it returned numbers, I found from char code to go from hex to ascii and it worked
-                            _StdOut.putText(String.fromCharCode(parseInt(_Memory.memoryArray[storedLoc] , 16)));
+                            //_StdOut.putText(String.fromCharCode(parseInt(_Memory.memoryArray[storedLoc] , 16)));
+                            newStr += (String.fromCharCode(parseInt(_Memory.memoryArray[storedLoc] , 16)));
                             storedLoc += 1;
                         }
                         _StdOut.putText(newStr);

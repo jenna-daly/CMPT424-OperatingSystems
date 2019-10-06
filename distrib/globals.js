@@ -59,6 +59,8 @@ var _Pcb;
 var _PCBStored = [];
 //one place to store memory size
 var _MemorySize = 256;
+//var to tell OS whether single step is used or not
+var _SingleStepRunning = false;
 var _MemoryArray = [];
 //var to assign unique PID
 var _PID = 0;
