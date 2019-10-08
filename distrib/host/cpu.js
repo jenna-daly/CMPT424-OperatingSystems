@@ -50,15 +50,14 @@ var TSOS;
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
-            //this.runEachOP();
+            this.runEachOP();
             TSOS.Control.accessCPU();
             this.storeinPCB();
             TSOS.Control.accessPCB();
-            this.runEachOP();
+            //this.runEachOP();
             //console.log(this.IR);
-            //access memory through memory accessor
             //cycle is called when CPU is executing.. we make it false until the arrow is pressed, runs, repeat
-            if (_SingleStepRunning) {
+            if (_SingleStepRunning == true) {
                 this.isExecuting = false;
             }
         };
@@ -85,7 +84,6 @@ var TSOS;
                     break;
                 //store the accumulator in memory
                 case "8D":
-                    //var getAccLocation = parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
                     var getAccLocation = this.littleEndianAddress();
                     //console.log(getAccLocation + " decoded location");
                     //this gives back the hex value of acc, before I was getting dec value
@@ -118,7 +116,7 @@ var TSOS;
                     break;
                 //load the X reg from memory
                 case "AE":
-                    var MemoryX = this.littleEndianAddress(); //parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
+                    var MemoryX = this.littleEndianAddress();
                     this.Xreg = _MemoryAccessor.getMemory(MemoryX);
                     this.PC += 3;
                     this.IR = "AE";
@@ -131,7 +129,7 @@ var TSOS;
                     break;
                 //load the Y reg from memory
                 case "AC":
-                    var MemoryY = this.littleEndianAddress(); //parseInt(_MemoryAccessor.getMemory(this.PC+1), 16)
+                    var MemoryY = this.littleEndianAddress();
                     this.Yreg = _MemoryAccessor.getMemory(MemoryY);
                     this.PC += 3;
                     this.IR = "AC";
@@ -148,7 +146,7 @@ var TSOS;
                     break;
                 //compare a byte in memory to X reg; set Z flag if equal
                 case "EC":
-                    var byteOne = this.littleEndianAddress(); //parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
+                    var byteOne = this.littleEndianAddress();
                     if (parseInt(_MemoryAccessor.getMemory(byteOne), 16) == this.Xreg) {
                         this.Zflag = 1;
                     }
@@ -162,25 +160,25 @@ var TSOS;
                 case "D0":
                     //console.log("ZFLAG " + this.Zflag);
                     if (this.Zflag == 0) {
-                        //this is troublesome and not working properly past counting0
                         var bytestobranch = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
                         //console.log(bytestobranch + "BYTES");
                         //console.log(this.PC + "INDEX");
-                        // this.PC = ((bytestobranch + this.PC + 2) % 255);
                         //console.log(this.PC + "PC AFTER BRANCH");
                         //console.log(_MemoryAccessor.getMemory(this.PC));
-                        console.log(this.PC + " this is the pc 21");
                         var newVar = this.PC + bytestobranch;
                         console.log(newVar + " this val is values added");
                         if (this.PC + bytestobranch > 255) {
+                            //if the branch will push us past 255/segment 0, we need to wrap back around
                             this.PC = (this.PC + bytestobranch) - 255 + 1; //(bytestobranch + this.PC + 1) % 255; //(this.PC + bytestobranch) - 255;
                             console.log(this.PC + "PC AFTER BRANCH");
                         }
                         else {
+                            //if the branch does not push us past, add 2 to increment the PC past this op and then add the branch
                             this.PC = this.PC + bytestobranch + 2;
                             console.log(this.PC + "PC AFTER BRANCH");
                         }
                     }
+                    //if Z flag is 1, keep moving forward
                     else {
                         this.PC += 2;
                     }
@@ -188,7 +186,7 @@ var TSOS;
                     break;
                 //increment value of a byte
                 case "EE":
-                    var incrementThis = this.littleEndianAddress(); //parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
+                    var incrementThis = this.littleEndianAddress();
                     var incrementedDone = parseInt(_MemoryAccessor.getMemory(incrementThis), 16);
                     incrementedDone += 1;
                     /*if(incrementedDone.toString().length == 1) {
