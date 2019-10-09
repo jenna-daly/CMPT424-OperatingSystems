@@ -137,20 +137,30 @@ var TSOS;
                 var oneLine = "";
                 var testWidth = 0;
                 var i = 0;
+                //if text is too long, execute these staements
                 if (this.currentXPosition + offset > 490) {
-                    while (testWidth < 480) {
-                        oneLine = text.substring(0, i);
-                        testWidth = _DrawingContext.measureText(this.currentFont, this.currentFontSize, oneLine);
-                        if (testWidth > 480) {
-                            _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, oneLine);
-                            this.advanceLine();
-                            this.putText(text.substring(i));
-                        }
-                        else {
-                            i = i + 1;
+                    //text.length != null, text != "" did not work.. some reason text.length>1 did
+                    if (text.length > 1) {
+                        while (testWidth < 480) {
+                            oneLine = text.substring(0, i);
+                            testWidth = _DrawingContext.measureText(this.currentFont, this.currentFontSize, oneLine);
+                            if (testWidth > 480) {
+                                _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, oneLine);
+                                this.advanceLine();
+                                this.putText(text.substring(i));
+                            }
+                            else {
+                                i = i + 1;
+                            }
                         }
                     }
+                    else {
+                        this.advanceLine();
+                        _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
+                        this.currentXPosition = this.currentXPosition + offset;
+                    }
                 }
+                //if the text is not too long, print it
                 else {
                     // Draw the text at the current X and Y coordinates.
                     _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
