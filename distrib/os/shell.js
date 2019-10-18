@@ -279,8 +279,18 @@ var TSOS;
                 //console.log(newInput);
                 //have to reset 
                 _CPU.init();
+                var segment;
+                if (_PID == 0) {
+                    segment = 0;
+                }
+                else if (_PID == 1) {
+                    segment = 1;
+                }
+                else if (_PID == 2) {
+                    segment = 2;
+                }
                 //save to memory
-                _MemoryManager.createArr(0, newInput);
+                _MemoryManager.createArr(segment, newInput);
                 _currentPID = _PID;
                 //update our counters / displays
                 TSOS.Control.updateMemory();
