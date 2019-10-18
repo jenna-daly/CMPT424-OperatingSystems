@@ -127,6 +127,42 @@ module TSOS {
                                   "<pid> - runs program as specified by pid.");
             this.commandList[this.commandList.length] = sc;
 
+            //clearmem command
+            sc = new ShellCommand(this.shellClearmem,
+                                  "clearmem",
+                                  "- Clears all memory partitions");
+            this.commandList[this.commandList.length] = sc;
+
+            //runall command
+            sc = new ShellCommand(this.shellRunall,
+                                  "runall",
+                                  "- Runs all programs at once");
+            this.commandList[this.commandList.length] = sc;
+
+            //ps command
+            sc = new ShellCommand(this.shellPS,
+                                  "ps",
+                                  "- Display the PID and state of all processes");
+            this.commandList[this.commandList.length] = sc;
+
+            //kill <pid> command
+            sc = new ShellCommand(this.shellKill,
+                                  "kill",
+                                  "<pid> - Kills specified process");
+            this.commandList[this.commandList.length] = sc;
+
+            //killall command
+            sc = new ShellCommand(this.shellKillall,
+                                  "killall",
+                                  "- Kills all processes");
+            this.commandList[this.commandList.length] = sc;
+
+            //quantum <int> command
+            sc = new ShellCommand(this.shellQuantum,
+                                  "quantum",
+                                  "<int> - Sets the round robin quantum");
+            this.commandList[this.commandList.length] = sc;
+
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -375,6 +411,37 @@ module TSOS {
 
         }
 
+        //iP3 commands, functionality to be added
+        public shellClearmem(args) {
+            _StdOut.putText("Coming soon");
+    
+        }
+
+        public shellRunall(args) {
+            _StdOut.putText("Coming soon");
+    
+        }
+
+        public shellPS(args) {
+            _StdOut.putText("Coming soon");
+    
+        }
+
+        public shellKill(args) {
+            _StdOut.putText("Coming soon");
+    
+        }
+
+        public shellKillall(args) {
+            _StdOut.putText("Coming soon");
+    
+        }
+
+        public shellQuantum(args) {
+            _StdOut.putText("Coming soon");
+    
+        }
+
         public shellMan(args) {
             if (args.length > 0) {
                 var topic = args[0];
@@ -437,6 +504,30 @@ module TSOS {
 
                     case "run":
                         _StdOut.putText("Program will run as specified by pid.");
+                        break;
+
+                    case "clearmem":
+                        _StdOut.putText("All memory partitions are cleared.");
+                        break;
+
+                    case "runall":
+                        _StdOut.putText("All programs in memory will be executed.");
+                        break;
+
+                    case "ps":
+                        _StdOut.putText("The PID and state of all processes is displayed.");
+                        break;
+
+                    case "kill":
+                        _StdOut.putText("Kills process as specified by PID.");
+                        break;
+                                
+                    case "killall":
+                        _StdOut.putText("Kills all processes.");
+                        break;
+
+                    case "quantum":
+                        _StdOut.putText("Quantum of round robin is set as specified by int.");
                         break;
 
                     default:
