@@ -58,7 +58,8 @@ var _MemoryManager = null;
 var _Pcb;
 var _PCBStored = [];
 //one place to store memory size
-var _MemorySize = 256;
+//updating to 768 for iP3
+var _MemorySize = 768;
 //var to tell OS whether single step is used or not
 var _SingleStepRunning = false;
 var _MemoryArray = [];

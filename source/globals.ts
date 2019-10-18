@@ -77,7 +77,8 @@ var _Pcb: TSOS.Pcb;
 var _PCBStored: any = [];
 
 //one place to store memory size
-var _MemorySize = 256;
+//updating to 768 for iP3
+var _MemorySize = 768;
 
 
 //var to tell OS whether single step is used or not

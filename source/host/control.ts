@@ -126,9 +126,13 @@ module TSOS {
                                     
             for(let i=0; i < (_MemorySize/8); i++) {
             //loading the labels for each memory row
-                if(memoryHex == 0) {
+                if(memoryHex == 0 || memoryHex == 8) {
                     containMem += "<tr><td> 0x00" + (memoryHex).toString(16).toUpperCase() + "</td>";
                     memoryHex += 8;
+                }
+                else if(memoryHex > 248) {
+                    containMem += "<tr><td> 0x" + (memoryHex).toString(16).toUpperCase() + "</td>";
+                    memoryHex += 8; 
                 }
                 else{
                     containMem += "<tr><td> 0x0" + (memoryHex).toString(16).toUpperCase() + "</td>";
