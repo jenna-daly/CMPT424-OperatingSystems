@@ -52,6 +52,13 @@ var TSOS;
             }
             return limit;
         };
+        //clearmem shell command
+        MemoryManager.prototype.clearMemory = function () {
+            for (var i = 0; i < _MemorySize; i++) {
+                _Memory.memoryArray[i] = "00";
+            }
+            TSOS.Control.updateMemory();
+        };
         return MemoryManager;
     }());
     TSOS.MemoryManager = MemoryManager;

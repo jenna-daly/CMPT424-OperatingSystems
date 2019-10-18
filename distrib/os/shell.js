@@ -327,7 +327,15 @@ var TSOS;
         };
         //iP3 commands, functionality to be added
         Shell.prototype.shellClearmem = function (args) {
-            _StdOut.putText("Coming soon");
+            if (_CPU.isExecuting == true) {
+                _StdOut.putText("Cannot clear memory while a program is running.");
+            }
+            else {
+                _MemoryManager.clearMemory();
+                _StdOut.putText("Success! Memory is now empty.");
+                _PID = 0;
+            }
+            //_StdOut.putText("Coming soon");
         };
         Shell.prototype.shellRunall = function (args) {
             _StdOut.putText("Coming soon");

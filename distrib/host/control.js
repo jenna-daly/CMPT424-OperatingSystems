@@ -83,22 +83,8 @@ var TSOS;
             }
             accessMemory.innerHTML = containMem;
         };
+        //updates the memory display
         Control.updateMemory = function () {
-            //I was using this to go through the input, but now that Memory Manager works to save the array, should not be needed..
-            //keeping commented until I am sure there are no bugs
-            //var validate = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
-            //code to put into memory the user entered op codes
-            /*var space = " ";
-            var newString = "";
-            for(let i =0; i< validate.length; i++) {
-                if(space.indexOf(validate[i]) < 0) {
-                    newString += validate[i];
-                }
-            }*/
-            //this loop breaks my code.. so I need to figure out how to store the newString in an array or else I can use substring
-            /*for(let i=0; i< _MemorySize; i+2) {
-                _Memory.memoryArray[i] = newString.substring(i, i+2);
-            }*/
             var accessMemory = document.getElementById("taMemory");
             var containMem = "";
             var maxRowCount = 8; //8 memory spaces across

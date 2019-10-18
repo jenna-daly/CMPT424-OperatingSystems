@@ -60,6 +60,14 @@ module TSOS {
             return limit;
         }
 
+        //clearmem shell command
+        public clearMemory(){
+            for(let i = 0; i < _MemorySize; i++) {
+                _Memory.memoryArray[i] = "00";
+            }
+            Control.updateMemory();    
+        }
+
 
     }
 }
