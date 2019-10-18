@@ -360,6 +360,10 @@ module TSOS {
             }
 
             if(isValid == true) {
+                if(_PID > 2){
+                    _StdOut.putText("Memory is full. Clear partitions to load a new program.");
+                    return -1;
+                }
                 _StdOut.putText("Program loaded successfuly with PID " + _PID);
                 //_Kernel.updateMemory();
                 //_Kernel.accessCPU();
