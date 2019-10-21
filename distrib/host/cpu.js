@@ -235,15 +235,25 @@ var TSOS;
         };
         //take values CPU generates and dispaly save them in the PCB so we can display it in control.ts
         Cpu.prototype.storeinPCB = function () {
-            _PCBStored = [];
-            var status;
-            if (this.isExecuting == false) {
-                status = "Completed";
+            //_PCBStored = [];
+            //var status;
+            for (var i = 0; i < _PCBStored.length; i++) {
+                if (this.isExecuting == false) {
+                    //status = "completed";
+                    _PCBStored[i].State = "Completed";
+                }
+                else {
+                    _PCBStored[0].State = "Running";
+                    //status = "Running";
+                }
+                _PCBStored[i].PC = this.PC.toString(16).toUpperCase();
+                _PCBStored[i].IR = this.IR;
+                _PCBStored[i].Acc = this.Acc.toString(16).toUpperCase();
+                _PCBStored[i].Xreg = this.Xreg.toString(16).toUpperCase();
+                _PCBStored[i].Yreg = this.Yreg.toString(16).toUpperCase();
+                _PCBStored[i].Zflag = this.Zflag.toString(16).toUpperCase();
+                //_PCBStored.push(_currentPID, status, this.PC.toString(16).toUpperCase(), this.IR, this.Acc.toString(16).toUpperCase(), this.Xreg.toString(16).toUpperCase(), this.Yreg.toString(16).toUpperCase(), this.Zflag.toString(16).toUpperCase());
             }
-            else {
-                status = "Running";
-            }
-            _PCBStored.push(_currentPID, status, this.PC.toString(16).toUpperCase(), this.IR, this.Acc.toString(16).toUpperCase(), this.Xreg.toString(16).toUpperCase(), this.Yreg.toString(16).toUpperCase(), this.Zflag.toString(16).toUpperCase());
         };
         return Cpu;
     }());

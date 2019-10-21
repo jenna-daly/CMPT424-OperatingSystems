@@ -400,6 +400,8 @@ module TSOS {
                 //_PCBStored.push(_currentPID);
                 //_PCBStored.push("Resident");
  
+                //for iP3 I can't use the commented out code above
+                //I make an object and store it in an array w all the info for one process
                 var newPCB = new TSOS.Pcb(_currentPID);
                 console.log("NEW PCB " + JSON.stringify(newPCB));
                 _PCBStored.push(newPCB);
@@ -416,7 +418,7 @@ module TSOS {
         if(args.length > 0) {
             _CPU.cycle();
             TSOS.Control.accessCPU();
-            _PCBStored.push("Running");
+            //_PCBStored.push("Running");
             TSOS.Control.accessPCB();
             _CPU.isExecuting = true;
 

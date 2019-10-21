@@ -320,7 +320,7 @@ var TSOS;
             if (args.length > 0) {
                 _CPU.cycle();
                 TSOS.Control.accessCPU();
-                _PCBStored.push("Running");
+                //_PCBStored.push("Running");
                 TSOS.Control.accessPCB();
                 _CPU.isExecuting = true;
             }
