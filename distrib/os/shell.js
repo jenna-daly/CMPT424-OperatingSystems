@@ -305,6 +305,8 @@ var TSOS;
                 //_PCBStored=[];
                 //_PCBStored.push(_currentPID);
                 //_PCBStored.push("Resident");
+                //for iP3 I can't use the commented out code above
+                //I make an object and store it in an array w all the info for one process
                 var newPCB = new TSOS.Pcb(_currentPID);
                 console.log("NEW PCB " + JSON.stringify(newPCB));
                 _PCBStored.push(newPCB);
@@ -337,6 +339,9 @@ var TSOS;
                 _MemoryManager.clearMemory();
                 _StdOut.putText("Success! Memory is now empty.");
                 _PID = 0;
+                //clear PCB list
+                _PCBStored = [];
+                TSOS.Control.accessPCB();
             }
         };
         Shell.prototype.shellRunall = function (args) {

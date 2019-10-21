@@ -438,6 +438,9 @@ module TSOS {
                 _MemoryManager.clearMemory();
                 _StdOut.putText("Success! Memory is now empty.");
                 _PID = 0;
+                //clear PCB list
+                _PCBStored = [];
+                TSOS.Control.accessPCB();
             }    
         }
 
