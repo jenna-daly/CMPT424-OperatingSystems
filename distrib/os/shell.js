@@ -302,9 +302,12 @@ var TSOS;
                 //TSOS.Control.accessPCB();
                 _PID += 1;
                 //clear array to start fresh if there is data, push the two things we know- PID and resident status
-                _PCBStored = [];
-                _PCBStored.push(_currentPID);
-                _PCBStored.push("Resident");
+                //_PCBStored=[];
+                //_PCBStored.push(_currentPID);
+                //_PCBStored.push("Resident");
+                var newPCB = new TSOS.Pcb(_currentPID);
+                console.log("NEW PCB " + JSON.stringify(newPCB));
+                _PCBStored.push(newPCB);
                 TSOS.Control.accessPCB();
             }
             else {
@@ -335,7 +338,6 @@ var TSOS;
                 _StdOut.putText("Success! Memory is now empty.");
                 _PID = 0;
             }
-            //_StdOut.putText("Coming soon");
         };
         Shell.prototype.shellRunall = function (args) {
             _StdOut.putText("Coming soon");

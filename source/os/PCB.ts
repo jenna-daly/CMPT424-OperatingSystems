@@ -6,7 +6,7 @@ module TSOS {
 
     export class Pcb {
         constructor(//pid first, we have that as a global var updating with load
-          _PID,
+          public Pid: number = 0,
           public PC: number = 0,
           public Acc: number = 0,
           public Xreg: number = 0,
@@ -18,7 +18,7 @@ module TSOS {
         }
 
     public init(): void {
-        _PID;
+        this.Pid = _currentPID;
         this.PC = 0;
         this.Acc = 0;
         this.Xreg = 0;
@@ -27,7 +27,7 @@ module TSOS {
         //this.isExecuting = false;
         this.State = "Resident";
 
-      }  
+      } 
 
       public storeNewVals(){
         /*_PID;

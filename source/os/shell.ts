@@ -396,12 +396,14 @@ module TSOS {
                 _PID += 1;
 
                 //clear array to start fresh if there is data, push the two things we know- PID and resident status
-                _PCBStored=[];
-                _PCBStored.push(_currentPID);
-                _PCBStored.push("Resident");
+                //_PCBStored=[];
+                //_PCBStored.push(_currentPID);
+                //_PCBStored.push("Resident");
+ 
+                var newPCB = new TSOS.Pcb(_currentPID);
+                console.log("NEW PCB " + JSON.stringify(newPCB));
+                _PCBStored.push(newPCB);
                 TSOS.Control.accessPCB();
-                
-            
             }
             else{
                 _StdOut.putText("Input is not valid. Use only hex digits and spaces.");
@@ -434,9 +436,7 @@ module TSOS {
                 _MemoryManager.clearMemory();
                 _StdOut.putText("Success! Memory is now empty.");
                 _PID = 0;
-            }
-            //_StdOut.putText("Coming soon");
-    
+            }    
         }
 
         public shellRunall(args) {
