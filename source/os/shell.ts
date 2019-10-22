@@ -3,6 +3,7 @@
 ///<reference path="shellCommand.ts" />
 ///<reference path="userCommand.ts" />
 ///<reference path="memoryManager.ts" />
+///<reference path="scheduler.ts" />
 
 /* ------------
    Shell.ts
@@ -413,19 +414,54 @@ module TSOS {
         }
 
         public shellRun(args) {
-            //_StdOut.putText("Coming soon");
-            //_MemoryAccessor.getMemory();
-        if(args.length > 0) {
-            _CPU.cycle();
-            TSOS.Control.accessCPU();
-            //_PCBStored.push("Running");
-            TSOS.Control.accessPCB();
-            _CPU.isExecuting = true;
+                //_StdOut.putText("Coming soon");
+                //_MemoryAccessor.getMemory();
+            var valid = false;
+            if(args.length > 0) {
+                for(let i =0; i < _PCBStored.length; i++) {
+                    if(_PCBStored[i].Pid == args) {
+                        _StdOut.putText("Valid PID. Running.");
+                        _StdOut.advanceLine();
+                        valid = true;
+                        break;
+                    }
+                    else{
+                        valid = false;
+                    }
+                }
+                /*_CPU.cycle();
+                TSOS.Control.accessCPU();
+                //_PCBStored.push("Running");
+                TSOS.Control.accessPCB();
+                _CPU.isExecuting = true;*/
 
-        }
-        else{
-            _StdOut.putText("Usage: run <PID> Please supply a PID.");
-        }
+            }
+            if(valid == false){
+                _StdOut.putText("Usage: run <PID> Please supply a PID.");
+            }
+            if(valid ==true) {
+                //_CPU.cycle();
+                if(args == 0) {
+                    _CPU.PC = 0;
+                    _CPU.isExecuting = true;
+                    TSOS.Control.accessCPU();
+                    TSOS.Control.accessPCB();
+                }
+                else if(args == 1) {
+                    _CPU.PC = 256;
+                    _CPU.isExecuting = true;
+                    TSOS.Control.accessCPU();
+                    TSOS.Control.accessPCB(); 
+                }
+                else{
+                    _CPU.PC = 512;
+                    _CPU.isExecuting = true;
+                    TSOS.Control.accessCPU();
+                    TSOS.Control.accessPCB();   
+                }
+                
+            }
+
 
         }
 
@@ -465,8 +501,13 @@ module TSOS {
         }
 
         public shellQuantum(args) {
-            _StdOut.putText("Coming soon");
-    
+            if(args.length > 0) {
+                //access function in scheduler
+                _StdOut.putText("New quantum set to: " + args);
+            }
+            else {
+                _StdOut.putText("Quantum not valid. Please enter an int.");
+            }
         }
 
         public shellMan(args) {

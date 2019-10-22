@@ -243,7 +243,7 @@ var TSOS;
                     _PCBStored[i].State = "Completed";
                 }
                 else {
-                    _PCBStored[0].State = "Running";
+                    _PCBStored[i].State = "Running";
                     //status = "Running";
                 }
                 _PCBStored[i].PC = this.PC.toString(16).toUpperCase();
