@@ -6,7 +6,7 @@ var TSOS;
         function Pcb(//pid first, we have that as a global var updating with load
         Pid, IR, PC, Acc, Xreg, Yreg, Zflag, 
         //public isExecuting: boolean = false,
-        State) {
+        State, base, limit) {
             if (Pid === void 0) { Pid = 0; }
             if (IR === void 0) { IR = "IR"; }
             if (PC === void 0) { PC = 0; }
@@ -15,6 +15,8 @@ var TSOS;
             if (Yreg === void 0) { Yreg = 0; }
             if (Zflag === void 0) { Zflag = 0; }
             if (State === void 0) { State = "Resident"; }
+            if (base === void 0) { base = 0; }
+            if (limit === void 0) { limit = 0; }
             this.Pid = Pid;
             this.IR = IR;
             this.PC = PC;
@@ -23,6 +25,8 @@ var TSOS;
             this.Yreg = Yreg;
             this.Zflag = Zflag;
             this.State = State;
+            this.base = base;
+            this.limit = limit;
         }
         Pcb.prototype.init = function () {
             this.Pid = _currentPID;
@@ -34,6 +38,8 @@ var TSOS;
             this.Zflag = 0;
             //this.isExecuting = false;
             this.State = "Resident";
+            this.base = 0;
+            this.limit = 0;
         };
         Pcb.prototype.storeNewVals = function () {
             /*_PID;

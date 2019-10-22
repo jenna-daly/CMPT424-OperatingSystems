@@ -225,6 +225,7 @@ var TSOS;
                 //else call an error to isr and write it to the console
             }
             this.storeinPCB();
+            TSOS.Control.accessPCB();
         };
         //this function accounts for op codes with two spaces for memory, little endian requires you flip to get the location
         Cpu.prototype.littleEndianAddress = function () {
@@ -238,10 +239,16 @@ var TSOS;
             //_PCBStored = [];
             //var status;
             for (var i = 0; i < _PCBStored.length; i++) {
-                if (_PCBStored[i].State == "Ready") {
+                if (_PCBStored[i].State == "Running") {
                     if (this.isExecuting == false) {
                         //status = "completed";
                         _PCBStored[i].State = "Completed";
+                        _PCBStored[i].PC = this.PC.toString(16).toUpperCase();
+                        _PCBStored[i].IR = this.IR;
+                        _PCBStored[i].Acc = this.Acc.toString(16).toUpperCase();
+                        _PCBStored[i].Xreg = this.Xreg.toString(16).toUpperCase();
+                        _PCBStored[i].Yreg = this.Yreg.toString(16).toUpperCase();
+                        _PCBStored[i].Zflag = this.Zflag.toString(16).toUpperCase();
                     }
                     else {
                         _PCBStored[i].State = "Running";

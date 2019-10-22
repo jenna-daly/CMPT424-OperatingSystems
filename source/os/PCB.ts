@@ -14,7 +14,9 @@ module TSOS {
           public Yreg: number = 0,
           public Zflag: number = 0,
           //public isExecuting: boolean = false,
-          public State: string = "Resident") {
+          public State: string = "Resident",
+          public base: number = 0,
+          public limit: number = 0) {
 
         }
 
@@ -28,7 +30,8 @@ module TSOS {
         this.Zflag = 0;
         //this.isExecuting = false;
         this.State = "Resident";
-
+        this.base = 0;
+        this.limit = 0;
       } 
 
       public storeNewVals(){

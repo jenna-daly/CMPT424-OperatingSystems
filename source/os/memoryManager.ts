@@ -68,6 +68,21 @@ module TSOS {
             Control.updateMemory();    
         }
 
-
+        public allocateMemory(){
+            var segment;
+            if(segmentZeroFree == true) {
+                segment = 0;
+                segmentZeroFree = false;
+            }
+            else if(segmentOneFree == true) {
+                segment = 1;
+                segmentOneFree = false;
+            }
+            else if(segmentTwoFree == true) {
+                segment = 2;
+                segmentTwoFree = false;
+            }
+            return segment;
+        }
     }
 }

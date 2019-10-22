@@ -351,11 +351,9 @@ module TSOS {
             for(let i=0; i< validateText.length; i++) {
                 if(allowedChars.indexOf(validateText[i]) > -1) {
                     isValid = true;
-                    //_StdOut.putText("Input is allowed.");
                 }
                 else {
                     isValid = false;
-                    //_StdOut.putText("Input is not valid. Use only hex digits and spaces.");
                     break;
                 }
             }
@@ -368,8 +366,6 @@ module TSOS {
                     return -1;
                 }
                 _StdOut.putText("Program loaded successfuly with PID " + _PID);
-                //_Kernel.updateMemory();
-                //_Kernel.accessCPU();
 
                 var validInput = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
                 var newInput = validInput.split(" ");
@@ -378,22 +374,22 @@ module TSOS {
                 //have to reset 
                 _CPU.init();
 
-                var segment;
-                //if(_PID == 0){
+                //allocate memory in memory manager instead
+                /*var segment;
                 if(segmentZeroFree == true) {
                     segment = 0;
                     segmentZeroFree = false;
                 }
-                //else if(_PID == 1) {
                 else if(segmentOneFree == true) {
                     segment = 1;
                     segmentOneFree = false;
                 }
-                //else if(_PID == 2) {
                 else if(segmentTwoFree == true) {
                     segment = 2;
                     segmentTwoFree = false;
-                }
+                }*/
+
+                var segment = _MemoryManager.allocateMemory();
                 //save to memory
                 _MemoryManager.createArr(segment, newInput);  
 
@@ -401,15 +397,9 @@ module TSOS {
                 //update our counters / displays
                 TSOS.Control.updateMemory();
                 TSOS.Control.accessCPU();
-                //TSOS.Control.accessPCB();
                 _PID += 1;
-
-                //clear array to start fresh if there is data, push the two things we know- PID and resident status
-                //_PCBStored=[];
-                //_PCBStored.push(_currentPID);
-                //_PCBStored.push("Resident");
  
-                //for iP3 I can't use the commented out code above
+                //for iP3 I can't use one array like I did before
                 //I make an object and store it in an array w all the info for one process
                 var newPCB = new TSOS.Pcb(_currentPID);
                 console.log("NEW PCB " + JSON.stringify(newPCB));
@@ -422,8 +412,7 @@ module TSOS {
         }
 
         public shellRun(args) {
-                //_StdOut.putText("Coming soon");
-                //_MemoryAccessor.getMemory();
+            //checks that arg given exists
             var valid = false;
             if(args.length > 0) {
                 for(let i =0; i < _PCBStored.length; i++) {
@@ -431,7 +420,7 @@ module TSOS {
                         _StdOut.putText("Valid PID. Running.");
                         _StdOut.advanceLine();
                         valid = true;
-                        _PCBStored[i].State = "Ready";
+                        _PCBStored[i].State = "Running";
                         break;
                     }
                     else{
@@ -459,6 +448,7 @@ module TSOS {
                 else if(_MemoryManager.getBase(args) == 512){
                     _CPU.PC = 512;  
                 }
+                //_CPU.PC = _PCBStored[args].base;
                 _CPU.isExecuting = true;
                 TSOS.Control.accessCPU();
                 TSOS.Control.accessPCB(); 
