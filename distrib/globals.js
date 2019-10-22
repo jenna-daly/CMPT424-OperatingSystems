@@ -67,6 +67,10 @@ var _MemoryArray = [];
 var _PID = 0;
 //var to store PID before it is incremented
 var _currentPID = 0;
+//initialize segments to be free
+var segmentZeroFree = true;
+var segmentOneFree = true;
+var segmentTwoFree = true;
 var onDocumentLoad = function () {
     TSOS.Control.hostInit();
 };

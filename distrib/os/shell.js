@@ -272,7 +272,9 @@ var TSOS;
                 }
             }
             if (isValid == true) {
-                if (_PID > 2) {
+                //memory is full if we have the 3 segments filled
+                //originally I was reassigning PID 0, I changed the if so I can keep incrementing up
+                if (_PCBStored.length > 2) {
                     _StdOut.putText("Memory is full. Clear partitions to load a new program.");
                     return -1;
                 }
@@ -285,14 +287,20 @@ var TSOS;
                 //have to reset 
                 _CPU.init();
                 var segment;
-                if (_PID == 0) {
+                //if(_PID == 0){
+                if (segmentZeroFree == true) {
                     segment = 0;
+                    segmentZeroFree = false;
                 }
-                else if (_PID == 1) {
+                //else if(_PID == 1) {
+                else if (segmentOneFree == true) {
                     segment = 1;
+                    segmentOneFree = false;
                 }
-                else if (_PID == 2) {
+                //else if(_PID == 2) {
+                else if (segmentTwoFree == true) {
                     segment = 2;
+                    segmentTwoFree = false;
                 }
                 //save to memory
                 _MemoryManager.createArr(segment, newInput);
@@ -327,6 +335,7 @@ var TSOS;
                         _StdOut.putText("Valid PID. Running.");
                         _StdOut.advanceLine();
                         valid = true;
+                        _PCBStored[i].State = "Ready";
                         break;
                     }
                     else {
@@ -343,25 +352,19 @@ var TSOS;
                 _StdOut.putText("Usage: run <PID> Please supply a PID.");
             }
             if (valid == true) {
-                //_CPU.cycle();
-                if (args == 0) {
+                //need to fix this for incremented PIDs after mem is cleared, works for 0,1,2 only
+                if (_MemoryManager.getBase(args) == 0) {
                     _CPU.PC = 0;
-                    _CPU.isExecuting = true;
-                    TSOS.Control.accessCPU();
-                    TSOS.Control.accessPCB();
                 }
-                else if (args == 1) {
+                else if (_MemoryManager.getBase(args) == 256) {
                     _CPU.PC = 256;
-                    _CPU.isExecuting = true;
-                    TSOS.Control.accessCPU();
-                    TSOS.Control.accessPCB();
                 }
-                else {
+                else if (_MemoryManager.getBase(args) == 512) {
                     _CPU.PC = 512;
-                    _CPU.isExecuting = true;
-                    TSOS.Control.accessCPU();
-                    TSOS.Control.accessPCB();
                 }
+                _CPU.isExecuting = true;
+                TSOS.Control.accessCPU();
+                TSOS.Control.accessPCB();
             }
         };
         //iP3 commands, functionality to be added
@@ -372,10 +375,13 @@ var TSOS;
             else {
                 _MemoryManager.clearMemory();
                 _StdOut.putText("Success! Memory is now empty.");
-                _PID = 0;
                 //clear PCB list
+                segmentZeroFree = true;
+                segmentOneFree = true;
+                segmentTwoFree = true;
                 _PCBStored = [];
                 TSOS.Control.accessPCB();
+                //clear CPU..??
             }
         };
         Shell.prototype.shellRunall = function (args) {
