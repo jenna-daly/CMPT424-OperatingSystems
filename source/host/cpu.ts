@@ -79,7 +79,7 @@ module TSOS {
                 //load the accumulator from memory
                 case "AD":
                     var memoryLocation = this.littleEndianAddress();//parseInt(_MemoryAccessor.getMemory(this.PC+1), 16)
-                    this.Acc = _MemoryAccessor.getMemory(memoryLocation);
+                    this.Acc = _MemoryAccessor.getMemory(memoryLocation + _PCBStored[runningPID].base);
                     this.PC += 3; 
                     this.IR = "AD";
                     break;
@@ -94,7 +94,7 @@ module TSOS {
                         _Memory.memoryArray[getAccLocation] = "0" + decToHex;
                     }
                     else {*/
-                    _Memory.memoryArray[getAccLocation] = decToHex;
+                    _Memory.memoryArray[getAccLocation + _PCBStored[runningPID].base] = decToHex;
                     //}
                     //console.log(_Memory.memoryArray[getAccLocation] + " location in memory ");
                     TSOS.Control.updateMemory();
@@ -104,7 +104,7 @@ module TSOS {
                 //add with carry
                 case "6D":
                     //is it add at the address that follows or add the next number??
-                    var value =  _MemoryAccessor.getMemory(this.littleEndianAddress());
+                    var value =  _MemoryAccessor.getMemory(this.littleEndianAddress() + _PCBStored[runningPID].base);
                     
                     this.Acc += parseInt(value, 16);
                     //parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
@@ -122,7 +122,10 @@ module TSOS {
                 //load the X reg from memory
                 case "AE":
                     var MemoryX = this.littleEndianAddress();
-                    this.Xreg = _MemoryAccessor.getMemory(MemoryX);
+                    //console.log("memory x " + MemoryX);
+                    //console.log("translated " + (MemoryX + _PCBStored[runningPID].base));
+                    this.Xreg = _MemoryAccessor.getMemory(MemoryX + _PCBStored[runningPID].base);
+                    //console.log("running pid base " + _PCBStored[runningPID].base);
                     this.PC += 3;
                     this.IR = "AE";
                     break;
@@ -135,7 +138,7 @@ module TSOS {
                 //load the Y reg from memory
                 case "AC":
                     var MemoryY = this.littleEndianAddress();
-                    this.Yreg = _MemoryAccessor.getMemory(MemoryY);
+                    this.Yreg = _MemoryAccessor.getMemory(MemoryY + _PCBStored[runningPID].base);
                     this.PC += 3;
                     this.IR = "AC";
                     break;
@@ -151,7 +154,7 @@ module TSOS {
                     break;
                 //compare a byte in memory to X reg; set Z flag if equal
                 case "EC":
-                    var byteOne = this.littleEndianAddress();
+                    var byteOne = this.littleEndianAddress() + _PCBStored[runningPID].base;
                     if(parseInt(_MemoryAccessor.getMemory(byteOne), 16) == this.Xreg) {
                         this.Zflag = 1;
                     }
@@ -171,17 +174,18 @@ module TSOS {
                          //console.log(this.PC + "PC AFTER BRANCH");
                         //console.log(_MemoryAccessor.getMemory(this.PC));
                        
-                        var newVar = this.PC + bytestobranch;
-                        console.log(newVar + " this val is values added");
-                        if(this.PC + bytestobranch > 255) {
+                        var newVar = this.PC + bytestobranch + _PCBStored[runningPID].base;
+                        //console.log(newVar + " this val is values added");
+                        if(this.PC + bytestobranch > _PCBStored[runningPID].limit) {
+                        //if(this.PC + bytestobranch > runningPID.limit) {
                             //if the branch will push us past 255/segment 0, we need to wrap back around
                             this.PC = (this.PC + bytestobranch) - 255 + 1; //(bytestobranch + this.PC + 1) % 255; //(this.PC + bytestobranch) - 255;
-                            console.log(this.PC + "PC AFTER BRANCH");
+                            //console.log(this.PC + "PC AFTER BRANCH");
                         }
                         else{
                             //if the branch does not push us past, add 2 to increment the PC past this op and then add the branch
                             this.PC = this.PC + bytestobranch + 2;
-                            console.log(this.PC + "PC AFTER BRANCH");
+                            //console.log(this.PC + "PC AFTER BRANCH");
                         }
    
                     }
@@ -193,7 +197,7 @@ module TSOS {
                     break;
                 //increment value of a byte
                 case "EE":
-                    var incrementThis = this.littleEndianAddress();
+                    var incrementThis = this.littleEndianAddress() + _PCBStored[runningPID].base;
                     var incrementedDone = parseInt(_MemoryAccessor.getMemory(incrementThis), 16);
                     incrementedDone += 1;
                     /*if(incrementedDone.toString().length == 1) {
@@ -213,7 +217,7 @@ module TSOS {
                         _StdOut.putText(this.Yreg.toString(16));
                     }
                     else if(this.Xreg == 2) {
-                        var storedLoc = this.Yreg;
+                        var storedLoc = this.Yreg + _PCBStored[runningPID].base;
                         var newStr = "";
                         while(_Memory.memoryArray[storedLoc] != "00") {
                             //to string did not work it returned numbers, I found from char code to go from hex to ascii and it worked

@@ -97,6 +97,8 @@ var segmentZeroFree = true;
 var segmentOneFree = true;
 var segmentTwoFree = true;
 
+var runningPID;
+
 var onDocumentLoad = function() {
 	TSOS.Control.hostInit();
 };

@@ -296,19 +296,37 @@ var TSOS;
                     segment = 2;
                     segmentTwoFree = false;
                 }*/
+                //moving this up for now
+                /*_currentPID = _PID;
+                //update our counters / displays
+                TSOS.Control.updateMemory();
+                TSOS.Control.accessCPU();
+                _PID += 1;
+ 
+                var newPCB = new TSOS.Pcb(_currentPID);
+                console.log("NEW PCB " + JSON.stringify(newPCB));
+                _PCBStored.push(newPCB);
+                TSOS.Control.accessPCB();*/
+                _currentPID = _PID;
+                var newPCB = new TSOS.Pcb(_currentPID);
+                console.log("NEW PCB " + JSON.stringify(newPCB));
+                _PCBStored.push(newPCB);
                 var segment = _MemoryManager.allocateMemory();
+                _PCBStored[segment].base = _MemoryManager.getBase(segment);
+                _PCBStored[segment].limit = _MemoryManager.getLimit(segment);
+                console.log("update PCB " + JSON.stringify(_PCBStored));
                 //save to memory
                 _MemoryManager.createArr(segment, newInput);
-                _currentPID = _PID;
+                //_currentPID = _PID;
                 //update our counters / displays
                 TSOS.Control.updateMemory();
                 TSOS.Control.accessCPU();
                 _PID += 1;
                 //for iP3 I can't use one array like I did before
                 //I make an object and store it in an array w all the info for one process
-                var newPCB = new TSOS.Pcb(_currentPID);
+                /*var newPCB = new TSOS.Pcb(_currentPID);
                 console.log("NEW PCB " + JSON.stringify(newPCB));
-                _PCBStored.push(newPCB);
+                _PCBStored.push(newPCB);*/
                 TSOS.Control.accessPCB();
             }
             else {
@@ -325,6 +343,8 @@ var TSOS;
                         _StdOut.advanceLine();
                         valid = true;
                         _PCBStored[i].State = "Running";
+                        runningPID = i;
+                        console.log("RUNNNING " + runningPID);
                         break;
                     }
                     else {
@@ -351,6 +371,7 @@ var TSOS;
                 else if (_MemoryManager.getBase(args) == 512) {
                     _CPU.PC = 512;
                 }
+                console.log(_CPU.PC + " STARTING PC");
                 //_CPU.PC = _PCBStored[args].base;
                 _CPU.isExecuting = true;
                 TSOS.Control.accessCPU();
