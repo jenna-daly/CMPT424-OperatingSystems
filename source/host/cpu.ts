@@ -231,7 +231,9 @@ module TSOS {
                     this.IR = "FF";
                     this.PC += 1;
                     break;
-                default:
+                default:                
+                    _StdOut.putText("ERROR Invalid op code: " + opcode.toString());
+                    _StdOut.advanceLine();
                     _OsShell.putPrompt();
                     this.isExecuting = false;
                     //else call an error to isr and write it to the console

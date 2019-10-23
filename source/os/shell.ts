@@ -460,7 +460,7 @@ module TSOS {
             }
             if(valid ==true) {
                 //need to fix this for incremented PIDs after mem is cleared, works for 0,1,2 only
-                if(_MemoryManager.getBase(args) == 0) {
+                /*if(_MemoryManager.getBase(args) == 0) {
                     _CPU.PC = 0;
                 }
                 else if(_MemoryManager.getBase(args) == 256) {
@@ -468,7 +468,8 @@ module TSOS {
                 }
                 else if(_MemoryManager.getBase(args) == 512){
                     _CPU.PC = 512;  
-                }
+                }*/
+                _CPU.PC = _PCBStored[runningPID].base;
                 console.log(_CPU.PC + " STARTING PC");
                 //_CPU.PC = _PCBStored[args].base;
                 _CPU.isExecuting = true;
@@ -502,21 +503,46 @@ module TSOS {
     
         }
 
+        //list running or resident processes
         public shellPS(args) {
             _StdOut.putText("Coming soon");
     
         }
 
+        //kill specified process
         public shellKill(args) {
-            _StdOut.putText("Coming soon");
-    
+          if(args.length > 0) {
+            for(let i =0; i < _PCBStored.length; i++) {
+                if(_PCBStored[i].Pid == args) {
+                    if(_PCBStored[i].State == "Completed"){
+                    _StdOut.putText("ERROR Process is already complete");
+                    _StdOut.advanceLine();
+                    }
+                    else if(_PCBStored[i].State == "Resident") {
+                        _PCBStored[i].State = "Terminated";
+                        TSOS.Control.accessPCB(); 
+                    }
+                    else if(_PCBStored[i].State == "Running") {
+                        _PCBStored[i].State = "Terminated";
+                        TSOS.Control.accessPCB(); 
+                        _CPU.isExecuting = false;
+                    }
+                }
+            }
+        }
+                else{
+                    _StdOut.putText("Usage: kill <PID> Please supply a valid PID.");
+                }
+            
         }
 
+        //kill all processes
         public shellKillall(args) {
             _StdOut.putText("Coming soon");
     
         }
 
+        //set rr quantum
         public shellQuantum(args) {
             if(args.length > 0) {
                 //access function in scheduler
