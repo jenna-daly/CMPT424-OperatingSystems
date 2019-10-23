@@ -436,6 +436,7 @@ module TSOS {
             if(args.length > 0) {
                 for(let i =0; i < _PCBStored.length; i++) {
                     if(_PCBStored[i].Pid == args) {
+                        //add in if status = ready do this, otherwise do not
                         _StdOut.putText("Valid PID. Running.");
                         _StdOut.advanceLine();
                         valid = true;
@@ -505,8 +506,13 @@ module TSOS {
 
         //list running or resident processes
         public shellPS(args) {
-            _StdOut.putText("Coming soon");
-    
+            var containsProcesses = "";
+            for(let i =0; i < _PCBStored.length; i++) {
+                if(_PCBStored[i].State == "Resident" || _PCBStored[i].State == "Running") {
+                    containsProcesses += "PID " + _PCBStored[i].Pid.toString() + " " + _PCBStored[i].State + " ";
+                }     
+            }
+            _StdOut.putText(containsProcesses);
         }
 
         //kill specified process
@@ -514,8 +520,8 @@ module TSOS {
           if(args.length > 0) {
             for(let i =0; i < _PCBStored.length; i++) {
                 if(_PCBStored[i].Pid == args) {
-                    if(_PCBStored[i].State == "Completed"){
-                    _StdOut.putText("ERROR Process is already complete");
+                    if(_PCBStored[i].State == "Completed" || _PCBStored[i].State == "Terminated"){
+                    _StdOut.putText("ERROR Process is already completed or terminated");
                     _StdOut.advanceLine();
                     }
                     else if(_PCBStored[i].State == "Resident") {
@@ -527,11 +533,14 @@ module TSOS {
                         TSOS.Control.accessPCB(); 
                         _CPU.isExecuting = false;
                     }
+                    else{
+                        _StdOut.putText("Usage: kill <PID> Please supply a valid PID.");
+                    }
                 }
             }
         }
                 else{
-                    _StdOut.putText("Usage: kill <PID> Please supply a valid PID.");
+                    _StdOut.putText("Usage: kill <PID> Please supply a PID.");
                 }
             
         }
