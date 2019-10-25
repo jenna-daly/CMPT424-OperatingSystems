@@ -446,7 +446,14 @@ var TSOS;
         Shell.prototype.shellQuantum = function (args) {
             if (args.length > 0) {
                 //access function in scheduler
-                _StdOut.putText("New quantum set to: " + args);
+                /*console.log("DEFAULT QUANTUM " + _Scheduler.quantum)
+                var newQuant = _Scheduler.setQuantum(args);
+                console.log("NEW QUANTUM " + newQuant);*/
+                //_Scheduler.quantum = parseInt(args);
+                var newQuantum = new TSOS.Scheduler();
+                var newQuant = _Scheduler.setQuantum(parseInt(args));
+                console.log(_Scheduler.quantum + " quantum val");
+                _StdOut.putText("New quantum set to: " + newQuant);
             }
             else {
                 _StdOut.putText("Quantum not valid. Please enter an int.");

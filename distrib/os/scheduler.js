@@ -1,8 +1,9 @@
 ///<reference path="../globals.ts" />
-//Creating this file to: develop a CPU scheduler in the client OS using Round Robin scheduling with the user-speci[ied quantum	
+//Creating this file to: develop a CPU scheduler in the client OS using Round Robin scheduling with the user-specified quantum	
 //(or default = 6)
 var TSOS;
 (function (TSOS) {
+    //construct global instance of class
     var Scheduler = /** @class */ (function () {
         function Scheduler(quantum, currentStep) {
             if (quantum === void 0) { quantum = 0; }
@@ -18,6 +19,7 @@ var TSOS;
         };
         Scheduler.prototype.setQuantum = function (newQuantum) {
             this.quantum = newQuantum;
+            return this.quantum;
         };
         Scheduler.prototype.roundRobin = function () {
             //code here for context switches per specified cpu cycle

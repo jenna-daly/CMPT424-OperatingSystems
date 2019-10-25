@@ -71,6 +71,8 @@ var	_Memory:	TSOS.Memory;
 var	_MemoryAccessor:	TSOS.MemoryAccessor;	
 //	Software	(OS)	
 var	_MemoryManager:	any	=	null;
+var _Scheduler: any = null;
+
 
 //PCB updates, declaring global array to store values in
 var _Pcb: TSOS.Pcb;
@@ -97,6 +99,7 @@ var segmentZeroFree = true;
 var segmentOneFree = true;
 var segmentTwoFree = true;
 
+//which PID runs through cpu cycle
 var runningPID;
 
 var onDocumentLoad = function() {

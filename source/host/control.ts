@@ -192,7 +192,9 @@ module TSOS {
             //per iProject 2 instructions, create and initialize memory, create memory accessor
             _Memory	= new Memory();	
             _Memory.init();	
-            _MemoryAccessor	= new MemoryAccessor();	    
+            _MemoryAccessor	= new MemoryAccessor();	  
+            
+            _Scheduler = new TSOS.Scheduler();
 
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
