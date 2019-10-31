@@ -48,7 +48,13 @@ module TSOS {
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
 
-            this.runEachOP();
+            console.log("RDYQueue " + _Scheduler.readyQueue.getSize());
+            if(_Scheduler.readyQueue.getSize() > 1) {
+                _Scheduler.scheduleProcesses(_Scheduler.readyQueue);
+            }
+            //test case
+            //runningProcess = _PCBStored[0];
+            this.runEachOP(runningProcess);
             Control.accessCPU();
             this.storeinPCB();
             Control.accessPCB();
@@ -62,7 +68,8 @@ module TSOS {
    
         }
 
-        public runEachOP() {
+        public runEachOP(running) {
+            console.log("running process " + runningProcess);
             var opcode = _MemoryAccessor.getMemory(this.PC);
             this.isExecuting = true; 
             //console.log(this.PC + " TEST");
@@ -79,7 +86,7 @@ module TSOS {
                 //load the accumulator from memory
                 case "AD":
                     var memoryLocation = this.littleEndianAddress();//parseInt(_MemoryAccessor.getMemory(this.PC+1), 16)
-                    this.Acc = _MemoryAccessor.getMemory(memoryLocation + _PCBStored[runningPID].base);
+                    this.Acc = _MemoryAccessor.getMemory(memoryLocation + runningProcess.base);//_PCBStored[runningPID].base);
                     this.PC += 3; 
                     this.IR = "AD";
                     break;
@@ -94,7 +101,9 @@ module TSOS {
                         _Memory.memoryArray[getAccLocation] = "0" + decToHex;
                     }
                     else {*/
-                    _Memory.memoryArray[getAccLocation + _PCBStored[runningPID].base] = decToHex;
+                    _Memory.memoryArray[getAccLocation + runningProcess.base] = decToHex;
+ 
+                    //_Memory.memoryArray[getAccLocation + _PCBStored[runningPID].base] = decToHex;
                     //}
                     //console.log(_Memory.memoryArray[getAccLocation] + " location in memory ");
                     TSOS.Control.updateMemory();
@@ -104,7 +113,7 @@ module TSOS {
                 //add with carry
                 case "6D":
                     //is it add at the address that follows or add the next number??
-                    var value =  _MemoryAccessor.getMemory(this.littleEndianAddress() + _PCBStored[runningPID].base);
+                    var value =  _MemoryAccessor.getMemory(this.littleEndianAddress() + runningProcess.base);//_PCBStored[runningPID].base);
                     
                     this.Acc += parseInt(value, 16);
                     //parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
@@ -124,7 +133,7 @@ module TSOS {
                     var MemoryX = this.littleEndianAddress();
                     //console.log("memory x " + MemoryX);
                     //console.log("translated " + (MemoryX + _PCBStored[runningPID].base));
-                    this.Xreg = _MemoryAccessor.getMemory(MemoryX + _PCBStored[runningPID].base);
+                    this.Xreg = _MemoryAccessor.getMemory(MemoryX + runningProcess.base);//_PCBStored[runningPID].base);
                     //console.log("running pid base " + _PCBStored[runningPID].base);
                     this.PC += 3;
                     this.IR = "AE";
@@ -138,7 +147,7 @@ module TSOS {
                 //load the Y reg from memory
                 case "AC":
                     var MemoryY = this.littleEndianAddress();
-                    this.Yreg = _MemoryAccessor.getMemory(MemoryY + _PCBStored[runningPID].base);
+                    this.Yreg = _MemoryAccessor.getMemory(MemoryY + runningProcess.base);//_PCBStored[runningPID].base);
                     this.PC += 3;
                     this.IR = "AC";
                     break;
@@ -154,7 +163,7 @@ module TSOS {
                     break;
                 //compare a byte in memory to X reg; set Z flag if equal
                 case "EC":
-                    var byteOne = this.littleEndianAddress() + _PCBStored[runningPID].base;
+                    var byteOne = this.littleEndianAddress() + runningProcess.base;//_PCBStored[runningPID].base;
                     if(parseInt(_MemoryAccessor.getMemory(byteOne), 16) == this.Xreg) {
                         this.Zflag = 1;
                     }
@@ -174,9 +183,9 @@ module TSOS {
                          //console.log(this.PC + "PC AFTER BRANCH");
                         //console.log(_MemoryAccessor.getMemory(this.PC));
                        
-                        var newVar = this.PC + bytestobranch + _PCBStored[runningPID].base;
+                        var newVar = this.PC + bytestobranch + runningProcess.base;//_PCBStored[runningPID].base;
                         //console.log(newVar + " this val is values added");
-                        if(this.PC + bytestobranch > _PCBStored[runningPID].limit) {
+                        if(this.PC + bytestobranch > runningProcess.limit){//_PCBStored[runningPID].limit) {
                         //if(this.PC + bytestobranch > runningPID.limit) {
                             //if the branch will push us past 255/segment 0, we need to wrap back around
                             this.PC = (this.PC + bytestobranch) - 255 + 1; //(bytestobranch + this.PC + 1) % 255; //(this.PC + bytestobranch) - 255;
@@ -197,7 +206,7 @@ module TSOS {
                     break;
                 //increment value of a byte
                 case "EE":
-                    var incrementThis = this.littleEndianAddress() + _PCBStored[runningPID].base;
+                    var incrementThis = this.littleEndianAddress() + runningProcess.base;//_PCBStored[runningPID].base;
                     var incrementedDone = parseInt(_MemoryAccessor.getMemory(incrementThis), 16);
                     incrementedDone += 1;
                     /*if(incrementedDone.toString().length == 1) {
@@ -217,7 +226,7 @@ module TSOS {
                         _StdOut.putText(this.Yreg.toString(16));
                     }
                     else if(this.Xreg == 2) {
-                        var storedLoc = this.Yreg + _PCBStored[runningPID].base;
+                        var storedLoc = this.Yreg + runningProcess.base;//_PCBStored[runningPID].base;
                         var newStr = "";
                         while(_Memory.memoryArray[storedLoc] != "00") {
                             //to string did not work it returned numbers, I found from char code to go from hex to ascii and it worked
@@ -262,20 +271,23 @@ module TSOS {
                 _PCBStored[i].State = "Completed";
                 _PCBStored[i].PC = this.PC.toString(16).toUpperCase();
                 _PCBStored[i].IR = this.IR;
-                _PCBStored[i].Acc = this.Acc.toString(16).toUpperCase()
-                _PCBStored[i].Xreg = this.Xreg.toString(16).toUpperCase()
-                _PCBStored[i].Yreg = this.Yreg.toString(16).toUpperCase()
-                _PCBStored[i].Zflag = this.Zflag.toString(16).toUpperCase()
+                _PCBStored[i].Acc = this.Acc.toString(16).toUpperCase();
+                _PCBStored[i].Xreg = this.Xreg.toString(16).toUpperCase();
+                _PCBStored[i].Yreg = this.Yreg.toString(16).toUpperCase();
+                _PCBStored[i].Zflag = this.Zflag.toString(16).toUpperCase();
+
+                //take out of ready queue if it's complete
+                _Scheduler.readyQueue.dequeue();
                 
             }
             else{
                 _PCBStored[i].State = "Running";
                 _PCBStored[i].PC = this.PC.toString(16).toUpperCase();
                 _PCBStored[i].IR = this.IR;
-                _PCBStored[i].Acc = this.Acc.toString(16).toUpperCase()
-                _PCBStored[i].Xreg = this.Xreg.toString(16).toUpperCase()
-                _PCBStored[i].Yreg = this.Yreg.toString(16).toUpperCase()
-                _PCBStored[i].Zflag = this.Zflag.toString(16).toUpperCase()
+                _PCBStored[i].Acc = this.Acc.toString(16).toUpperCase();
+                _PCBStored[i].Xreg = this.Xreg.toString(16).toUpperCase();
+                _PCBStored[i].Yreg = this.Yreg.toString(16).toUpperCase();
+                _PCBStored[i].Zflag = this.Zflag.toString(16).toUpperCase();
                 //status = "Running";
             }
         }

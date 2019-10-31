@@ -91,6 +91,7 @@ module TSOS {
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) { // If there are no interrupts then run one CPU cycle if there is anything being processed. {
                 _CPU.cycle();
+                //_Scheduler.scheduleProcesses();
             } else {                      // If there are no interrupts and there is nothing being executed then just be idle. {
                 this.krnTrace("Idle");
             }
@@ -128,6 +129,9 @@ module TSOS {
                 case KEYBOARD_IRQ:
                     _krnKeyboardDriver.isr(params);   // Kernel mode device driver
                     _StdIn.handleInput();
+                    break;
+                case CONTEXT_SWITCH_IRQ:              //rr context switch
+                    _Scheduler.contextSwitch();
                     break;
                 //case OPCODE_NOTFOUND:
                 //    _StdOut.putText("Op code does not exist. Please insert a valid op code at index " + _CPU.PC);

@@ -345,33 +345,24 @@ var TSOS;
                         valid = true;
                         _PCBStored[i].State = "Running";
                         runningPID = i;
-                        console.log("RUNNNING " + runningPID);
+                        console.log("RUNNING " + runningPID);
+                        //populate ready queue
+                        _Scheduler.setReadyQueue(_PCBStored[runningPID]);
+                        //set running process
+                        console.log("queue contains " + JSON.stringify(_Scheduler.readyQueue));
+                        //runningProcess = _Scheduler.readyQueue.dequeue();
+                        runningProcess = _PCBStored[runningPID];
                         break;
                     }
                     else {
                         valid = false;
                     }
                 }
-                /*_CPU.cycle();
-                TSOS.Control.accessCPU();
-                //_PCBStored.push("Running");
-                TSOS.Control.accessPCB();
-                _CPU.isExecuting = true;*/
             }
             if (valid == false) {
                 _StdOut.putText("Usage: run <PID> Please supply a PID.");
             }
             if (valid == true) {
-                //need to fix this for incremented PIDs after mem is cleared, works for 0,1,2 only
-                /*if(_MemoryManager.getBase(args) == 0) {
-                    _CPU.PC = 0;
-                }
-                else if(_MemoryManager.getBase(args) == 256) {
-                    _CPU.PC = 256;
-                }
-                else if(_MemoryManager.getBase(args) == 512){
-                    _CPU.PC = 512;
-                }*/
                 _CPU.PC = _PCBStored[runningPID].base;
                 console.log(_CPU.PC + " STARTING PC");
                 //_CPU.PC = _PCBStored[args].base;
@@ -398,7 +389,21 @@ var TSOS;
             }
         };
         Shell.prototype.shellRunall = function (args) {
-            _StdOut.putText("Coming soon");
+            //_StdOut.putText("Coming soon");
+            for (var i = 0; i < _PCBStored.length; i++) {
+                _Scheduler.setReadyQueue(_PCBStored[i]);
+                //_OsShell.shellRun(_PCBStored[i].Pid.toString());
+            }
+            _CPU.isExecuting = true;
+            runningProcess = _Scheduler.readyQueue.dequeue();
+            /*for(let i=0; i < _PCBStored[i].length; i++) {
+                _Scheduler.setReadyQueue(_PCBStored[i]);
+            }
+            console.log("READY QUEUE SIZE " + _Scheduler.readyQueue.getSize())
+            runningProcess = _Scheduler.readyQueue.dequeue();
+            _CPU.isExecuting = true;
+            TSOS.Control.accessCPU();
+            TSOS.Control.accessPCB(); */
         };
         //list running or resident processes
         Shell.prototype.shellPS = function (args) {
@@ -445,12 +450,6 @@ var TSOS;
         //set rr quantum
         Shell.prototype.shellQuantum = function (args) {
             if (args.length > 0) {
-                //access function in scheduler
-                /*console.log("DEFAULT QUANTUM " + _Scheduler.quantum)
-                var newQuant = _Scheduler.setQuantum(args);
-                console.log("NEW QUANTUM " + newQuant);*/
-                //_Scheduler.quantum = parseInt(args);
-                var newQuantum = new TSOS.Scheduler();
                 var newQuant = _Scheduler.setQuantum(parseInt(args));
                 console.log(_Scheduler.quantum + " quantum val");
                 _StdOut.putText("New quantum set to: " + newQuant);

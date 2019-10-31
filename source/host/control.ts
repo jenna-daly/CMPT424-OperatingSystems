@@ -60,6 +60,7 @@ module TSOS {
             _Memory = new Memory();
             _Memory.init();
             this.memoryLog();
+
         }
 
         public static hostLog(msg: string, source: string = "?"): void {

@@ -19,6 +19,7 @@ const CPU_CLOCK_INTERVAL: number = 100;   // This is in ms (milliseconds) so 100
 const TIMER_IRQ: number = 0;  // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
                               // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
 const KEYBOARD_IRQ: number = 1;
+var CONTEXT_SWITCH_IRQ: number = 2;
 
 
 //
@@ -93,6 +94,7 @@ var _PID: number = 0;
 //var to store PID before it is incremented
 var _currentPID: number = 0;
 
+//var readyQueue;
 
 //initialize segments to be free
 var segmentZeroFree = true;
@@ -101,6 +103,7 @@ var segmentTwoFree = true;
 
 //which PID runs through cpu cycle
 var runningPID;
+var runningProcess;
 
 var onDocumentLoad = function() {
 	TSOS.Control.hostInit();
