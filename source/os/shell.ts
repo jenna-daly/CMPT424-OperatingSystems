@@ -461,7 +461,8 @@ module TSOS {
                 _StdOut.putText("Usage: run <PID> Please supply a PID.");
             }
             if(valid ==true) {
-                _CPU.PC = _PCBStored[runningPID].base;
+                //maybe don't need
+                //_CPU.PC = _PCBStored[runningPID].base;
                 console.log(_CPU.PC + " STARTING PC");
                 
                 //_CPU.PC = _PCBStored[args].base;
@@ -499,6 +500,7 @@ module TSOS {
             }
             _CPU.isExecuting = true;
             runningProcess = _Scheduler.readyQueue.dequeue();
+            runningProcess.State = "Running";
             /*for(let i=0; i < _PCBStored[i].length; i++) {
                 _Scheduler.setReadyQueue(_PCBStored[i]);
             }

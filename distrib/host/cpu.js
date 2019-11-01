@@ -50,7 +50,7 @@ var TSOS;
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
-            console.log("RDYQueue " + _Scheduler.readyQueue.getSize());
+            //console.log("RDYQueue " + _Scheduler.readyQueue.getSize());
             if (_Scheduler.readyQueue.getSize() > 1) {
                 _Scheduler.scheduleProcesses(_Scheduler.readyQueue);
             }
@@ -68,25 +68,33 @@ var TSOS;
             }
         };
         Cpu.prototype.runEachOP = function (running) {
-            console.log("running process " + runningProcess);
-            var opcode = _MemoryAccessor.getMemory(this.PC);
+            //console.log("running process " + runningProcess);
+            var newtest = parseInt(runningProcess.PC, 16) + parseInt(runningProcess.base);
+            console.log(newtest + " PC");
+            var opcode = _MemoryAccessor.getMemory(newtest); //runningProcess.PC);
+            //console.log(newtest + " PC and base");
+            //console.log("TEST " + opcode);
+            //console.log(runningProcess.PC + " current pc");
+            //console.log(runningProcess.base + " current base");
+            //console.log(opcode + " opcode");
+            console.log(JSON.stringify(runningProcess) + " running PID " + " running base " + runningProcess.base);
             this.isExecuting = true;
-            //console.log(this.PC + " TEST");
+            //console.log(runningProcess.PC + " TEST");
             switch (opcode) {
                 //future fix: add functions instead of doing all the work in the case statement
                 //load the accumulator w a constant
                 case "A9":
-                    //note to self: my codes weren't working bc I am using this.PC, but I was changing acc AFTER I incremented the counter, so it was not giving me the correct value
-                    this.Acc = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
-                    //console.log(_MemoryAccessor.getMemory(this.PC+1) + "value");
-                    this.PC += 2;
+                    //note to self: my codes weren't working bc I am using runningProcess.PC, but I was changing acc AFTER I incremented the counter, so it was not giving me the correct value
+                    this.Acc = parseInt(_MemoryAccessor.getMemory(parseInt(runningProcess.PC, 16) + 1 + runningProcess.base), 16);
+                    //console.log(_MemoryAccessor.getMemory(runningProcess.PC+1) + "value");
+                    this.PC = parseInt(runningProcess.PC, 16) + 2;
                     this.IR = "A9";
                     break;
                 //load the accumulator from memory
                 case "AD":
-                    var memoryLocation = this.littleEndianAddress(); //parseInt(_MemoryAccessor.getMemory(this.PC+1), 16)
+                    var memoryLocation = this.littleEndianAddress(); //parseInt(_MemoryAccessor.getMemory(runningProcess.PC+1), 16)
                     this.Acc = _MemoryAccessor.getMemory(memoryLocation + runningProcess.base); //_PCBStored[runningPID].base);
-                    this.PC += 3;
+                    this.PC = parseInt(runningProcess.PC, 16) + 3;
                     this.IR = "AD";
                     break;
                 //store the accumulator in memory
@@ -104,7 +112,7 @@ var TSOS;
                     //}
                     //console.log(_Memory.memoryArray[getAccLocation] + " location in memory ");
                     TSOS.Control.updateMemory();
-                    this.PC += 3;
+                    this.PC = parseInt(runningProcess.PC, 16) + 3;
                     this.IR = "8D";
                     break;
                 //add with carry
@@ -112,14 +120,14 @@ var TSOS;
                     //is it add at the address that follows or add the next number??
                     var value = _MemoryAccessor.getMemory(this.littleEndianAddress() + runningProcess.base); //_PCBStored[runningPID].base);
                     this.Acc += parseInt(value, 16);
-                    //parseInt(_MemoryAccessor.getMemory(this.PC+1), 16);
-                    this.PC += 3;
+                    //parseInt(_MemoryAccessor.getMemory(runningProcess.PC+1), 16);
+                    this.PC = parseInt(runningProcess.PC, 16) + 3;
                     this.IR = "6D";
                     break;
                 //load the X reg w a constant
                 case "A2":
-                    this.Xreg = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
-                    this.PC += 2;
+                    this.Xreg = _MemoryAccessor.getMemory(parseInt(runningProcess.PC, 16) + 1 + runningProcess.base);
+                    this.PC = parseInt(runningProcess.PC, 16) + 2;
                     this.IR = "A2";
                     break;
                 //load the X reg from memory
@@ -129,25 +137,25 @@ var TSOS;
                     //console.log("translated " + (MemoryX + _PCBStored[runningPID].base));
                     this.Xreg = _MemoryAccessor.getMemory(MemoryX + runningProcess.base); //_PCBStored[runningPID].base);
                     //console.log("running pid base " + _PCBStored[runningPID].base);
-                    this.PC += 3;
+                    this.PC = parseInt(runningProcess.PC, 16) + 3;
                     this.IR = "AE";
                     break;
                 //load the Y reg w a constant
                 case "A0":
-                    this.Yreg = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
-                    this.PC += 2;
+                    this.Yreg = _MemoryAccessor.getMemory(parseInt(runningProcess.PC, 16) + 1 + runningProcess.base);
+                    this.PC = parseInt(runningProcess.PC, 16) + 2;
                     this.IR = "A0";
                     break;
                 //load the Y reg from memory
                 case "AC":
                     var MemoryY = this.littleEndianAddress();
                     this.Yreg = _MemoryAccessor.getMemory(MemoryY + runningProcess.base); //_PCBStored[runningPID].base);
-                    this.PC += 3;
+                    this.PC = parseInt(runningProcess.PC, 16) + 3;
                     this.IR = "AC";
                     break;
                 //No op
                 case "EA":
-                    this.PC += 1;
+                    this.PC = parseInt(runningProcess.PC, 16) + 1;
                     this.IR = "EA";
                     break;
                 //break; system call
@@ -164,35 +172,35 @@ var TSOS;
                     else {
                         this.Zflag = 0;
                     }
-                    this.PC += 3;
+                    this.PC = parseInt(runningProcess.PC, 16) + 3;
                     this.IR = "EC";
                     break;
                 //branch n bytes if Z flag is 0
                 case "D0":
                     //console.log("ZFLAG " + this.Zflag);
                     if (this.Zflag == 0) {
-                        var bytestobranch = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
+                        var bytestobranch = parseInt(_MemoryAccessor.getMemory(parseInt(runningProcess.PC, 16) + 1 + runningProcess.base), 16);
                         //console.log(bytestobranch + "BYTES");
-                        //console.log(this.PC + "INDEX");
-                        //console.log(this.PC + "PC AFTER BRANCH");
-                        //console.log(_MemoryAccessor.getMemory(this.PC));
-                        var newVar = this.PC + bytestobranch + runningProcess.base; //_PCBStored[runningPID].base;
+                        //console.log(runningProcess.PC + "INDEX");
+                        //console.log(runningProcess.PC + "PC AFTER BRANCH");
+                        //console.log(_MemoryAccessor.getMemory(runningProcess.PC));
+                        var newVar = parseInt(runningProcess.PC, 16) + bytestobranch + runningProcess.base; //_PCBStored[runningPID].base;
                         //console.log(newVar + " this val is values added");
-                        if (this.PC + bytestobranch > runningProcess.limit) { //_PCBStored[runningPID].limit) {
-                            //if(this.PC + bytestobranch > runningPID.limit) {
+                        if (parseInt(runningProcess.PC, 16) + bytestobranch > runningProcess.limit) { //_PCBStored[runningPID].limit) {
+                            //if(runningProcess.PC + bytestobranch > runningPID.limit) {
                             //if the branch will push us past 255/segment 0, we need to wrap back around
-                            this.PC = (this.PC + bytestobranch) - 255 + 1; //(bytestobranch + this.PC + 1) % 255; //(this.PC + bytestobranch) - 255;
-                            //console.log(this.PC + "PC AFTER BRANCH");
+                            this.PC = (parseInt(runningProcess.PC, 16) + bytestobranch) - 255 + 1; //(bytestobranch + runningProcess.PC + 1) % 255; //(runningProcess.PC + bytestobranch) - 255;
+                            //console.log(runningProcess.PC + "PC AFTER BRANCH");
                         }
                         else {
                             //if the branch does not push us past, add 2 to increment the PC past this op and then add the branch
-                            this.PC = this.PC + bytestobranch + 2;
-                            //console.log(this.PC + "PC AFTER BRANCH");
+                            this.PC = parseInt(runningProcess.PC, 16) + bytestobranch + 2;
+                            //console.log(runningProcess.PC + "PC AFTER BRANCH");
                         }
                     }
                     //if Z flag is 1, keep moving forward
                     else {
-                        this.PC += 2;
+                        this.PC = parseInt(runningProcess.PC, 16) + 2;
                     }
                     this.IR = "D0";
                     break;
@@ -209,16 +217,18 @@ var TSOS;
                     _Memory.memoryArray[incrementThis] = incrementedDone.toString(16);
                     //}
                     TSOS.Control.updateMemory();
-                    this.PC += 3;
+                    this.PC = parseInt(runningProcess.PC, 16) + 3;
                     this.IR = "EE";
                     break;
                 //system call
                 case "FF":
+                    //console.log("reached FF" + this.Xreg);
                     if (this.Xreg == 1) {
                         _StdOut.putText(this.Yreg.toString(16));
                     }
                     else if (this.Xreg == 2) {
-                        var storedLoc = this.Yreg + runningProcess.base; //_PCBStored[runningPID].base;
+                        var storedLoc = parseInt(this.Yreg.toString(16), 16) + runningProcess.base; //_PCBStored[runningPID].base;
+                        console.log("stored loc " + storedLoc);
                         var newStr = "";
                         while (_Memory.memoryArray[storedLoc] != "00") {
                             //to string did not work it returned numbers, I found from char code to go from hex to ascii and it worked
@@ -229,10 +239,11 @@ var TSOS;
                         _StdOut.putText(newStr);
                     }
                     this.IR = "FF";
-                    this.PC += 1;
+                    this.PC = parseInt(runningProcess.PC, 16) + 1;
                     break;
                 default:
-                    _StdOut.putText("ERROR Invalid op code: " + opcode.toString());
+                    //_StdOut.putText("ERROR Invalid op code: " + opcode.toString());
+                    _StdOut.putText("ERROR Invalid op code");
                     _StdOut.advanceLine();
                     _OsShell.putPrompt();
                     this.isExecuting = false;
@@ -243,8 +254,9 @@ var TSOS;
         };
         //this function accounts for op codes with two spaces for memory, little endian requires you flip to get the location
         Cpu.prototype.littleEndianAddress = function () {
-            var inputOne = parseInt(_MemoryAccessor.getMemory(this.PC + 1), 16);
-            var inputTwo = parseInt(_MemoryAccessor.getMemory(this.PC + 2), 16);
+            var takeThis = parseInt(runningProcess.PC, 16);
+            var inputOne = parseInt(_MemoryAccessor.getMemory(takeThis + 1), 16);
+            var inputTwo = parseInt(_MemoryAccessor.getMemory(takeThis + 2), 16);
             var newValue = inputTwo + inputOne;
             return newValue;
         };
@@ -265,6 +277,10 @@ var TSOS;
                         _PCBStored[i].Zflag = this.Zflag.toString(16).toUpperCase();
                         //take out of ready queue if it's complete
                         _Scheduler.readyQueue.dequeue();
+                        /*if(_Scheduler.readyQueue.getSize() > 1) {
+                            _Scheduler.startNewPCB();
+                            _CPU.isExecuting = true;
+                        }*/
                     }
                     else {
                         _PCBStored[i].State = "Running";
@@ -274,6 +290,13 @@ var TSOS;
                         _PCBStored[i].Xreg = this.Xreg.toString(16).toUpperCase();
                         _PCBStored[i].Yreg = this.Yreg.toString(16).toUpperCase();
                         _PCBStored[i].Zflag = this.Zflag.toString(16).toUpperCase();
+                        /*runningProcess.State = "Running";
+                        runningProcess.PC = this.PC.toString(16).toUpperCase();
+                        runningProcess.IR = this.IR;
+                        runningProcess.Acc = this.Acc.toString(16).toUpperCase();
+                        runningProcess.Xreg = this.Xreg.toString(16).toUpperCase();
+                        runningProcess.Yreg = this.Yreg.toString(16).toUpperCase();
+                        runningProcess.Zflag = this.Zflag.toString(16).toUpperCase();*/
                         //status = "Running";
                     }
                 }

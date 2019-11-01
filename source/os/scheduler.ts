@@ -7,7 +7,7 @@ module TSOS {
 //construct global instance of class
     export class Scheduler {
         constructor(
-            public quantum: number = 0,
+            public quantum: number = 6,
             public currentStep: number = 0,
             public readyQueue = new TSOS.Queue()) {
 
@@ -37,7 +37,8 @@ module TSOS {
     }
 
     public scheduleProcesses(queue) {
-        this.currentStep += 1;
+        this.currentStep++;
+        //console.log(this.currentStep + " current step current quantum " + this.quantum);
 
         if (this.currentStep >= this.quantum && this.readyQueue.getSize() > 0) {
             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CONTEXT_SWITCH_IRQ, 0));
@@ -84,9 +85,12 @@ module TSOS {
             this.startNewPCB();
         }
         public removeOldPCB(){
-
+            runningProcess.State = "Waiting";
+            this.readyQueue.enqueue(runningProcess);
         }
         public startNewPCB(){
+            runningProcess = this.readyQueue.dequeue();
+            runningProcess.State = "Running"
 
         }
     }

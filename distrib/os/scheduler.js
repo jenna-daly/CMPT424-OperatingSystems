@@ -6,7 +6,7 @@ var TSOS;
     //construct global instance of class
     var Scheduler = /** @class */ (function () {
         function Scheduler(quantum, currentStep, readyQueue) {
-            if (quantum === void 0) { quantum = 0; }
+            if (quantum === void 0) { quantum = 1006; }
             if (currentStep === void 0) { currentStep = 0; }
             if (readyQueue === void 0) { readyQueue = new TSOS.Queue(); }
             this.quantum = quantum;
@@ -15,7 +15,7 @@ var TSOS;
         }
         Scheduler.prototype.init = function () {
             //quantum- defaulted to 6
-            this.quantum = 6;
+            this.quantum = 1006;
             //the current step, so when we reach 6 we reset and count again
             this.currentStep = 0;
             this.readyQueue;
@@ -32,7 +32,8 @@ var TSOS;
             console.log(this.readyQueue.toString());
         };
         Scheduler.prototype.scheduleProcesses = function (queue) {
-            this.currentStep += 1;
+            this.currentStep++;
+            //console.log(this.currentStep + " current step current quantum " + this.quantum);
             if (this.currentStep >= this.quantum && this.readyQueue.getSize() > 0) {
                 _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CONTEXT_SWITCH_IRQ, 0));
             }
@@ -77,8 +78,12 @@ var TSOS;
             this.startNewPCB();
         };
         Scheduler.prototype.removeOldPCB = function () {
+            runningProcess.State = "Waiting";
+            this.readyQueue.enqueue(runningProcess);
         };
         Scheduler.prototype.startNewPCB = function () {
+            runningProcess = this.readyQueue.dequeue();
+            runningProcess.State = "Running";
         };
         return Scheduler;
     }());
