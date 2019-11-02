@@ -6,7 +6,7 @@ var TSOS;
     //construct global instance of class
     var Scheduler = /** @class */ (function () {
         function Scheduler(quantum, currentStep, readyQueue) {
-            if (quantum === void 0) { quantum = 1006; }
+            if (quantum === void 0) { quantum = 6; }
             if (currentStep === void 0) { currentStep = 0; }
             if (readyQueue === void 0) { readyQueue = new TSOS.Queue(); }
             this.quantum = quantum;
@@ -15,7 +15,7 @@ var TSOS;
         }
         Scheduler.prototype.init = function () {
             //quantum- defaulted to 6
-            this.quantum = 1006;
+            this.quantum = 6;
             //the current step, so when we reach 6 we reset and count again
             this.currentStep = 0;
             this.readyQueue;

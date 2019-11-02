@@ -444,9 +444,9 @@ module TSOS {
                         runningPID = i;
                         console.log("RUNNING " + runningPID);
                         //populate ready queue
-                        _Scheduler.setReadyQueue(_PCBStored[runningPID]);
+                        //_Scheduler.setReadyQueue(_PCBStored[runningPID]);
                         //set running process
-                        console.log("queue contains " + JSON.stringify(_Scheduler.readyQueue));
+                        //console.log("queue contains " + JSON.stringify(_Scheduler.readyQueue));
                         //runningProcess = _Scheduler.readyQueue.dequeue();
                         runningProcess = _PCBStored[runningPID];
                         break;

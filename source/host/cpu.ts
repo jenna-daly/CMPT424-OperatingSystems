@@ -74,12 +74,13 @@ module TSOS {
             console.log(newtest + " PC");
             var opcode = _MemoryAccessor.getMemory(newtest);//runningProcess.PC);
             //console.log(newtest + " PC and base");
-
+            console.log("PID " + runningProcess.Pid);
+            console.log("running OP " + opcode);
             //console.log("TEST " + opcode);
             //console.log(runningProcess.PC + " current pc");
             //console.log(runningProcess.base + " current base");
             //console.log(opcode + " opcode");
-            console.log(JSON.stringify(runningProcess) + " running PID " + " running base " + runningProcess.base);
+            //console.log(JSON.stringify(runningProcess) + " running PID " + " running base " + runningProcess.base);
             this.isExecuting = true; 
             //console.log(runningProcess.PC + " TEST");
             switch(opcode) {
@@ -140,10 +141,9 @@ module TSOS {
                 //load the X reg from memory
                 case "AE":
                     var MemoryX = this.littleEndianAddress();
-                    //console.log("memory x " + MemoryX);
-                    //console.log("translated " + (MemoryX + _PCBStored[runningPID].base));
+
                     this.Xreg = _MemoryAccessor.getMemory(MemoryX + runningProcess.base);//_PCBStored[runningPID].base);
-                    //console.log("running pid base " + _PCBStored[runningPID].base);
+      
                     this.PC = parseInt(runningProcess.PC, 16) + 3;
                     this.IR = "AE";
                     break;
@@ -168,12 +168,19 @@ module TSOS {
                 //break; system call
                 case "00":
                     this.IR = "00";
-                    this.isExecuting = false;
+                    this.endProgram();
                     break;
                 //compare a byte in memory to X reg; set Z flag if equal
                 case "EC":
                     var byteOne = this.littleEndianAddress() + runningProcess.base;//_PCBStored[runningPID].base;
-                    if(parseInt(_MemoryAccessor.getMemory(byteOne), 16) == this.Xreg) {
+                    //console.log(_MemoryAccessor.getMemory(byteOne) + " DATA AT LOC");
+                    //console.log(this.Xreg + " current X");
+                    //if(parseInt(_MemoryAccessor.getMemory(byteOne), 16) == this.Xreg) {
+                    //console was not picking up 00 and 0 as equal, changing that here
+                    if(this.Xreg.toString() == "00" ) {
+                        this.Xreg = 0;
+                    }
+                    if(_MemoryAccessor.getMemory(byteOne) == this.Xreg) {
                         this.Zflag = 1;
                     }
                     else{
@@ -184,8 +191,9 @@ module TSOS {
                     break;
                 //branch n bytes if Z flag is 0
                 case "D0":
-                    //console.log("ZFLAG " + this.Zflag);
-                    if(this.Zflag == 0) {
+                    //console.log(this.Zflag + " zflag");
+                    //console.log(runningProcess.Zflag + " running z");
+                    if(runningProcess.Zflag == 0) {
                         var bytestobranch = parseInt(_MemoryAccessor.getMemory(parseInt(runningProcess.PC,16)+1+ runningProcess.base), 16);
                         //console.log(bytestobranch + "BYTES");
                         //console.log(runningProcess.PC + "INDEX");
@@ -193,17 +201,22 @@ module TSOS {
                         //console.log(_MemoryAccessor.getMemory(runningProcess.PC));
                        
                         var newVar = parseInt(runningProcess.PC, 16) + bytestobranch + runningProcess.base;//_PCBStored[runningPID].base;
-                        //console.log(newVar + " this val is values added");
-                        if(parseInt(runningProcess.PC, 16) + bytestobranch > runningProcess.limit){//_PCBStored[runningPID].limit) {
+
+                     
+                        if(parseInt(runningProcess.PC, 16) + bytestobranch + runningProcess.base > runningProcess.limit){//_PCBStored[runningPID].limit) {
                         //if(runningProcess.PC + bytestobranch > runningPID.limit) {
                             //if the branch will push us past 255/segment 0, we need to wrap back around
                             this.PC = (parseInt(runningProcess.PC, 16) + bytestobranch) - 255 + 1; //(bytestobranch + runningProcess.PC + 1) % 255; //(runningProcess.PC + bytestobranch) - 255;
-                            //console.log(runningProcess.PC + "PC AFTER BRANCH");
+                            console.log(runningProcess.PC + "PC first");
                         }
                         else{
                             //if the branch does not push us past, add 2 to increment the PC past this op and then add the branch
                             this.PC = parseInt(runningProcess.PC, 16) + bytestobranch + 2;
-                            //console.log(runningProcess.PC + "PC AFTER BRANCH");
+                            //this.PC = parseInt(runningProcess.PC, 16) + parseInt(runningProcess.base) + bytestobranch + 2;
+                            //var idk = parseInt(runningProcess.PC,16) + runningProcess.base + bytestobranch ;
+                            //console.log(idk + " idk");
+                            console.log(parseInt(runningProcess.PC, 16) + "PC second");
+                            console.log(bytestobranch + " bytes to branch add 2");
                         }
    
                     }
@@ -263,6 +276,18 @@ module TSOS {
             Control.accessPCB();
         }
 
+        public endProgram(){
+            if (_Scheduler.readyQueue.isEmpty()) {
+                runningProcess.State = "Completed";
+                this.isExecuting = false;
+            }
+            else {
+                //_Scheduler.readyQueue.dequeue();
+                runningProcess.State = "Completed";
+                _Scheduler.startNewPCB();
+                _Scheduler.currentStep = 0;
+            }
+        }
         //this function accounts for op codes with two spaces for memory, little endian requires you flip to get the location
         public littleEndianAddress(){
             var takeThis = parseInt(runningProcess.PC, 16);
@@ -277,7 +302,7 @@ module TSOS {
         public storeinPCB(){
             //_PCBStored = [];
             //var status;
-        for(let i =0; i <_PCBStored.length; i++) {
+        /*for(let i =0; i <_PCBStored.length; i++) {
           if(_PCBStored[i].State == "Running") {
             if(this.isExecuting == false) {
                 //status = "completed";
@@ -290,12 +315,7 @@ module TSOS {
                 _PCBStored[i].Zflag = this.Zflag.toString(16).toUpperCase();
 
                 //take out of ready queue if it's complete
-                _Scheduler.readyQueue.dequeue();
-                /*if(_Scheduler.readyQueue.getSize() > 1) {
-                    _Scheduler.startNewPCB();
-                    _CPU.isExecuting = true;
-                }*/
-                
+                _Scheduler.readyQueue.dequeue();      
             }
             else{
                 _PCBStored[i].State = "Running";
@@ -306,7 +326,6 @@ module TSOS {
                 _PCBStored[i].Yreg = this.Yreg.toString(16).toUpperCase();
                 _PCBStored[i].Zflag = this.Zflag.toString(16).toUpperCase();
 
-
                 /*runningProcess.State = "Running";
                 runningProcess.PC = this.PC.toString(16).toUpperCase();
                 runningProcess.IR = this.IR;
@@ -315,13 +334,37 @@ module TSOS {
                 runningProcess.Yreg = this.Yreg.toString(16).toUpperCase();
                 runningProcess.Zflag = this.Zflag.toString(16).toUpperCase();*/
 
-                //status = "Running";
-            }
+            /*}
         }
-            //_PCBStored.push(_currentPID, status, this.PC.toString(16).toUpperCase(), this.IR, this.Acc.toString(16).toUpperCase(), this.Xreg.toString(16).toUpperCase(), this.Yreg.toString(16).toUpperCase(), this.Zflag.toString(16).toUpperCase());
-          
+        else if(runningProcess.State == "Completed") {
+                _PCBStored[i].State = "Completed";
+                _PCBStored[i].PC = this.PC.toString(16).toUpperCase();
+                _PCBStored[i].IR = this.IR;
+                _PCBStored[i].Acc = this.Acc.toString(16).toUpperCase();
+                _PCBStored[i].Xreg = this.Xreg.toString(16).toUpperCase();
+                _PCBStored[i].Yreg = this.Yreg.toString(16).toUpperCase();
+                _PCBStored[i].Zflag = this.Zflag.toString(16).toUpperCase();
+            }          
 
-            }
+            }*/
+        if(runningProcess.State == "Running") {
+            runningProcess.PC = this.PC.toString(16).toUpperCase();
+            runningProcess.IR = this.IR;
+            runningProcess.Acc = this.Acc.toString(16).toUpperCase();
+            runningProcess.Xreg = this.Xreg.toString(16).toUpperCase();
+            runningProcess.Yreg = this.Yreg.toString(16).toUpperCase();
+            runningProcess.Zflag = this.Zflag.toString(16).toUpperCase();
+        }
+        else if(runningProcess.State == "Completed") {
+            runningProcess.PC = this.PC.toString(16).toUpperCase();
+            runningProcess.IR = this.IR;
+            runningProcess.Acc = this.Acc.toString(16).toUpperCase();
+            runningProcess.Xreg = this.Xreg.toString(16).toUpperCase();
+            runningProcess.Yreg = this.Yreg.toString(16).toUpperCase();
+            runningProcess.Zflag = this.Zflag.toString(16).toUpperCase();
+        }
+
+
         }
 
 
