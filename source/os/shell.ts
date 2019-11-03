@@ -502,25 +502,28 @@ module TSOS {
             _CPU.isExecuting = true;
             runningProcess = _Scheduler.readyQueue.dequeue();
             runningProcess.State = "Running";
-            /*for(let i=0; i < _PCBStored[i].length; i++) {
-                _Scheduler.setReadyQueue(_PCBStored[i]);
-            }
-            console.log("READY QUEUE SIZE " + _Scheduler.readyQueue.getSize())
-            runningProcess = _Scheduler.readyQueue.dequeue();
-            _CPU.isExecuting = true;
-            TSOS.Control.accessCPU();
-            TSOS.Control.accessPCB(); */
         }
 
         //list running or resident processes
         public shellPS(args) {
-            var containsProcesses = "";
+          var containsProcesses = "";
+          if(_Scheduler.readyQueue.isEmpty()) {
             for(let i =0; i < _PCBStored.length; i++) {
                 if(_PCBStored[i].State == "Resident" || _PCBStored[i].State == "Running") {
-                    containsProcesses += "PID " + _PCBStored[i].Pid.toString() + " " + _PCBStored[i].State + " ";
+                    containsProcesses += " PID " + _PCBStored[i].Pid.toString() + " " + _PCBStored[i].State + " ";
                 }     
             }
             _StdOut.putText(containsProcesses);
+          }
+          else {
+            containsProcesses += " PID " + runningProcess.Pid.toString() + " " + runningProcess.State;
+            for(let i=0; i < _Scheduler.readyQueue.getSize(); i++) {
+                var changeState = _Scheduler.readyQueue.dequeue();
+                containsProcesses += " PID " + changeState.Pid.toString() + " " + changeState.State;
+                _Scheduler.readyQueue.enqueue(changeState);
+            }
+            _StdOut.putText(containsProcesses);
+          }   
         }
 
         //kill specified process
