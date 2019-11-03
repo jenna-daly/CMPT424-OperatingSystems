@@ -33,7 +33,7 @@ var TSOS;
         };
         Scheduler.prototype.scheduleProcesses = function (queue) {
             this.currentStep++;
-            //console.log(this.currentStep + " current step current quantum " + this.quantum);
+            console.log(this.currentStep + " current step current quantum " + this.quantum);
             if (this.currentStep >= this.quantum && this.readyQueue.getSize() > 0) {
                 _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CONTEXT_SWITCH_IRQ, 0));
             }
@@ -84,6 +84,16 @@ var TSOS;
         Scheduler.prototype.startNewPCB = function () {
             runningProcess = this.readyQueue.dequeue();
             runningProcess.State = "Running";
+        };
+        Scheduler.prototype.getTimes = function () {
+            runningProcess.turnaround += 1;
+            var increment;
+            for (var i = 0; i < this.readyQueue.getSize(); i++) {
+                increment = this.readyQueue.dequeue();
+                increment.turnaround++;
+                increment.waitTime++;
+                this.readyQueue.enqueue(increment);
+            }
         };
         return Scheduler;
     }());

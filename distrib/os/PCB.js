@@ -6,7 +6,9 @@ var TSOS;
         function Pcb(//pid first, we have that as a global var updating with load
         Pid, IR, PC, Acc, Xreg, Yreg, Zflag, 
         //public isExecuting: boolean = false,
-        State, base, limit) {
+        State, base, limit /*,
+        public turnaround: number = 0,
+        public waitTime: number = 0*/) {
             if (Pid === void 0) { Pid = 0; }
             if (IR === void 0) { IR = "IR"; }
             if (PC === void 0) { PC = 0; }
@@ -40,6 +42,8 @@ var TSOS;
             this.State = "Resident";
             this.base = 0;
             this.limit = 0;
+            //this.turnaround = 0;
+            //this.waitTime = 0;
         };
         Pcb.prototype.storeNewVals = function () {
             /*_PID;

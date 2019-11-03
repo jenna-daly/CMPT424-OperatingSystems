@@ -38,7 +38,7 @@ module TSOS {
 
     public scheduleProcesses(queue) {
         this.currentStep++;
-        //console.log(this.currentStep + " current step current quantum " + this.quantum);
+        console.log(this.currentStep + " current step current quantum " + this.quantum);
 
         if (this.currentStep >= this.quantum && this.readyQueue.getSize() > 0) {
             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CONTEXT_SWITCH_IRQ, 0));
@@ -92,6 +92,16 @@ module TSOS {
             runningProcess = this.readyQueue.dequeue();
             runningProcess.State = "Running"
 
+        }
+        public getTimes(){
+            runningProcess.turnaround += 1;
+            var increment;
+            for(let i =0; i < this.readyQueue.getSize(); i++) {
+                increment = this.readyQueue.dequeue();
+                increment.turnaround++;
+                increment.waitTime++;
+                this.readyQueue.enqueue(increment);
+            }
         }
     }
 }

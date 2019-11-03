@@ -403,6 +403,7 @@ module TSOS {
                 _currentPID = _PID;
                 var newPCB = new TSOS.Pcb(_currentPID);
                 console.log("NEW PCB " + JSON.stringify(newPCB));
+                //resident list
                 _PCBStored.push(newPCB);
 
                 var segment = _MemoryManager.allocateMemory();

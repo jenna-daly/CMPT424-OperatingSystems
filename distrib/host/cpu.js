@@ -53,6 +53,7 @@ var TSOS;
             //console.log("RDYQueue " + _Scheduler.readyQueue.getSize());
             if (_Scheduler.readyQueue.getSize() > 1) {
                 _Scheduler.scheduleProcesses(_Scheduler.readyQueue);
+                //_Scheduler.getTimes();
             }
             //test case
             //runningProcess = _PCBStored[0];
@@ -70,20 +71,19 @@ var TSOS;
         Cpu.prototype.runEachOP = function (running) {
             //console.log("running process " + runningProcess);
             var newtest = parseInt(runningProcess.PC, 16) + parseInt(runningProcess.base);
-            console.log(newtest + " PC");
+            //console.log(newtest + " PC");
             var opcode = _MemoryAccessor.getMemory(newtest); //runningProcess.PC);
             //console.log(newtest + " PC and base");
             console.log("PID " + runningProcess.Pid);
-            console.log("running OP " + opcode);
+            //console.log("running OP " + opcode);
             //console.log("TEST " + opcode);
             //console.log(runningProcess.PC + " current pc");
             //console.log(runningProcess.base + " current base");
             //console.log(opcode + " opcode");
-            //console.log(JSON.stringify(runningProcess) + " running PID " + " running base " + runningProcess.base);
+            console.log(JSON.stringify(runningProcess) + " running PID " + " running base " + runningProcess.base);
             this.isExecuting = true;
             //console.log(runningProcess.PC + " TEST");
             switch (opcode) {
-                //future fix: add functions instead of doing all the work in the case statement
                 //load the accumulator w a constant
                 case "A9":
                     //note to self: my codes weren't working bc I am using runningProcess.PC, but I was changing acc AFTER I incremented the counter, so it was not giving me the correct value
@@ -91,6 +91,9 @@ var TSOS;
                     //console.log(_MemoryAccessor.getMemory(runningProcess.PC+1) + "value");
                     this.PC = parseInt(runningProcess.PC, 16) + 2;
                     this.IR = "A9";
+                    runningProcess.Acc = this.Acc.toString(16).toUpperCase();
+                    runningProcess.PC = this.PC.toString(16).toUpperCase();
+                    runningProcess.IR = this.IR;
                     break;
                 //load the accumulator from memory
                 case "AD":
@@ -98,52 +101,67 @@ var TSOS;
                     this.Acc = _MemoryAccessor.getMemory(memoryLocation + runningProcess.base); //_PCBStored[runningPID].base);
                     this.PC = parseInt(runningProcess.PC, 16) + 3;
                     this.IR = "AD";
+                    runningProcess.Acc = this.Acc.toString(16).toUpperCase();
+                    runningProcess.PC = this.PC.toString(16).toUpperCase();
+                    runningProcess.IR = this.IR;
                     break;
                 //store the accumulator in memory
                 case "8D":
-                    var getAccLocation = this.littleEndianAddress();
-                    //console.log(getAccLocation + " decoded location");
+                    var getAccLocation = this.littleEndianAddress() + runningProcess.base;
+                    console.log(getAccLocation + " decoded location");
+                    console.log("this acc" + this.Acc);
+                    console.log("running acc" + runningProcess.Acc);
                     //this gives back the hex value of acc, before I was getting dec value
-                    var decToHex = this.Acc.toString(16).toUpperCase();
-                    /*if(decToHex.length == 1) {
-                        _Memory.memoryArray[getAccLocation] = "0" + decToHex;
-                    }
-                    else {*/
-                    _Memory.memoryArray[getAccLocation + runningProcess.base] = decToHex;
-                    //_Memory.memoryArray[getAccLocation + _PCBStored[runningPID].base] = decToHex;
-                    //}
-                    //console.log(_Memory.memoryArray[getAccLocation] + " location in memory ");
+                    //var decToHex = this.Acc.toString(16).toUpperCase();
+                    var decToHex = runningProcess.Acc.toString(16).toUpperCase();
+                    _Memory.memoryArray[getAccLocation] = decToHex;
                     TSOS.Control.updateMemory();
                     this.PC = parseInt(runningProcess.PC, 16) + 3;
                     this.IR = "8D";
+                    runningProcess.PC = this.PC.toString(16).toUpperCase();
+                    runningProcess.IR = this.IR;
                     break;
                 //add with carry
                 case "6D":
                     //is it add at the address that follows or add the next number??
                     var value = _MemoryAccessor.getMemory(this.littleEndianAddress() + runningProcess.base); //_PCBStored[runningPID].base);
+                    var loc = this.littleEndianAddress() + runningProcess.base;
+                    console.log("DATA LOC " + loc);
+                    console.log(this.Acc + "ACC");
                     this.Acc += parseInt(value, 16);
-                    //parseInt(_MemoryAccessor.getMemory(runningProcess.PC+1), 16);
                     this.PC = parseInt(runningProcess.PC, 16) + 3;
                     this.IR = "6D";
+                    runningProcess.Acc = this.Acc.toString(16).toUpperCase();
+                    runningProcess.PC = this.PC.toString(16).toUpperCase();
+                    runningProcess.IR = this.IR;
                     break;
                 //load the X reg w a constant
                 case "A2":
                     this.Xreg = _MemoryAccessor.getMemory(parseInt(runningProcess.PC, 16) + 1 + runningProcess.base);
                     this.PC = parseInt(runningProcess.PC, 16) + 2;
                     this.IR = "A2";
+                    runningProcess.Xreg = this.Xreg.toString(16).toUpperCase();
+                    runningProcess.PC = this.PC.toString(16).toUpperCase();
+                    runningProcess.IR = this.IR;
                     break;
                 //load the X reg from memory
                 case "AE":
-                    var MemoryX = this.littleEndianAddress();
-                    this.Xreg = _MemoryAccessor.getMemory(MemoryX + runningProcess.base); //_PCBStored[runningPID].base);
+                    var MemoryX = this.littleEndianAddress() + runningProcess.base;
+                    this.Xreg = _MemoryAccessor.getMemory(MemoryX); //_PCBStored[runningPID].base);
+                    runningProcess.Xreg = _MemoryAccessor.getMemory(MemoryX);
                     this.PC = parseInt(runningProcess.PC, 16) + 3;
                     this.IR = "AE";
+                    runningProcess.PC = this.PC.toString(16).toUpperCase();
+                    runningProcess.IR = this.IR;
                     break;
                 //load the Y reg w a constant
                 case "A0":
                     this.Yreg = _MemoryAccessor.getMemory(parseInt(runningProcess.PC, 16) + 1 + runningProcess.base);
                     this.PC = parseInt(runningProcess.PC, 16) + 2;
                     this.IR = "A0";
+                    runningProcess.Yreg = this.Yreg.toString(16).toUpperCase();
+                    runningProcess.PC = this.PC.toString(16).toUpperCase();
+                    runningProcess.IR = this.IR;
                     break;
                 //load the Y reg from memory
                 case "AC":
@@ -151,26 +169,36 @@ var TSOS;
                     this.Yreg = _MemoryAccessor.getMemory(MemoryY + runningProcess.base); //_PCBStored[runningPID].base);
                     this.PC = parseInt(runningProcess.PC, 16) + 3;
                     this.IR = "AC";
+                    runningProcess.Yreg = this.Yreg.toString(16).toUpperCase();
+                    runningProcess.PC = this.PC.toString(16).toUpperCase();
+                    runningProcess.IR = this.IR;
                     break;
                 //No op
                 case "EA":
                     this.PC = parseInt(runningProcess.PC, 16) + 1;
                     this.IR = "EA";
+                    runningProcess.PC = this.PC.toString(16).toUpperCase();
+                    runningProcess.IR = this.IR;
                     break;
                 //break; system call
                 case "00":
                     this.IR = "00";
+                    runningProcess.IR = this.IR;
                     this.endProgram();
                     break;
                 //compare a byte in memory to X reg; set Z flag if equal
                 case "EC":
                     var byteOne = this.littleEndianAddress() + runningProcess.base; //_PCBStored[runningPID].base;
-                    //console.log(_MemoryAccessor.getMemory(byteOne) + " DATA AT LOC");
-                    //console.log(this.Xreg + " current X");
+                    /*console.log(byteOne + " memory location")
+                    console.log(_MemoryAccessor.getMemory(byteOne) + " DATA AT LOC");
+                    console.log(this.Xreg + " current X");*/
                     //if(parseInt(_MemoryAccessor.getMemory(byteOne), 16) == this.Xreg) {
                     //console was not picking up 00 and 0 as equal, changing that here
                     if (this.Xreg.toString() == "00") {
                         this.Xreg = 0;
+                    }
+                    if (this.Xreg.toString() == "01") {
+                        this.Xreg = 1;
                     }
                     if (_MemoryAccessor.getMemory(byteOne) == this.Xreg) {
                         this.Zflag = 1;
@@ -180,11 +208,13 @@ var TSOS;
                     }
                     this.PC = parseInt(runningProcess.PC, 16) + 3;
                     this.IR = "EC";
+                    runningProcess.Zflag = this.Zflag.toString(16).toUpperCase();
+                    runningProcess.Xreg = this.Xreg.toString(16).toUpperCase();
+                    runningProcess.PC = this.PC.toString(16).toUpperCase();
+                    runningProcess.IR = this.IR;
                     break;
                 //branch n bytes if Z flag is 0
                 case "D0":
-                    //console.log(this.Zflag + " zflag");
-                    //console.log(runningProcess.Zflag + " running z");
                     if (runningProcess.Zflag == 0) {
                         var bytestobranch = parseInt(_MemoryAccessor.getMemory(parseInt(runningProcess.PC, 16) + 1 + runningProcess.base), 16);
                         //console.log(bytestobranch + "BYTES");
@@ -213,31 +243,29 @@ var TSOS;
                         this.PC = parseInt(runningProcess.PC, 16) + 2;
                     }
                     this.IR = "D0";
+                    runningProcess.PC = this.PC.toString(16).toUpperCase();
+                    runningProcess.IR = this.IR;
                     break;
                 //increment value of a byte
                 case "EE":
                     var incrementThis = this.littleEndianAddress() + runningProcess.base; //_PCBStored[runningPID].base;
                     var incrementedDone = parseInt(_MemoryAccessor.getMemory(incrementThis), 16);
                     incrementedDone += 1;
-                    /*if(incrementedDone.toString().length == 1) {
-                        _Memory.memoryArray[incrementThis] = "0" + incrementedDone.toString(16);
-
-                    }
-                    else{*/
                     _Memory.memoryArray[incrementThis] = incrementedDone.toString(16);
-                    //}
                     TSOS.Control.updateMemory();
                     this.PC = parseInt(runningProcess.PC, 16) + 3;
                     this.IR = "EE";
+                    runningProcess.PC = this.PC.toString(16).toUpperCase();
+                    runningProcess.IR = this.IR;
                     break;
                 //system call
                 case "FF":
                     //console.log("reached FF" + this.Xreg);
                     if (this.Xreg == 1) {
-                        _StdOut.putText(this.Yreg.toString(16));
+                        _StdOut.putText(runningProcess.Yreg.toString(16));
                     }
                     else if (this.Xreg == 2) {
-                        var storedLoc = parseInt(this.Yreg.toString(16), 16) + runningProcess.base; //_PCBStored[runningPID].base;
+                        var storedLoc = parseInt(runningProcess.Yreg.toString(16), 16) + runningProcess.base; //_PCBStored[runningPID].base;
                         console.log("stored loc " + storedLoc);
                         var newStr = "";
                         while (_Memory.memoryArray[storedLoc] != "00") {
@@ -250,10 +278,12 @@ var TSOS;
                     }
                     this.IR = "FF";
                     this.PC = parseInt(runningProcess.PC, 16) + 1;
+                    runningProcess.PC = this.PC.toString(16).toUpperCase();
+                    runningProcess.IR = this.IR;
                     break;
                 default:
-                    //_StdOut.putText("ERROR Invalid op code: " + opcode.toString());
-                    _StdOut.putText("ERROR Invalid op code");
+                    _StdOut.putText("ERROR Invalid op code: " + opcode.toString());
+                    //_StdOut.putText("ERROR Invalid op code");
                     _StdOut.advanceLine();
                     _OsShell.putPrompt();
                     this.isExecuting = false;
@@ -270,6 +300,9 @@ var TSOS;
             else {
                 //_Scheduler.readyQueue.dequeue();
                 runningProcess.State = "Completed";
+                //_StdOut.advanceLine();
+                //_StdOut.putText("Turnaround time: " + runningProcess.turnaround + " Wait time: " + runningProcess.waitTime);
+                //_StdOut.advanceLine();
                 _Scheduler.startNewPCB();
                 _Scheduler.currentStep = 0;
             }
@@ -331,20 +364,21 @@ var TSOS;
 
             }*/
             if (runningProcess.State == "Running") {
-                runningProcess.PC = this.PC.toString(16).toUpperCase();
+                /*runningProcess.PC = this.PC.toString(16).toUpperCase();
                 runningProcess.IR = this.IR;
                 runningProcess.Acc = this.Acc.toString(16).toUpperCase();
                 runningProcess.Xreg = this.Xreg.toString(16).toUpperCase();
+                console.log(this.Xreg.toString(16).toUpperCase() + " X REG");
                 runningProcess.Yreg = this.Yreg.toString(16).toUpperCase();
-                runningProcess.Zflag = this.Zflag.toString(16).toUpperCase();
+                runningProcess.Zflag = this.Zflag.toString(16).toUpperCase();*/
             }
             else if (runningProcess.State == "Completed") {
-                runningProcess.PC = this.PC.toString(16).toUpperCase();
+                /*runningProcess.PC = this.PC.toString(16).toUpperCase();
                 runningProcess.IR = this.IR;
                 runningProcess.Acc = this.Acc.toString(16).toUpperCase();
                 runningProcess.Xreg = this.Xreg.toString(16).toUpperCase();
                 runningProcess.Yreg = this.Yreg.toString(16).toUpperCase();
-                runningProcess.Zflag = this.Zflag.toString(16).toUpperCase();
+                runningProcess.Zflag = this.Zflag.toString(16).toUpperCase();*/
             }
         };
         return Cpu;
