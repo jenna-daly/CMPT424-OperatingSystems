@@ -16,9 +16,9 @@ module TSOS {
           //public isExecuting: boolean = false,
           public State: string = "Resident",
           public base: number = 0,
-          public limit: number = 0/*,
+          public limit: number = 0,
           public turnaround: number = 0,
-          public waitTime: number = 0*/) {
+          public waitTime: number = 0) {
 
         }
 
@@ -34,8 +34,8 @@ module TSOS {
         this.State = "Resident";
         this.base = 0;
         this.limit = 0;
-        //this.turnaround = 0;
-        //this.waitTime = 0;
+        this.turnaround = 0;
+        this.waitTime = 0;
       } 
 
       public storeNewVals(){

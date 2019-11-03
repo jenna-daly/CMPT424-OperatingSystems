@@ -88,11 +88,16 @@ var TSOS;
         Scheduler.prototype.getTimes = function () {
             runningProcess.turnaround += 1;
             var increment;
-            for (var i = 0; i < this.readyQueue.getSize(); i++) {
-                increment = this.readyQueue.dequeue();
-                increment.turnaround++;
-                increment.waitTime++;
-                this.readyQueue.enqueue(increment);
+            if (this.readyQueue.getSize() > 0) {
+                for (var i = 0; i < this.readyQueue.getSize(); i++) {
+                    increment = this.readyQueue.dequeue();
+                    increment.turnaround++;
+                    increment.waitTime++;
+                    this.readyQueue.enqueue(increment);
+                }
+            }
+            else {
+                runningProcess.waitTime = 0;
             }
         };
         return Scheduler;

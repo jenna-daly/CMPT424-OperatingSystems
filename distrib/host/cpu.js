@@ -61,6 +61,7 @@ var TSOS;
             TSOS.Control.accessCPU();
             this.storeinPCB();
             TSOS.Control.accessPCB();
+            _Scheduler.getTimes();
             //this.runEachOP();
             //console.log(this.IR);
             //cycle is called when CPU is executing.. we make it false until the arrow is pressed, runs, repeat
@@ -295,14 +296,17 @@ var TSOS;
         Cpu.prototype.endProgram = function () {
             if (_Scheduler.readyQueue.isEmpty()) {
                 runningProcess.State = "Completed";
+                _StdOut.advanceLine();
+                _StdOut.putText("Turnaround time: " + runningProcess.turnaround + " Wait time: " + runningProcess.waitTime);
+                _StdOut.advanceLine();
                 this.isExecuting = false;
             }
             else {
                 //_Scheduler.readyQueue.dequeue();
                 runningProcess.State = "Completed";
-                //_StdOut.advanceLine();
-                //_StdOut.putText("Turnaround time: " + runningProcess.turnaround + " Wait time: " + runningProcess.waitTime);
-                //_StdOut.advanceLine();
+                _StdOut.advanceLine();
+                _StdOut.putText("Turnaround time: " + runningProcess.turnaround + " Wait time: " + runningProcess.waitTime);
+                _StdOut.advanceLine();
                 _Scheduler.startNewPCB();
                 _Scheduler.currentStep = 0;
             }

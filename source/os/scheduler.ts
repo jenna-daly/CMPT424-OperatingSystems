@@ -96,11 +96,16 @@ module TSOS {
         public getTimes(){
             runningProcess.turnaround += 1;
             var increment;
+            if(this.readyQueue.getSize() > 0) {
             for(let i =0; i < this.readyQueue.getSize(); i++) {
                 increment = this.readyQueue.dequeue();
                 increment.turnaround++;
                 increment.waitTime++;
                 this.readyQueue.enqueue(increment);
+            }
+        }
+            else{
+                runningProcess.waitTime = 0;
             }
         }
     }
