@@ -77,13 +77,13 @@ module TSOS {
             //console.log(newtest + " PC");
             var opcode = _MemoryAccessor.getMemory(newtest);//runningProcess.PC);
             //console.log(newtest + " PC and base");
-            console.log("PID " + runningProcess.Pid);
+            //console.log("PID " + runningProcess.Pid);
             //console.log("running OP " + opcode);
             //console.log("TEST " + opcode);
             //console.log(runningProcess.PC + " current pc");
             //console.log(runningProcess.base + " current base");
             //console.log(opcode + " opcode");
-            console.log(JSON.stringify(runningProcess) + " running PID " + " running base " + runningProcess.base);
+            //console.log(JSON.stringify(runningProcess) + " running PID " + " running base " + runningProcess.base);
             this.isExecuting = true; 
             //console.log(runningProcess.PC + " TEST");
             switch(opcode) {
@@ -113,9 +113,9 @@ module TSOS {
                //store the accumulator in memory
                case "8D":
                     var getAccLocation = this.littleEndianAddress() + runningProcess.base;
-                    console.log(getAccLocation + " decoded location");
-                    console.log("this acc" + this.Acc);
-                    console.log("running acc" + runningProcess.Acc);
+                    //console.log(getAccLocation + " decoded location");
+                    //console.log("this acc" + this.Acc);
+                    //console.log("running acc" + runningProcess.Acc);
 
                     //this gives back the hex value of acc, before I was getting dec value
                     //var decToHex = this.Acc.toString(16).toUpperCase();
@@ -135,8 +135,8 @@ module TSOS {
                     //is it add at the address that follows or add the next number??
                     var value =  _MemoryAccessor.getMemory(this.littleEndianAddress() + runningProcess.base);//_PCBStored[runningPID].base);
                     var loc = this.littleEndianAddress() + runningProcess.base;
-                    console.log("DATA LOC " + loc);
-                    console.log(this.Acc + "ACC");
+                    //console.log("DATA LOC " + loc);
+                    //console.log(this.Acc + "ACC");
                     this.Acc += parseInt(value, 16);                    
                     
                     this.PC = parseInt(runningProcess.PC, 16) + 3;
@@ -211,13 +211,18 @@ module TSOS {
                     console.log(this.Xreg + " current X");*/
                     //if(parseInt(_MemoryAccessor.getMemory(byteOne), 16) == this.Xreg) {
                     //console was not picking up 00 and 0 as equal, changing that here
-                    if(this.Xreg.toString() == "00" ) {
-                        this.Xreg = 0;
+                    if(runningProcess.Xreg.toString() == "00" ) {
+                        runningProcess.Xreg = 0;
                     }
-                    if(this.Xreg.toString() == "01") {
-                        this.Xreg = 1;
+                    if(runningProcess.Xreg.toString() == "01") {
+                        runningProcess.Xreg = 1;
                     }
-                    if(_MemoryAccessor.getMemory(byteOne) == this.Xreg) {
+                    if(runningProcess.Xreg.toString() == "02") {
+                        runningProcess.Xreg = 2;
+                    }
+                    console.log("memory byte " +_MemoryAccessor.getMemory(byteOne));
+                    console.log("x reg " + this.Xreg);
+                    if(_MemoryAccessor.getMemory(byteOne) == runningProcess.Xreg) {
                         this.Zflag = 1;
                     }
                     else{
@@ -237,7 +242,7 @@ module TSOS {
                         var bytestobranch = parseInt(_MemoryAccessor.getMemory(parseInt(runningProcess.PC,16)+1+ runningProcess.base), 16);
                         //console.log(bytestobranch + "BYTES");
                         //console.log(runningProcess.PC + "INDEX");
-                         //console.log(runningProcess.PC + "PC AFTER BRANCH");
+                        //console.log(runningProcess.PC + "PC AFTER BRANCH");
                         //console.log(_MemoryAccessor.getMemory(runningProcess.PC));
                        
                         var newVar = parseInt(runningProcess.PC, 16) + bytestobranch + runningProcess.base;//_PCBStored[runningPID].base;
@@ -247,7 +252,7 @@ module TSOS {
                         //if(runningProcess.PC + bytestobranch > runningPID.limit) {
                             //if the branch will push us past 255/segment 0, we need to wrap back around
                             this.PC = (parseInt(runningProcess.PC, 16) + bytestobranch) - 255 + 1; //(bytestobranch + runningProcess.PC + 1) % 255; //(runningProcess.PC + bytestobranch) - 255;
-                            console.log(runningProcess.PC + "PC first");
+                            //console.log(runningProcess.PC + "PC first");
                         }
                         else{
                             //if the branch does not push us past, add 2 to increment the PC past this op and then add the branch
@@ -255,8 +260,8 @@ module TSOS {
                             //this.PC = parseInt(runningProcess.PC, 16) + parseInt(runningProcess.base) + bytestobranch + 2;
                             //var idk = parseInt(runningProcess.PC,16) + runningProcess.base + bytestobranch ;
                             //console.log(idk + " idk");
-                            console.log(parseInt(runningProcess.PC, 16) + "PC second");
-                            console.log(bytestobranch + " bytes to branch add 2");
+                            //console.log(parseInt(runningProcess.PC, 16) + "PC second");
+                            //console.log(bytestobranch + " bytes to branch add 2");
                         }
    
                     }
@@ -287,12 +292,12 @@ module TSOS {
                 //system call
                 case "FF":
                     //console.log("reached FF" + this.Xreg);
-                    if(this.Xreg == 1) {
+                    if(runningProcess.Xreg == 1) {
                         _StdOut.putText(runningProcess.Yreg.toString(16));
                     }
-                    else if(this.Xreg == 2) {
+                    else if(runningProcess.Xreg == 2) {
                         var storedLoc = parseInt(runningProcess.Yreg.toString(16), 16) + runningProcess.base;//_PCBStored[runningPID].base;
-                        console.log("stored loc " + storedLoc);
+                        //console.log("stored loc " + storedLoc);
                         var newStr = "";
                         while(_Memory.memoryArray[storedLoc] != "00") {
                             //to string did not work it returned numbers, I found from char code to go from hex to ascii and it worked
@@ -319,6 +324,8 @@ module TSOS {
             }
             this.storeinPCB();
             Control.accessPCB();
+            console.log(JSON.stringify(runningProcess) + " running PID " + " running base " + runningProcess.base);
+
         }
 
         public endProgram(){
