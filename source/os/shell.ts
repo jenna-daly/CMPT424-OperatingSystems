@@ -556,7 +556,16 @@ module TSOS {
         //kill all processes
         public shellKillall(args) {
             _StdOut.putText("Coming soon");
-    
+            runningProcess.State = "Terminated";
+            for(let i =0; i < _Scheduler.readyQueue.getSize(); i++) {
+                var changeState = _Scheduler.readyQueue.dequeue();
+                changeState.State = "Terminated";
+                _Scheduler.readyQueue.enqueue(changeState);
+            }
+            _CPU.isExecuting = false;
+            _StdOut.advanceLine();
+            TSOS.Control.accessPCB(); 
+
         }
 
         //set rr quantum

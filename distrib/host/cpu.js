@@ -51,7 +51,7 @@ var TSOS;
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             //console.log("RDYQueue " + _Scheduler.readyQueue.getSize());
-            if (_Scheduler.readyQueue.getSize() > 1) {
+            if (_Scheduler.readyQueue.getSize() > 0) {
                 _Scheduler.scheduleProcesses(_Scheduler.readyQueue);
                 //_Scheduler.getTimes();
             }
@@ -75,7 +75,7 @@ var TSOS;
             //console.log(newtest + " PC");
             var opcode = _MemoryAccessor.getMemory(newtest); //runningProcess.PC);
             //console.log(newtest + " PC and base");
-            //console.log("PID " + runningProcess.Pid);
+            console.log("PID " + runningProcess.Pid);
             //console.log("running OP " + opcode);
             //console.log("TEST " + opcode);
             //console.log(runningProcess.PC + " current pc");
@@ -127,8 +127,6 @@ var TSOS;
                     //is it add at the address that follows or add the next number??
                     var value = _MemoryAccessor.getMemory(this.littleEndianAddress() + runningProcess.base); //_PCBStored[runningPID].base);
                     var loc = this.littleEndianAddress() + runningProcess.base;
-                    //console.log("DATA LOC " + loc);
-                    //console.log(this.Acc + "ACC");
                     this.Acc += parseInt(value, 16);
                     this.PC = parseInt(runningProcess.PC, 16) + 3;
                     this.IR = "6D";
@@ -189,11 +187,7 @@ var TSOS;
                     break;
                 //compare a byte in memory to X reg; set Z flag if equal
                 case "EC":
-                    var byteOne = this.littleEndianAddress() + runningProcess.base; //_PCBStored[runningPID].base;
-                    /*console.log(byteOne + " memory location")
-                    console.log(_MemoryAccessor.getMemory(byteOne) + " DATA AT LOC");
-                    console.log(this.Xreg + " current X");*/
-                    //if(parseInt(_MemoryAccessor.getMemory(byteOne), 16) == this.Xreg) {
+                    var byteOne = this.littleEndianAddress() + runningProcess.base;
                     //console was not picking up 00 and 0 as equal, changing that here
                     if (runningProcess.Xreg.toString() == "00") {
                         runningProcess.Xreg = 0;
@@ -223,16 +217,10 @@ var TSOS;
                 case "D0":
                     if (runningProcess.Zflag == 0) {
                         var bytestobranch = parseInt(_MemoryAccessor.getMemory(parseInt(runningProcess.PC, 16) + 1 + runningProcess.base), 16);
-                        //console.log(bytestobranch + "BYTES");
-                        //console.log(runningProcess.PC + "INDEX");
-                        //console.log(runningProcess.PC + "PC AFTER BRANCH");
-                        //console.log(_MemoryAccessor.getMemory(runningProcess.PC));
                         var newVar = parseInt(runningProcess.PC, 16) + bytestobranch + runningProcess.base; //_PCBStored[runningPID].base;
-                        if (parseInt(runningProcess.PC, 16) + bytestobranch + runningProcess.base > runningProcess.limit) { //_PCBStored[runningPID].limit) {
-                            //if(runningProcess.PC + bytestobranch > runningPID.limit) {
+                        if (parseInt(runningProcess.PC, 16) + bytestobranch + runningProcess.base > runningProcess.limit) {
                             //if the branch will push us past 255/segment 0, we need to wrap back around
-                            this.PC = (parseInt(runningProcess.PC, 16) + bytestobranch) - 255 + 1; //(bytestobranch + runningProcess.PC + 1) % 255; //(runningProcess.PC + bytestobranch) - 255;
-                            //console.log(runningProcess.PC + "PC first");
+                            this.PC = (parseInt(runningProcess.PC, 16) + bytestobranch) - 255 + 1;
                         }
                         else {
                             //if the branch does not push us past, add 2 to increment the PC past this op and then add the branch
@@ -297,7 +285,7 @@ var TSOS;
             }
             this.storeinPCB();
             TSOS.Control.accessPCB();
-            console.log(JSON.stringify(runningProcess) + " running PID " + " running base " + runningProcess.base);
+            //console.log(JSON.stringify(runningProcess) + " running PID " + " running base " + runningProcess.base);
         };
         Cpu.prototype.endProgram = function () {
             if (_Scheduler.readyQueue.isEmpty()) {
@@ -310,6 +298,7 @@ var TSOS;
             else {
                 //_Scheduler.readyQueue.dequeue();
                 runningProcess.State = "Completed";
+                console.log("FINISHED A PROCESS");
                 _StdOut.advanceLine();
                 _StdOut.putText("Turnaround time: " + runningProcess.turnaround + " Wait time: " + runningProcess.waitTime);
                 _StdOut.advanceLine();
@@ -327,52 +316,6 @@ var TSOS;
         };
         //take values CPU generates and dispaly save them in the PCB so we can display it in control.ts
         Cpu.prototype.storeinPCB = function () {
-            //_PCBStored = [];
-            //var status;
-            /*for(let i =0; i <_PCBStored.length; i++) {
-              if(_PCBStored[i].State == "Running") {
-                if(this.isExecuting == false) {
-                    //status = "completed";
-                    _PCBStored[i].State = "Completed";
-                    _PCBStored[i].PC = this.PC.toString(16).toUpperCase();
-                    _PCBStored[i].IR = this.IR;
-                    _PCBStored[i].Acc = this.Acc.toString(16).toUpperCase();
-                    _PCBStored[i].Xreg = this.Xreg.toString(16).toUpperCase();
-                    _PCBStored[i].Yreg = this.Yreg.toString(16).toUpperCase();
-                    _PCBStored[i].Zflag = this.Zflag.toString(16).toUpperCase();
-    
-                    //take out of ready queue if it's complete
-                    _Scheduler.readyQueue.dequeue();
-                }
-                else{
-                    _PCBStored[i].State = "Running";
-                    _PCBStored[i].PC = this.PC.toString(16).toUpperCase();
-                    _PCBStored[i].IR = this.IR;
-                    _PCBStored[i].Acc = this.Acc.toString(16).toUpperCase();
-                    _PCBStored[i].Xreg = this.Xreg.toString(16).toUpperCase();
-                    _PCBStored[i].Yreg = this.Yreg.toString(16).toUpperCase();
-                    _PCBStored[i].Zflag = this.Zflag.toString(16).toUpperCase();
-    
-                    /*runningProcess.State = "Running";
-                    runningProcess.PC = this.PC.toString(16).toUpperCase();
-                    runningProcess.IR = this.IR;
-                    runningProcess.Acc = this.Acc.toString(16).toUpperCase();
-                    runningProcess.Xreg = this.Xreg.toString(16).toUpperCase();
-                    runningProcess.Yreg = this.Yreg.toString(16).toUpperCase();
-                    runningProcess.Zflag = this.Zflag.toString(16).toUpperCase();*/
-            /*}
-        }
-        else if(runningProcess.State == "Completed") {
-                _PCBStored[i].State = "Completed";
-                _PCBStored[i].PC = this.PC.toString(16).toUpperCase();
-                _PCBStored[i].IR = this.IR;
-                _PCBStored[i].Acc = this.Acc.toString(16).toUpperCase();
-                _PCBStored[i].Xreg = this.Xreg.toString(16).toUpperCase();
-                _PCBStored[i].Yreg = this.Yreg.toString(16).toUpperCase();
-                _PCBStored[i].Zflag = this.Zflag.toString(16).toUpperCase();
-            }
-
-            }*/
             if (runningProcess.State == "Running") {
                 /*runningProcess.PC = this.PC.toString(16).toUpperCase();
                 runningProcess.IR = this.IR;
