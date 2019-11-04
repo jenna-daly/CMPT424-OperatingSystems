@@ -369,37 +369,10 @@ module TSOS {
 
                 var validInput = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
                 var newInput = validInput.split(" ");
-                //console.log(newInput);
                 
                 //have to reset 
                 _CPU.init();
 
-                //allocate memory in memory manager instead
-                /*var segment;
-                if(segmentZeroFree == true) {
-                    segment = 0;
-                    segmentZeroFree = false;
-                }
-                else if(segmentOneFree == true) {
-                    segment = 1;
-                    segmentOneFree = false;
-                }
-                else if(segmentTwoFree == true) {
-                    segment = 2;
-                    segmentTwoFree = false;
-                }*/
-
-                 //moving this up for now
-                /*_currentPID = _PID;
-                //update our counters / displays
-                TSOS.Control.updateMemory();
-                TSOS.Control.accessCPU();
-                _PID += 1;
- 
-                var newPCB = new TSOS.Pcb(_currentPID);
-                console.log("NEW PCB " + JSON.stringify(newPCB));
-                _PCBStored.push(newPCB);
-                TSOS.Control.accessPCB();*/
                 _currentPID = _PID;
                 var newPCB = new TSOS.Pcb(_currentPID);
                 console.log("NEW PCB " + JSON.stringify(newPCB));
@@ -419,11 +392,6 @@ module TSOS {
                 TSOS.Control.accessCPU();
                 _PID += 1;
  
-                //for iP3 I can't use one array like I did before
-                //I make an object and store it in an array w all the info for one process
-                /*var newPCB = new TSOS.Pcb(_currentPID);
-                console.log("NEW PCB " + JSON.stringify(newPCB));
-                _PCBStored.push(newPCB);*/
                 TSOS.Control.accessPCB();
             }
             else{
@@ -436,7 +404,7 @@ module TSOS {
             var valid = false;
             if(args.length > 0) {
                 for(let i =0; i < _PCBStored.length; i++) {
-                    if(_PCBStored[i].Pid == args) {
+                    if(_PCBStored[i].Pid == args && _PCBStored[i].State == "Resident") {
                         //add in if status = ready do this, otherwise do not
                         _StdOut.putText("Valid PID. Running.");
                         _StdOut.advanceLine();
@@ -444,11 +412,7 @@ module TSOS {
                         _PCBStored[i].State = "Running";
                         runningPID = i;
                         console.log("RUNNING " + runningPID);
-                        //populate ready queue
-                        //_Scheduler.setReadyQueue(_PCBStored[runningPID]);
                         //set running process
-                        //console.log("queue contains " + JSON.stringify(_Scheduler.readyQueue));
-                        //runningProcess = _Scheduler.readyQueue.dequeue();
                         runningProcess = _PCBStored[runningPID];
                         break;
                     }
@@ -458,6 +422,7 @@ module TSOS {
                 }
 
             }
+
             if(valid == false){
                 _StdOut.putText("Usage: run <PID> Please supply a PID.");
             }
@@ -495,11 +460,8 @@ module TSOS {
         }
 
         public shellRunall(args) {
-            //_StdOut.putText("Coming soon");
             for(let i=0; i < _PCBStored.length; i++) {
                 _Scheduler.setReadyQueue(_PCBStored[i]);
-
-                //_OsShell.shellRun(_PCBStored[i].Pid.toString());
             }
             _CPU.isExecuting = true;
             runningProcess = _Scheduler.readyQueue.dequeue();
