@@ -76,7 +76,7 @@ var TSOS;
             var opcode = _MemoryAccessor.getMemory(newtest); //runningProcess.PC);
             //console.log(newtest + " PC and base");
             console.log("PID " + runningProcess.Pid);
-            //console.log("running OP " + opcode);
+            console.log("running OP " + opcode);
             //console.log("TEST " + opcode);
             //console.log(runningProcess.PC + " current pc");
             //console.log(runningProcess.base + " current base");
@@ -138,6 +138,7 @@ var TSOS;
                     this.Xreg = _MemoryAccessor.getMemory(parseInt(runningProcess.PC, 16) + 1 + runningProcess.base);
                     this.PC = parseInt(runningProcess.PC, 16) + 2;
                     this.IR = "A2";
+                    console.log("A2 X REG " + this.Xreg);
                     runningProcess.Xreg = this.Xreg.toString(16).toUpperCase();
                     runningProcess.PC = this.PC.toString(16).toUpperCase();
                     runningProcess.IR = this.IR;
@@ -163,10 +164,13 @@ var TSOS;
                     break;
                 //load the Y reg from memory
                 case "AC":
+                    console.log("reached AC");
                     var MemoryY = this.littleEndianAddress();
                     this.Yreg = _MemoryAccessor.getMemory(MemoryY + runningProcess.base); //_PCBStored[runningPID].base);
                     this.PC = parseInt(runningProcess.PC, 16) + 3;
                     this.IR = "AC";
+                    console.log("data loc for AC " + MemoryY);
+                    console.log("new Y for AC " + this.Yreg);
                     runningProcess.Yreg = this.Yreg.toString(16).toUpperCase();
                     runningProcess.PC = this.PC.toString(16).toUpperCase();
                     runningProcess.IR = this.IR;
@@ -197,8 +201,8 @@ var TSOS;
                     if (runningProcess.Xreg.toString() == "02") {
                         runningProcess.Xreg = 2;
                     }
-                    console.log("memory byte " + _MemoryAccessor.getMemory(byteOne));
-                    console.log("x reg " + this.Xreg);
+                    //console.log("memory byte " +_MemoryAccessor.getMemory(byteOne));
+                    console.log("x reg EC " + this.Xreg);
                     if (_MemoryAccessor.getMemory(byteOne) == runningProcess.Xreg) {
                         this.Zflag = 1;
                     }
@@ -263,19 +267,21 @@ var TSOS;
                     }
                 //system call
                 case "FF":
-                    //console.log("reached FF" + this.Xreg);
+                    if (runningProcess.Xreg == "02") {
+                        runningProcess.Xreg = 2;
+                    }
                     if (runningProcess.Xreg == 1) {
                         _StdOut.putText(runningProcess.Yreg.toString(16));
                     }
                     else if (runningProcess.Xreg == 2) {
                         var storedLoc = parseInt(runningProcess.Yreg.toString(16), 16) + runningProcess.base;
-                        //console.log("stored loc " + storedLoc);
                         var newStr = "";
                         while (_Memory.memoryArray[storedLoc] != "00") {
                             //to string did not work it returned numbers, I found from char code to go from hex to ascii and it worked
                             newStr += (String.fromCharCode(parseInt(_Memory.memoryArray[storedLoc], 16)));
                             storedLoc += 1;
                         }
+                        console.log("new str " + newStr);
                         _StdOut.putText(newStr);
                     }
                     this.IR = "FF";

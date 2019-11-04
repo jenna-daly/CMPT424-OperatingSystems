@@ -486,9 +486,11 @@ module TSOS {
                 segmentZeroFree = true;
                 segmentOneFree = true;
                 segmentTwoFree = true;
+                //redisplay PCB and CPU
                 _PCBStored = [];
                 TSOS.Control.accessPCB();
-                //clear CPU..??
+                _CPU.init();
+                TSOS.Control.accessCPU();
             }    
         }
 
