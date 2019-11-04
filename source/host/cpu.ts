@@ -331,6 +331,10 @@ module TSOS {
                 _StdOut.advanceLine();
                 _StdOut.putText("Turnaround time: " + runningProcess.turnaround + " Wait time: " + runningProcess.waitTime);
                 _StdOut.advanceLine();
+                //runall works and switches but after completing 0 it was starting PID 2 instead
+                //this is prob not an efficient fix to get 1 to run next, but does the job for now
+                var switchQueue = _Scheduler.readyQueue.dequeue();
+                _Scheduler.readyQueue.enqueue(switchQueue);
                 _Scheduler.startNewPCB();
                 _Scheduler.currentStep = 0;
                 

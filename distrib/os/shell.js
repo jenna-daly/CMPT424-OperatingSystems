@@ -406,16 +406,16 @@ var TSOS;
             if (_Scheduler.readyQueue.isEmpty()) {
                 for (var i = 0; i < _PCBStored.length; i++) {
                     if (_PCBStored[i].State == "Resident" || _PCBStored[i].State == "Running") {
-                        containsProcesses += "PID " + _PCBStored[i].Pid.toString() + " " + _PCBStored[i].State + " ";
+                        containsProcesses += " PID " + _PCBStored[i].Pid.toString() + " " + _PCBStored[i].State + " ";
                     }
                 }
                 _StdOut.putText(containsProcesses);
             }
             else {
-                containsProcesses += "PID " + runningProcess.Pid.toString() + " " + runningProcess.State;
+                containsProcesses += " PID " + runningProcess.Pid.toString() + " " + runningProcess.State;
                 for (var i = 0; i < _Scheduler.readyQueue.getSize(); i++) {
                     var changeState = _Scheduler.readyQueue.dequeue();
-                    containsProcesses += "PID " + changeState.Pid.toString() + " " + changeState.State;
+                    containsProcesses += " PID " + changeState.Pid.toString() + " " + changeState.State;
                     _Scheduler.readyQueue.enqueue(changeState);
                 }
                 _StdOut.putText(containsProcesses);

@@ -302,6 +302,8 @@ var TSOS;
                 _StdOut.advanceLine();
                 _StdOut.putText("Turnaround time: " + runningProcess.turnaround + " Wait time: " + runningProcess.waitTime);
                 _StdOut.advanceLine();
+                var switchQueue = _Scheduler.readyQueue.dequeue();
+                _Scheduler.readyQueue.enqueue(switchQueue);
                 _Scheduler.startNewPCB();
                 _Scheduler.currentStep = 0;
             }
