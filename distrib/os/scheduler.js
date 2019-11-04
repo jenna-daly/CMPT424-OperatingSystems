@@ -24,9 +24,6 @@ var TSOS;
             this.quantum = newQuantum;
             return this.quantum;
         };
-        Scheduler.prototype.roundRobin = function () {
-            //code here for context switches per specified cpu cycle
-        };
         Scheduler.prototype.setReadyQueue = function (queueInput) {
             this.readyQueue.enqueue(queueInput);
             console.log(this.readyQueue.toString());
@@ -38,37 +35,6 @@ var TSOS;
                 _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CONTEXT_SWITCH_IRQ, 0));
             }
         };
-        /*runningPID = this.readyQueue.q[0];
-    this.currentStep += 1;
-
-    //rr scheduling
-    if (this.currentStep > this.quantum) {
-        this.currentStep = 0;
-        var tempPCB = runningPID;
-        var tempReadyQueue = [];
-                
-        for (let i = 0; i < this.readyQueue.getSize(); i++) {
-            if (tempPCB === this.readyQueue.q[i].pid) {
-                continue;
-            }
-            
-            tempReadyQueue.push(this.readyQueue.q[i]);
-        }
-        this.readyQueue.q = tempReadyQueue;
-        this.readyQueue.q.push(tempPCB);
-    }
-    runningPID = this.readyQueue.q[0];
-
-    var loopIndex = -1;
-        //loop through the ready queue
-        for (var i = 0; i < this.readyQueue.getSize(); i++) {
-        //skip over the one we are already on
-            if (this.readyQueue.q[i].memorySegment > -1) {
-                loopIndex = i;
-            }
-        }
-
-}*/
         Scheduler.prototype.contextSwitch = function () {
             //we want to remove the process that was running and put it on the back of the ready queue
             this.removeOldPCB();
@@ -95,9 +61,6 @@ var TSOS;
                     increment.waitTime++;
                     this.readyQueue.enqueue(increment);
                 }
-            }
-            else {
-                runningProcess.waitTime = 0;
             }
         };
         return Scheduler;

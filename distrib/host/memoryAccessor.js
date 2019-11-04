@@ -10,6 +10,18 @@ var TSOS;
             //console.log(_Memory.memoryArray[1] + "loc");     
             return _Memory.memoryArray[loc];
         };
+        MemoryAccessor.prototype.memoryBoundaries = function (counter) {
+            console.log("counter " + counter);
+            if ((counter + runningProcess.base) > runningProcess.limit) {
+                return false;
+            }
+            else if ((counter + runningProcess.base) < runningProcess.base) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        };
         return MemoryAccessor;
     }());
     TSOS.MemoryAccessor = MemoryAccessor;

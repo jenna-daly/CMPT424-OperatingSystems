@@ -89,7 +89,6 @@ var TSOS;
                 case "A9":
                     //note to self: my codes weren't working bc I am using runningProcess.PC, but I was changing acc AFTER I incremented the counter, so it was not giving me the correct value
                     this.Acc = parseInt(_MemoryAccessor.getMemory(parseInt(runningProcess.PC, 16) + 1 + runningProcess.base), 16);
-                    //console.log(_MemoryAccessor.getMemory(runningProcess.PC+1) + "value");
                     this.PC = parseInt(runningProcess.PC, 16) + 2;
                     this.IR = "A9";
                     runningProcess.Acc = this.Acc.toString(16).toUpperCase();
@@ -242,16 +241,26 @@ var TSOS;
                     break;
                 //increment value of a byte
                 case "EE":
-                    var incrementThis = this.littleEndianAddress() + runningProcess.base; //_PCBStored[runningPID].base;
-                    var incrementedDone = parseInt(_MemoryAccessor.getMemory(incrementThis), 16);
-                    incrementedDone += 1;
-                    _Memory.memoryArray[incrementThis] = incrementedDone.toString(16);
-                    TSOS.Control.updateMemory();
-                    this.PC = parseInt(runningProcess.PC, 16) + 3;
-                    this.IR = "EE";
-                    runningProcess.PC = this.PC.toString(16).toUpperCase();
-                    runningProcess.IR = this.IR;
-                    break;
+                    var incrementThis = this.littleEndianAddress() + runningProcess.base;
+                    //check that memory is in bounds
+                    if (_MemoryAccessor.memoryBoundaries(incrementThis) == false) {
+                        //call the kernel with an interrupt
+                        _StdOut.putText("[ERROR] OUT OF BOUNDS");
+                        runningProcess.State = "Terminated";
+                        TSOS.Control.accessPCB();
+                        this.isExecuting = false;
+                    }
+                    else {
+                        var incrementedDone = parseInt(_MemoryAccessor.getMemory(incrementThis), 16);
+                        incrementedDone += 1;
+                        _Memory.memoryArray[incrementThis] = incrementedDone.toString(16);
+                        TSOS.Control.updateMemory();
+                        this.PC = parseInt(runningProcess.PC, 16) + 3;
+                        this.IR = "EE";
+                        runningProcess.PC = this.PC.toString(16).toUpperCase();
+                        runningProcess.IR = this.IR;
+                        break;
+                    }
                 //system call
                 case "FF":
                     //console.log("reached FF" + this.Xreg);
@@ -259,12 +268,11 @@ var TSOS;
                         _StdOut.putText(runningProcess.Yreg.toString(16));
                     }
                     else if (runningProcess.Xreg == 2) {
-                        var storedLoc = parseInt(runningProcess.Yreg.toString(16), 16) + runningProcess.base; //_PCBStored[runningPID].base;
+                        var storedLoc = parseInt(runningProcess.Yreg.toString(16), 16) + runningProcess.base;
                         //console.log("stored loc " + storedLoc);
                         var newStr = "";
                         while (_Memory.memoryArray[storedLoc] != "00") {
                             //to string did not work it returned numbers, I found from char code to go from hex to ascii and it worked
-                            //_StdOut.putText(String.fromCharCode(parseInt(_Memory.memoryArray[storedLoc] , 16)));
                             newStr += (String.fromCharCode(parseInt(_Memory.memoryArray[storedLoc], 16)));
                             storedLoc += 1;
                         }
@@ -277,9 +285,10 @@ var TSOS;
                     break;
                 default:
                     _StdOut.putText("ERROR Invalid op code: " + opcode.toString());
-                    //_StdOut.putText("ERROR Invalid op code");
                     _StdOut.advanceLine();
                     _OsShell.putPrompt();
+                    runningProcess.State = "Terminated";
+                    TSOS.Control.accessPCB();
                     this.isExecuting = false;
                 //else call an error to isr and write it to the console
             }
@@ -302,6 +311,8 @@ var TSOS;
                 _StdOut.advanceLine();
                 _StdOut.putText("Turnaround time: " + runningProcess.turnaround + " Wait time: " + runningProcess.waitTime);
                 _StdOut.advanceLine();
+                //runall works and switches but after completing 0 it was starting PID 2 instead
+                //this is prob not an efficient fix to get 1 to run next, but does the job for now
                 var switchQueue = _Scheduler.readyQueue.dequeue();
                 _Scheduler.readyQueue.enqueue(switchQueue);
                 _Scheduler.startNewPCB();
@@ -314,7 +325,17 @@ var TSOS;
             var inputOne = parseInt(_MemoryAccessor.getMemory(takeThis + 1), 16);
             var inputTwo = parseInt(_MemoryAccessor.getMemory(takeThis + 2), 16);
             var newValue = inputTwo + inputOne;
-            return newValue;
+            //check address is in bounds of segment
+            if (_MemoryAccessor.memoryBoundaries(newValue) == false) {
+                //call the kernel with an interrupt
+                _StdOut.putText("[ERROR] OUT OF BOUNDS");
+                runningProcess.State = "Terminated";
+                TSOS.Control.accessPCB();
+                this.isExecuting = false;
+            }
+            else {
+                return newValue;
+            }
         };
         //take values CPU generates and dispaly save them in the PCB so we can display it in control.ts
         Cpu.prototype.storeinPCB = function () {

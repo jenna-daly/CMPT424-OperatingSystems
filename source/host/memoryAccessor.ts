@@ -17,6 +17,19 @@ module TSOS {
         
     }
 
+    public memoryBoundaries(counter) {
+        console.log("counter " + counter);
+        if((counter + runningProcess.base) > runningProcess.limit){
+            return false;
+        }   
+        else if((counter + runningProcess.base) < runningProcess.base) {
+            return false;
+        }      
+        else {
+            return true;
+        }
+    }
+
     //making a function to write memory
     /*public setMemory(loc, posNow){
         _Memory.memoryArray[loc] = _Memory.memoryArray[posNow]; 

@@ -27,9 +27,6 @@ module TSOS {
         return this.quantum;
       }
 
-    public roundRobin() {
-        //code here for context switches per specified cpu cycle
-    }
 
     public setReadyQueue(queueInput) {
         this.readyQueue.enqueue(queueInput);
@@ -44,37 +41,6 @@ module TSOS {
             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CONTEXT_SWITCH_IRQ, 0));
         }
     }
-                /*runningPID = this.readyQueue.q[0];
-            this.currentStep += 1;
-
-            //rr scheduling
-            if (this.currentStep > this.quantum) {
-                this.currentStep = 0; 
-                var tempPCB = runningPID;
-                var tempReadyQueue = [];
-                        
-                for (let i = 0; i < this.readyQueue.getSize(); i++) {           
-                    if (tempPCB === this.readyQueue.q[i].pid) {
-                        continue;
-                    }
-                    
-                    tempReadyQueue.push(this.readyQueue.q[i]);
-                }
-                this.readyQueue.q = tempReadyQueue;
-                this.readyQueue.q.push(tempPCB);
-            }            
-            runningPID = this.readyQueue.q[0];
-        
-            var loopIndex = -1;
-                //loop through the ready queue
-                for (var i = 0; i < this.readyQueue.getSize(); i++) {
-                //skip over the one we are already on
-                    if (this.readyQueue.q[i].memorySegment > -1) {
-                        loopIndex = i;
-                    }
-                }
-
-        }*/
 
         public contextSwitch(){
             //we want to remove the process that was running and put it on the back of the ready queue
@@ -97,16 +63,14 @@ module TSOS {
             runningProcess.turnaround += 1;
             var increment;
             if(this.readyQueue.getSize() > 0) {
-            for(let i =0; i < this.readyQueue.getSize(); i++) {
-                increment = this.readyQueue.dequeue();
-                increment.turnaround++;
-                increment.waitTime++;
-                this.readyQueue.enqueue(increment);
+                for(let i =0; i < this.readyQueue.getSize(); i++) {
+                    increment = this.readyQueue.dequeue();
+                    increment.turnaround++;
+                    increment.waitTime++;
+                    this.readyQueue.enqueue(increment);
+                }
             }
-        }
-            else{
-                runningProcess.waitTime = 0;
-            }
+
         }
     }
 }
