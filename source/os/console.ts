@@ -166,11 +166,16 @@ module TSOS {
                       while(testWidth < 480) {
                         oneLine = text.substring(0,i);
                         testWidth = _DrawingContext.measureText(this.currentFont, this.currentFontSize, oneLine);
+                        console.log("TEST WIDTH: " + testWidth);
 
-                        if(testWidth > 480) {
+                        if(testWidth + this.currentXPosition > 480) {
+                            //this.advanceLine();
                             _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, oneLine);
+                            console.log("substring 1: " + oneLine)
                             this.advanceLine();
                             this.putText(text.substring(i));
+                            console.log("substring 2: " + text.substring(i) );
+                            break;
                         }
                         else{
                             i=i+1;
@@ -180,7 +185,6 @@ module TSOS {
                 else{
                     this.advanceLine();
                     _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
-
                     this.currentXPosition = this.currentXPosition + offset;
                 }
             }

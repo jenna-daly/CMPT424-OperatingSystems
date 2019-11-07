@@ -144,10 +144,15 @@ var TSOS;
                         while (testWidth < 480) {
                             oneLine = text.substring(0, i);
                             testWidth = _DrawingContext.measureText(this.currentFont, this.currentFontSize, oneLine);
-                            if (testWidth > 480) {
+                            console.log("TEST WIDTH: " + testWidth);
+                            if (testWidth + this.currentXPosition > 480) {
+                                //this.advanceLine();
                                 _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, oneLine);
+                                console.log("substring 1: " + oneLine);
                                 this.advanceLine();
                                 this.putText(text.substring(i));
+                                console.log("substring 2: " + text.substring(i));
+                                break;
                             }
                             else {
                                 i = i + 1;
@@ -168,6 +173,14 @@ var TSOS;
                     this.currentXPosition = this.currentXPosition + offset;
                 }
             }
+            /*if (text !== "") {
+                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+                if (this.currentXPosition + offset > _Canvas.width) {
+                    this.advanceLine();
+                }
+                _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
+                this.currentXPosition = this.currentXPosition + offset;
+            }*/
         };
         Console.prototype.advanceLine = function () {
             this.currentXPosition = 0;
