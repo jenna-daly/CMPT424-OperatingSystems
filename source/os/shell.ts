@@ -164,6 +164,51 @@ module TSOS {
                                   "<int> - Sets the round robin quantum");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.shellQuantum,
+                "quantum",
+                "<int> - Sets the round robin quantum");
+                this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellCreate,
+                "create",
+                "<filename> - Creates a file with given name");
+                this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellRead,
+                "read",
+                "<filename> - Displays contents of specified file if valid");
+                this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellWrite,
+                "write",
+                "<filename> data - Writes data provided in quotes to specified file");
+                this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellDelete,
+                "delete",
+                "<filename> - Removes file from storage");
+                this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellFormat,
+                "format",
+                "Initializes all blocks in all sectors in all tracks");
+                this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellLs,
+                "ls",
+                "Lists current files stored on the disk");
+                this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellSetschedule,
+                "setschedule",
+                "[rr, fcfs, priority] - Sets the scheduling algorithm");
+                this.commandList[this.commandList.length] = sc;
+
+            sc = new ShellCommand(this.shellGetschedule,
+                "getschedule",
+                "Returns the name of the current scheduling algorithm");
+                this.commandList[this.commandList.length] = sc;
+
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -547,6 +592,38 @@ module TSOS {
             }
         }
 
+        public shellCreate(args) {
+            _StdOut.putText("Coming soon");
+        }
+
+        public shellRead(args) {
+            _StdOut.putText("Coming soon");
+        }
+
+        public shellWrite(args) {
+            _StdOut.putText("Coming soon");
+        }
+
+        public shellDelete(args) {
+            _StdOut.putText("Coming soon");
+        }
+
+        public shellFormat(args) {
+            _StdOut.putText("Coming soon");
+        }
+
+        public shellLs(args) {
+            _StdOut.putText("Coming soon");
+        }
+
+        public shellSetschedule(args) {
+            _StdOut.putText("Coming soon");
+        }
+
+        public shellGetschedule(args) {
+            _StdOut.putText("Coming soon");
+        }
+
         public shellMan(args) {
             if (args.length > 0) {
                 var topic = args[0];
@@ -633,6 +710,38 @@ module TSOS {
 
                     case "quantum":
                         _StdOut.putText("Quantum of round robin is set as specified by int.");
+                        break;
+
+                    case "create":
+                        _StdOut.putText("Creates a new file.");
+                        break;
+
+                    case "read":
+                        _StdOut.putText("Reads the contents of a file.");
+                        break;
+
+                    case "write":
+                        _StdOut.putText("Writes specified data to file.");
+                        break;
+
+                    case "delete":
+                        _StdOut.putText("Deletes file from disk.");
+                        break;
+
+                    case "format":
+                        _StdOut.putText("Initializes disk for use.");
+                        break;
+                    
+                    case "ls":
+                        _StdOut.putText("Lists files on the disk.");
+                        break;
+
+                    case "setschedule":
+                        _StdOut.putText("Sets new scheduling algorithm.");
+                        break;
+
+                    case "getschedule":
+                        _StdOut.putText("Returns current scheduling algorithm.");
                         break;
 
                     default:
