@@ -42,12 +42,21 @@ module TSOS {
     }
 
     public scheduleProcesses(queue) {
-        //if(this.algorithm == 'rr')
-        this.currentStep++;
-        console.log(this.currentStep + " current step current quantum " + this.quantum);
+        if(this.algorithm == 'rr') {
+            this.currentStep++;
+            console.log(this.currentStep + " current step current quantum " + this.quantum);
 
-        if (this.currentStep >= this.quantum && this.readyQueue.getSize() > 0) {
-            _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CONTEXT_SWITCH_IRQ, 0));
+            if (this.currentStep >= this.quantum && this.readyQueue.getSize() > 0) {
+                _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CONTEXT_SWITCH_IRQ, 0));
+            }
+        }
+        if(this.algorithm == 'fcfs') {
+            this.currentStep++;
+            console.log(this.currentStep + " current step current quantum " + this.quantum);
+
+            if (this.currentStep >= 100000 && this.readyQueue.getSize() > 0) {
+                _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CONTEXT_SWITCH_IRQ, 0));
+            }
         }
     }
 
