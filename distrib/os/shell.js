@@ -475,10 +475,29 @@ var TSOS;
             _StdOut.putText("Coming soon");
         };
         Shell.prototype.shellSetschedule = function (args) {
-            _StdOut.putText("Coming soon");
+            if (args.length > 0) {
+                if (args[0].toLowerCase() == 'rr') {
+                    _Scheduler.setAlg('rr');
+                    _StdOut.putText("Setting schedule to RR");
+                }
+                else if (args[0].toLowerCase() == 'priority') {
+                    _Scheduler.setAlg('priority');
+                    _StdOut.putText("Setting schedule to priority");
+                }
+                else if (args[0].toLowerCase() == 'fcfs') {
+                    _Scheduler.setAlg('fcfs');
+                    _StdOut.putText("Setting schedule to FCFS");
+                }
+                else {
+                    _StdOut.putText("Please enter a valid schedule: [RR, Priority, FCFS].");
+                }
+            }
+            else {
+                _StdOut.putText("Please enter a valid schedule: [RR, Priority, FCFS].");
+            }
         };
         Shell.prototype.shellGetschedule = function (args) {
-            _StdOut.putText("Coming soon");
+            _StdOut.putText("Scheduling algorithm is set to: " + _Scheduler.algorithm);
         };
         Shell.prototype.shellMan = function (args) {
             if (args.length > 0) {

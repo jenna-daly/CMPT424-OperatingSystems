@@ -74,7 +74,8 @@ var	_MemoryAccessor:	TSOS.MemoryAccessor;
 //	Software	(OS)	
 var	_MemoryManager:	any	=	null;
 var _Scheduler: any = null;
-
+//var for performing operations on disk
+var _diskDrive: any = null;
 
 //PCB updates, declaring global array to store values in
 var _Pcb: TSOS.Pcb;

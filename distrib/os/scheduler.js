@@ -5,30 +5,39 @@ var TSOS;
 (function (TSOS) {
     //construct global instance of class
     var Scheduler = /** @class */ (function () {
-        function Scheduler(quantum, currentStep, readyQueue) {
+        function Scheduler(quantum, currentStep, readyQueue, algorithm) {
             if (quantum === void 0) { quantum = 6; }
             if (currentStep === void 0) { currentStep = 0; }
             if (readyQueue === void 0) { readyQueue = new TSOS.Queue(); }
+            if (algorithm === void 0) { algorithm = "rr"; }
             this.quantum = quantum;
             this.currentStep = currentStep;
             this.readyQueue = readyQueue;
+            this.algorithm = algorithm;
         }
         Scheduler.prototype.init = function () {
             //quantum- defaulted to 6
             this.quantum = 6;
             //the current step, so when we reach 6 we reset and count again
             this.currentStep = 0;
-            this.readyQueue;
+            this.readyQueue,
+                //scheudling alg defaulted to rr
+                this.algorithm = "rr";
         };
         Scheduler.prototype.setQuantum = function (newQuantum) {
             this.quantum = newQuantum;
             return this.quantum;
+        };
+        Scheduler.prototype.setAlg = function (newAlgorithm) {
+            this.algorithm = newAlgorithm;
+            return this.algorithm;
         };
         Scheduler.prototype.setReadyQueue = function (queueInput) {
             this.readyQueue.enqueue(queueInput);
             console.log(this.readyQueue.toString());
         };
         Scheduler.prototype.scheduleProcesses = function (queue) {
+            //if(this.algorithm == 'rr')
             this.currentStep++;
             console.log(this.currentStep + " current step current quantum " + this.quantum);
             if (this.currentStep >= this.quantum && this.readyQueue.getSize() > 0) {

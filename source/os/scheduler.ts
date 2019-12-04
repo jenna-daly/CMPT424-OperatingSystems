@@ -9,7 +9,8 @@ module TSOS {
         constructor(
             public quantum: number = 6,
             public currentStep: number = 0,
-            public readyQueue = new TSOS.Queue()) {
+            public readyQueue = new TSOS.Queue(),
+            public algorithm: string = "rr") {
 
         }
 
@@ -18,7 +19,9 @@ module TSOS {
         this.quantum = 6;
         //the current step, so when we reach 6 we reset and count again
         this.currentStep = 0;
-        this.readyQueue;
+        this.readyQueue,
+        //scheudling alg defaulted to rr
+        this.algorithm = "rr";
 
       } 
 
@@ -27,6 +30,11 @@ module TSOS {
         return this.quantum;
       }
 
+    public setAlg(newAlgorithm) {
+        this.algorithm = newAlgorithm;
+        return this.algorithm;
+    }
+
 
     public setReadyQueue(queueInput) {
         this.readyQueue.enqueue(queueInput);
@@ -34,6 +42,7 @@ module TSOS {
     }
 
     public scheduleProcesses(queue) {
+        //if(this.algorithm == 'rr')
         this.currentStep++;
         console.log(this.currentStep + " current step current quantum " + this.quantum);
 

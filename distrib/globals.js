@@ -57,6 +57,8 @@ var _MemoryAccessor;
 //	Software	(OS)	
 var _MemoryManager = null;
 var _Scheduler = null;
+//var for performing operations on disk
+var _diskDrive = null;
 //PCB updates, declaring global array to store values in
 var _Pcb;
 var _PCBStored = [];
