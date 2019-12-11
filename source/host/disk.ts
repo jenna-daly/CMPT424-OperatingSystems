@@ -6,11 +6,11 @@
      module TSOS {
 
         export class Disk {
-    
             constructor(
                 public tracks: number = 4,
                 public sectors: number = 8,
-                public blocks: number = 8) {
+                public blocks: number = 8,
+                public blocksize: number = 60) {
     
             }
     
@@ -18,6 +18,7 @@
                 this.tracks = 4;
                 this.sectors = 8;
                 this.blocks = 8;
+                this.blocksize = 60;
             }
         }
     }

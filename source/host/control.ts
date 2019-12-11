@@ -139,6 +139,29 @@ module TSOS {
                 accessMemory.innerHTML = containMem;
       
             }
+
+        //update disk display
+        public static updateDisk(){
+            var accessDisk = document.getElementById("taDisk");
+            var rowNum = 0;
+            var containDisk = "<th>T:S:B</th><th>In Use</th><th>Next</th><th>Data</th></tr>";
+
+            for (let i = 0; i < _Disk.tracks; i++) {
+                for (let j = 0; j < _Disk.sectors; j++) {
+                    for (let k = 0; k < _Disk.blocks; k++) {
+                        // var tsb = i + ":" + j + ":" + k;
+                        // var row = accessDisk.insertRow(rowNum);
+                        // rowNum++;
+                        // row.insertCell(0);
+                        containDisk += "<tr><td>" + (i + ":" + j + ":" + k) + "</td><td>" + JSON.parse(sessionStorage.getItem(i + ":" + j + ":" + k)).inUse + "</td><td>" + JSON.parse(sessionStorage.getItem(i + ":" + j + ":" + k)).next + "</td><td>" + JSON.parse(sessionStorage.getItem(i + ":" + j + ":" + k)).data.join("").toString() + "</td</tr>"
+                        //containDisk += "<tr><td>" + (i + ":" + j + ":" + k) + "</td></tr>";
+                    }
+                }
+            }
+            console.log("contain disk " + containDisk);
+            accessDisk.innerHTML = containDisk;
+
+        }
     
 
         //PCB
@@ -199,6 +222,8 @@ module TSOS {
             
             _Scheduler = new TSOS.Scheduler();
 
+            //connecting var _DiskDrive to the device driver disk file which takes in a disk with the parameters
+            //contained in the disk.js file
             _Disk = new TSOS.Disk();
             _DiskDrive = new TSOS.DeviceDriverDisk(_Disk);
 

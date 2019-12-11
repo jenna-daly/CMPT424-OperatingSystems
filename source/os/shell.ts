@@ -613,8 +613,14 @@ module TSOS {
         }
 
         public shellFormat(args) {
-            _DiskDrive.format();
-            _StdOut.putText("Disk formatted");
+            if(_CPU.isExecuting == true) {
+                _StdOut.putText("Cannot format disk during execution");
+            }
+            else {
+                _DiskDrive.format();
+                TSOS.Control.updateDisk();
+                _StdOut.putText("Disk formatted");
+            }
         }
 
         public shellLs(args) {

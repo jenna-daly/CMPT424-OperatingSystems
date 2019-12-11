@@ -34,13 +34,23 @@ var TSOS;
             // More?
         };
         DeviceDriverDisk.prototype.format = function () {
-            // for (let i = 0; i < this.disk.tracks; i++) {
-            //     for (let j = 0; j < this.disk.sectors; j++) {
-            //         for (let k = 0; k < this.disk.blocks; k++) {
-            //             sessionStorage.setItem(deviceDriverDisk.buildLoc(i, j, k), this.emptyBlock());
-            //         }
-            //     }
-            // }
+            sessionStorage.clear();
+            for (var i = 0; i < this.disk.tracks; i++) {
+                for (var j = 0; j < this.disk.sectors; j++) {
+                    for (var k = 0; k < this.disk.blocks; k++) {
+                        var dataArr = new Array();
+                        for (var l = 0; l < this.disk.blocksize; l++) {
+                            dataArr.push("00");
+                        }
+                        var block = {
+                            inUse: "0",
+                            next: "0:0:0",
+                            data: dataArr
+                        };
+                        sessionStorage.setItem(i + ":" + j + ":" + k, JSON.stringify(block));
+                    }
+                }
+            }
             console.log("reached");
         };
         return DeviceDriverDisk;

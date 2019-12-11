@@ -476,8 +476,14 @@ var TSOS;
             _StdOut.putText("Coming soon");
         };
         Shell.prototype.shellFormat = function (args) {
-            _DiskDrive.format();
-            _StdOut.putText("Disk formatted");
+            if (_CPU.isExecuting == true) {
+                _StdOut.putText("Cannot format disk during execution");
+            }
+            else {
+                _DiskDrive.format();
+                TSOS.Control.updateDisk();
+                _StdOut.putText("Disk formatted");
+            }
         };
         Shell.prototype.shellLs = function (args) {
             _StdOut.putText("Coming soon");
