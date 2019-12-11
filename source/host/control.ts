@@ -199,7 +199,7 @@ module TSOS {
             
             _Scheduler = new TSOS.Scheduler();
 
-            //_Disk = new TSOS.Disk();
+            _Disk = new TSOS.Disk();
             _DiskDrive = new TSOS.DeviceDriverDisk(_Disk);
 
             // ... then set the host clock pulse ...
