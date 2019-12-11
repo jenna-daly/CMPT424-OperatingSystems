@@ -119,7 +119,7 @@ module TSOS {
             //load command
             sc = new ShellCommand(this.shellLoad,
                                   "load",
-                                  "- Validates input- only hex digits and spaces allowed.");
+                                  "<priority> - Validates input- only hex digits and spaces allowed. Priority is an optional paramter.");
             this.commandList[this.commandList.length] = sc;
 
             //load command
@@ -164,50 +164,45 @@ module TSOS {
                                   "<int> - Sets the round robin quantum");
             this.commandList[this.commandList.length] = sc;
 
-            sc = new ShellCommand(this.shellQuantum,
-                "quantum",
-                "<int> - Sets the round robin quantum");
-                this.commandList[this.commandList.length] = sc;
-
             sc = new ShellCommand(this.shellCreate,
-                "create",
-                "<filename> - Creates a file with given name");
-                this.commandList[this.commandList.length] = sc;
+                                  "create",
+                                  "<filename> - Creates a file with given name");
+                                  this.commandList[this.commandList.length] = sc;
 
             sc = new ShellCommand(this.shellRead,
-                "read",
-                "<filename> - Displays contents of specified file if valid");
-                this.commandList[this.commandList.length] = sc;
+                                  "read",
+                                  "<filename> - Displays contents of specified file if valid");
+                                  this.commandList[this.commandList.length] = sc;
 
             sc = new ShellCommand(this.shellWrite,
-                "write",
-                "<filename> data - Writes data provided in quotes to specified file");
-                this.commandList[this.commandList.length] = sc;
+                                  "write",
+                                  "<filename> data - Writes data provided in quotes to specified file");
+                                  this.commandList[this.commandList.length] = sc;
 
             sc = new ShellCommand(this.shellDelete,
-                "delete",
-                "<filename> - Removes file from storage");
-                this.commandList[this.commandList.length] = sc;
+                                  "delete",
+                                  "<filename> - Removes file from storage");
+                                  this.commandList[this.commandList.length] = sc;
 
             sc = new ShellCommand(this.shellFormat,
-                "format",
-                "Initializes all blocks in all sectors in all tracks");
-                this.commandList[this.commandList.length] = sc;
+                                  "format",
+                                  "Initializes all blocks in all sectors in all tracks");
+                                  this.commandList[this.commandList.length] = sc;
 
             sc = new ShellCommand(this.shellLs,
-                "ls",
-                "Lists current files stored on the disk");
-                this.commandList[this.commandList.length] = sc;
+                                  "ls",
+                                  "Lists current files stored on the disk");
+                                  this.commandList[this.commandList.length] = sc;
 
             sc = new ShellCommand(this.shellSetschedule,
-                "setschedule",
-                "[rr, fcfs, priority] - Sets the scheduling algorithm");
-                this.commandList[this.commandList.length] = sc;
+                                  "setschedule",
+                                  "[rr, fcfs, priority] - Sets the scheduling algorithm");
+                                  this.commandList[this.commandList.length] = sc;
 
             sc = new ShellCommand(this.shellGetschedule,
-                "getschedule",
-                "Returns the name of the current scheduling algorithm");
-                this.commandList[this.commandList.length] = sc;
+                                  "getschedule",
+                                  "Returns the name of the current scheduling algorithm");
+                                  this.commandList[this.commandList.length] = sc;
 
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -404,6 +399,15 @@ module TSOS {
             }
             
             if(isValid == true) {
+                if(args.length > 0 && args[0] > 0) {
+                    _StdOut.putText("Priority set to " + parseInt(args[0]));
+                    var inputPriority = parseInt(args[0]);
+                    _StdOut.advanceLine();
+                }
+                else if(args.length > 0){
+                    _StdOut.putText("Please enter a valid priority as an integer");
+                    return -1;
+                }
                 //memory is full if we have the 3 segments filled
                 //originally I was reassigning PID 0, I changed the if so I can keep incrementing up
                 if(_PCBStored.length > 2){
@@ -609,7 +613,8 @@ module TSOS {
         }
 
         public shellFormat(args) {
-            _StdOut.putText("Coming soon");
+            _DiskDrive.format();
+            _StdOut.putText("Disk formatted");
         }
 
         public shellLs(args) {
@@ -700,7 +705,7 @@ module TSOS {
                         break;
 
                     case "load":
-                        _StdOut.putText("OS will validate input. Allows hex digits and spaces only.");
+                        _StdOut.putText("OS will validate input. Allows hex digits and spaces only. Can give a priority to be used with the priority scheduling algorithm.");
                         break;
 
                     case "run":

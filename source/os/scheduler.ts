@@ -58,6 +58,9 @@ module TSOS {
                 _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CONTEXT_SWITCH_IRQ, 0));
             }
         }
+        if(this.algorithm == 'priority') {
+            
+        }
     }
 
         public contextSwitch(){

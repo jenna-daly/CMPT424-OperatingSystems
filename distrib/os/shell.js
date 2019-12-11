@@ -71,7 +71,7 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellPark, "park", "- Type at your own risk.");
             this.commandList[this.commandList.length] = sc;
             //load command
-            sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Validates input- only hex digits and spaces allowed.");
+            sc = new TSOS.ShellCommand(this.shellLoad, "load", "<priority> - Validates input- only hex digits and spaces allowed. Priority is an optional paramter.");
             this.commandList[this.commandList.length] = sc;
             //load command
             sc = new TSOS.ShellCommand(this.shellRun, "run", "<pid> - runs program as specified by pid.");
@@ -92,8 +92,6 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellKillall, "killall", "- Kills all processes");
             this.commandList[this.commandList.length] = sc;
             //quantum <int> command
-            sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "<int> - Sets the round robin quantum");
-            this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "<int> - Sets the round robin quantum");
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellCreate, "create", "<filename> - Creates a file with given name");
@@ -288,6 +286,15 @@ var TSOS;
                 }
             }
             if (isValid == true) {
+                if (args.length > 0 && args[0] > 0) {
+                    _StdOut.putText("Priority set to " + parseInt(args[0]));
+                    var inputPriority = parseInt(args[0]);
+                    _StdOut.advanceLine();
+                }
+                else if (args.length > 0) {
+                    _StdOut.putText("Please enter a valid priority as an integer");
+                    return -1;
+                }
                 //memory is full if we have the 3 segments filled
                 //originally I was reassigning PID 0, I changed the if so I can keep incrementing up
                 if (_PCBStored.length > 2) {
@@ -469,7 +476,8 @@ var TSOS;
             _StdOut.putText("Coming soon");
         };
         Shell.prototype.shellFormat = function (args) {
-            _StdOut.putText("Coming soon");
+            _DiskDrive.format();
+            _StdOut.putText("Disk formatted");
         };
         Shell.prototype.shellLs = function (args) {
             _StdOut.putText("Coming soon");
@@ -544,7 +552,7 @@ var TSOS;
                         _StdOut.putText("Once more.. type for your own peril.");
                         break;
                     case "load":
-                        _StdOut.putText("OS will validate input. Allows hex digits and spaces only.");
+                        _StdOut.putText("OS will validate input. Allows hex digits and spaces only. Can give a priority to be used with the priority scheduling algorithm.");
                         break;
                     case "run":
                         _StdOut.putText("Program will run as specified by pid.");

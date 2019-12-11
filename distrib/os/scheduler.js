@@ -51,6 +51,8 @@ var TSOS;
                     _KernelInterruptQueue.enqueue(new TSOS.Interrupt(CONTEXT_SWITCH_IRQ, 0));
                 }
             }
+            if (this.algorithm == 'priority') {
+            }
         };
         Scheduler.prototype.contextSwitch = function () {
             //we want to remove the process that was running and put it on the back of the ready queue
