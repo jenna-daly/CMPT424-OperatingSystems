@@ -249,7 +249,31 @@ module TSOS {
             }
 
             public ls() {
+                for (let j = 0; j < this.disk.sectors; j++) {
+                    for (let k = 0; k < this.disk.blocks; k++) {
+                        //skip over mbr when checking for free blocks
+                        if(j == 0 && k == 0) {
+                            continue;
+                        }
 
+                        var tsb = "0" + ":" + j + ":" + k;
+                        var itemAtTSB = JSON.parse(sessionStorage.getItem(tsb));
+                        //we want to find in use files and then read name in dir block, so we don't need to look at data block now
+                        if(itemAtTSB.inUse == "1"){
+                            var getName = "";
+                            for(let i = 0; i < 60; i++) {
+                                if(itemAtTSB.data[i] != "00") {
+                                    getName += String.fromCharCode(itemAtTSB.data[i]);
+                                }
+                                else{
+                                    _StdOut.putText(getName);
+                                    _StdOut.advanceLine();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
         }

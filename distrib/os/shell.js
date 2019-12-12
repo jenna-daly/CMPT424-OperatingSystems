@@ -531,7 +531,7 @@ var TSOS;
             }
         };
         Shell.prototype.shellLs = function (args) {
-            _StdOut.putText("Coming soon");
+            _DiskDrive.ls();
         };
         Shell.prototype.shellSetschedule = function (args) {
             if (args.length > 0) {

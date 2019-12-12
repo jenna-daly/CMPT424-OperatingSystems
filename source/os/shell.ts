@@ -669,7 +669,7 @@ module TSOS {
         }
 
         public shellLs(args) {
-            _StdOut.putText("Coming soon");
+            _DiskDrive.ls();
         }
 
         public shellSetschedule(args) {
