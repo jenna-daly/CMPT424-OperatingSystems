@@ -314,6 +314,13 @@ var TSOS;
                 var segment = _MemoryManager.allocateMemory();
                 _PCBStored[segment].base = _MemoryManager.getBase(segment);
                 _PCBStored[segment].limit = _MemoryManager.getLimit(segment);
+                if (inputPriority != null) {
+                    _PCBStored[segment].priority = inputPriority;
+                }
+                else {
+                    _PCBStored[segment].priority;
+                }
+                console.log("PRIORITY SET TO " + _PCBStored[segment].priority);
                 console.log("update PCB " + JSON.stringify(_PCBStored));
                 //save to memory
                 _MemoryManager.createArr(segment, newInput);
@@ -505,12 +512,13 @@ var TSOS;
                 // console.log(fileName + "name of file");
                 _StdOut.putText("Writing to file ..");
                 _StdOut.advanceLine();
-                _DiskDrive.writeFile(fileName, fileInfo);
+                var x = _DiskDrive.writeFile(fileName, fileInfo);
+                x;
             }
             else {
                 _StdOut.putText("<Usage>: Please supply a file name and data in quotes");
             }
-            if (_DiskDrive.writeFile(fileName, fileInfo) != -1) {
+            if (x != -1) {
                 _StdOut.putText("[ERROR] file not found");
             }
             else {

@@ -431,6 +431,13 @@ module TSOS {
                 var segment = _MemoryManager.allocateMemory();
                 _PCBStored[segment].base = _MemoryManager.getBase(segment);
                 _PCBStored[segment].limit = _MemoryManager.getLimit(segment);
+                if(inputPriority != null) {
+                    _PCBStored[segment].priority = inputPriority;
+                }
+                else{
+                    _PCBStored[segment].priority;
+                }
+                console.log("PRIORITY SET TO " + _PCBStored[segment].priority);
                 console.log("update PCB " + JSON.stringify(_PCBStored));
                 //save to memory
                 _MemoryManager.createArr(segment, newInput);  

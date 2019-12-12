@@ -18,7 +18,8 @@ module TSOS {
           public base: number = 0,
           public limit: number = 0,
           public turnaround: number = 0,
-          public waitTime: number = 0) {
+          public waitTime: number = 0,
+          public priority: number = 99) {
 
         }
 
@@ -36,6 +37,7 @@ module TSOS {
         this.limit = 0;
         this.turnaround = 0;
         this.waitTime = 0;
+        this.priority = 99;
       } 
 
       public storeNewVals(){
