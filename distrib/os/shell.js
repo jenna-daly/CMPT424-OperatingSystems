@@ -484,6 +484,17 @@ var TSOS;
             if (!_formattedDisk) {
                 _StdOut.putText("Must format disk before performing this operation");
             }
+            else if (args.length >= 2) {
+                var fileName = args[0];
+                args.splice(0, 1);
+                //replaces , with a space when saving user input
+                var fileInfo = args.join(' ');
+                console.log(fileInfo + " file info");
+                _DiskDrive.writeFile(args[0], fileInfo);
+            }
+            else {
+                _StdOut.putText("<Usage>: Please supply a file name and data in quotes");
+            }
         };
         Shell.prototype.shellDelete = function (args) {
             if (!_formattedDisk) {

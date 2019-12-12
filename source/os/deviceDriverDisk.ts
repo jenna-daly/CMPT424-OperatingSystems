@@ -94,7 +94,7 @@ module TSOS {
                 }
                 return newStr;
             }
-
+            //find free block to write data to
             public findFreeBlock(){
                 //start looking at track 1
                 for (let i = 1; i < this.disk.tracks; i++) {
@@ -108,14 +108,46 @@ module TSOS {
                         }
                     }
                 }
-
             }
 
             public readFile(name) {
 
             }
 
-            public writeFile(data, name) {
+            public writeFile(name, data) {
+                var newHex = this.convertToAscii(name);
+                for (let j = 0; j < this.disk.sectors; j++) {
+                    for (let k = 0; k < this.disk.blocks; k++) {
+                        //skip over mbr when checking for free blocks
+                        if(j == 0 && k == 0) {
+                            continue;
+                        }
+                        var tsb = "0" + ":" + j + ":" + k;
+                        var itemAtTSB = JSON.parse(sessionStorage.getItem(tsb));
+                        //we want to find an in use file and then check for a matching name
+                        var found = false;
+                        if(itemAtTSB.inUse == "1"){
+                            for(let k=0; k< newHex.length; k++){
+                                if(itemAtTSB.data[k] = newHex[k]) {
+                                    found = true
+                                }
+                            }
+                            if(found == true) {
+                                var dataHex = this.convertToAscii(data);
+                                var dataBlock = JSON.parse(sessionStorage.getItem(itemAtTSB.next));
+                                for(let i=0; i<dataHex.length; i++) {
+                                    dataBlock.data[i] = dataHex[i];
+                                }
+                                sessionStorage.setItem(itemAtTSB.next, JSON.stringify(dataBlock));
+                                TSOS.Control.updateDisk();
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            public deleteFile(name){
 
             }
 

@@ -96,6 +96,7 @@ var TSOS;
             }
             return newStr;
         };
+        //find free block to write data to
         DeviceDriverDisk.prototype.findFreeBlock = function () {
             //start looking at track 1
             for (var i = 1; i < this.disk.tracks; i++) {
@@ -112,7 +113,38 @@ var TSOS;
         };
         DeviceDriverDisk.prototype.readFile = function (name) {
         };
-        DeviceDriverDisk.prototype.writeFile = function (data, name) {
+        DeviceDriverDisk.prototype.writeFile = function (name, data) {
+            var newHex = this.convertToAscii(name);
+            for (var j = 0; j < this.disk.sectors; j++) {
+                for (var k = 0; k < this.disk.blocks; k++) {
+                    //skip over mbr when checking for free blocks
+                    if (j == 0 && k == 0) {
+                        continue;
+                    }
+                    var tsb = "0" + ":" + j + ":" + k;
+                    var itemAtTSB = JSON.parse(sessionStorage.getItem(tsb));
+                    //we want to find an in use file and then check for a matching name
+                    var found = false;
+                    if (itemAtTSB.inUse == "1") {
+                        for (var k_2 = 0; k_2 < newHex.length; k_2++) {
+                            if (itemAtTSB.data[k_2] = newHex[k_2]) {
+                                found = true;
+                            }
+                        }
+                        if (found == true) {
+                            var dataHex = this.convertToAscii(data);
+                            var dataBlock = JSON.parse(sessionStorage.getItem(itemAtTSB.next));
+                            for (var i = 0; i < dataHex.length; i++) {
+                                dataBlock.data[i] = dataHex[i];
+                            }
+                            sessionStorage.setItem(itemAtTSB.next, JSON.stringify(dataBlock));
+                            TSOS.Control.updateDisk();
+                        }
+                    }
+                }
+            }
+        };
+        DeviceDriverDisk.prototype.deleteFile = function (name) {
         };
         DeviceDriverDisk.prototype.ls = function () {
         };
