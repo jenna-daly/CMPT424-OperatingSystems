@@ -358,7 +358,6 @@ module TSOS {
                 }
                 _Scheduler.startNewPCB();
                 _Scheduler.currentStep = 0;
-                
             }
         }
         //this function accounts for op codes with two spaces for memory, little endian requires you flip to get the location
