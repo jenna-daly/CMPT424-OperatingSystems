@@ -48,7 +48,7 @@ module TSOS {
                 _formattedDisk = true;
                 console.log(_formattedDisk);
             }
-    
+
             public createFile(name) {
                 for (let j = 0; j < this.disk.sectors; j++) {
                     for (let k = 0; k < this.disk.blocks; k++) {
@@ -58,25 +58,26 @@ module TSOS {
                         }
                         
                         var tsb = "0" + ":" + j + ":" + k;
-                        var test = JSON.parse(sessionStorage.getItem(tsb));
-                        console.log(test);
+                        var itemAtTSB = JSON.parse(sessionStorage.getItem(tsb));
+                        console.log(itemAtTSB);
                         //this finds a not in use area to then point to our data block, which we need to locate in the if
-                        if(test.inUse == "0") {
+                        if(itemAtTSB.inUse == "0") {
                             console.log(tsb);
                             var findBlockTSB = this.findFreeBlock();
                             var freeBlock = JSON.parse(sessionStorage.getItem(findBlockTSB));
-                            test.inUse = "1"
+                            //both now in use, free block to hold data and itemAtTSB to hold name and update next
+                            itemAtTSB.inUse = "1"
                             freeBlock.inUse = "1";
-                            freeBlock.next = findBlockTSB;
+                            itemAtTSB.next = findBlockTSB;
                             //freeBlock = this.clearData(freeBlock);
                             var newHex = this.convertToAscii(name);
                             //test = this.clearData(test);
 
                             for(let k=0; k< newHex.length; k++){
-                                test.data[k] = newHex[k]
+                                itemAtTSB.data[k] = newHex[k]
                             }
 
-                            sessionStorage.setItem(tsb, JSON.stringify(test));
+                            sessionStorage.setItem(tsb, JSON.stringify(itemAtTSB));
                             sessionStorage.setItem(findBlockTSB, JSON.stringify(freeBlock));
                             TSOS.Control.updateDisk();
                             return -1;
@@ -85,7 +86,7 @@ module TSOS {
                     }
                 }
             }
-
+            //gets name of file in ascii
             public convertToAscii(string){
                 var newStr = ""
                 for(let i=0; i < string.length; i++){
@@ -95,7 +96,19 @@ module TSOS {
             }
 
             public findFreeBlock(){
-                return "1:0:0";
+                //start looking at track 1
+                for (let i = 1; i < this.disk.tracks; i++) {
+                    for (let j = 0; j < this.disk.sectors; j++) {
+                        for (let k = 0; k < this.disk.blocks; k++) {
+                            var tsb = i + ":" + j + ":" + k;
+                            var tsbInfo = JSON.parse(sessionStorage.getItem(tsb));
+                            if(tsbInfo.inUse == "0") {
+                                return tsb;
+                            }
+                        }
+                    }
+                }
+
             }
 
             public readFile(name) {
