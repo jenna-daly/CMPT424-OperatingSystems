@@ -411,8 +411,18 @@ module TSOS {
                 //memory is full if we have the 3 segments filled
                 //originally I was reassigning PID 0, I changed the if so I can keep incrementing up
                 if(_PCBStored.length > 2){
-                    _StdOut.putText("Memory is full. Clear partitions to load a new program.");
-                    return -1;
+                    // _StdOut.putText("Memory is full. Clear partitions to load a new program.");
+                    // return -1;
+                    if(!_formattedDisk) {
+                        _StdOut.putText("Memory is full. Must format disk to load additional data.");
+                        return;
+                    }   
+                    else{
+                        _StdOut.putText("Attempting to load to disk");
+                        _StdOut.advanceLine();
+                        _DiskDrive.createFile("file");
+                        _DiskDrive.writeFile("file", validateText);
+                    }
                 }
                 _StdOut.putText("Program loaded successfuly with PID " + _PID);
 
@@ -611,6 +621,7 @@ module TSOS {
         public shellCreate(args) {
             if(!_formattedDisk) {
                 _StdOut.putText("Must format disk before performing this operation");
+                return;;
             }
             else if(args.length > 0){
                 _DiskDrive.createFile(args[0]);
@@ -624,6 +635,7 @@ module TSOS {
         public shellRead(args) {
             if(!_formattedDisk) {
                 _StdOut.putText("Must format disk before performing this operation");
+                return;
             }    
             else if(args.length > 0) {
                 var filename = args[0];
@@ -642,6 +654,7 @@ module TSOS {
         public shellWrite(args) {
             if(!_formattedDisk) {
                 _StdOut.putText("Must format disk before performing this operation");
+                return;
             } 
             else if (args.length >= 2) {
                 var fileName = args[0];
@@ -670,6 +683,7 @@ module TSOS {
         public shellDelete(args) {
             if(!_formattedDisk) {
                 _StdOut.putText("Must format disk before performing this operation");
+                return;
             }   
             else if(args.length > 0) {
                 var filename = args[0];

@@ -158,6 +158,10 @@ var TSOS;
         };
         DeviceDriverDisk.prototype.writeFile = function (name, data) {
             var hexName = this.convertToAscii(name);
+            var dataToAdd = [];
+            for (var i = 0; i < _Disk.blocksize; i++) {
+                dataToAdd.push("00");
+            }
             for (var j = 0; j < this.disk.sectors; j++) {
                 for (var k = 0; k < this.disk.blocks; k++) {
                     //skip over mbr when checking for free blocks
@@ -185,6 +189,7 @@ var TSOS;
                             var newTSB = itemAtTSB.next;
                             var dataHex = this.convertToAscii(data);
                             var dataBlock = JSON.parse(sessionStorage.getItem(newTSB));
+                            dataBlock.data = dataToAdd;
                             for (var i = 0; i < dataHex.length; i++) {
                                 dataBlock.data[i] = dataHex[i];
                             }
