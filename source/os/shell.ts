@@ -639,13 +639,14 @@ module TSOS {
                 // console.log(fileName + "name of file");
                 _StdOut.putText("Writing to file ..");
                 _StdOut.advanceLine();
-                _DiskDrive.writeFile(fileName, fileInfo);
+                var x = _DiskDrive.writeFile(fileName, fileInfo);
+                x;
             }   
             else {
                 _StdOut.putText("<Usage>: Please supply a file name and data in quotes");
  
             }  
-            if(_DiskDrive.writeFile(fileName, fileInfo) != -1) {
+            if(x != -1) {
                 _StdOut.putText("[ERROR] file not found");
             }  
             else{
