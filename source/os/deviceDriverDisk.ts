@@ -191,11 +191,9 @@ module TSOS {
                                 console.log("new tsb for data " + newTSB);
                                 sessionStorage.setItem(newTSB, JSON.stringify(dataBlock));
                                 TSOS.Control.updateDisk();
-                                _StdOut.putText("Success");
+                                // _StdOut.putText("Success");
                                 return -1;
                             }
-                            //future fix: add error file not found
-
                         }
                     }
                 }
@@ -241,7 +239,7 @@ module TSOS {
                                 sessionStorage.setItem(tsb, JSON.stringify(itemAtTSB));
                                 sessionStorage.setItem(newTSB, JSON.stringify(dataBlock));
                                 TSOS.Control.updateDisk();
-
+                                return -1;
                             }
                         }
                     }
@@ -275,6 +273,5 @@ module TSOS {
                     }
                 }
             }
-
         }
     }

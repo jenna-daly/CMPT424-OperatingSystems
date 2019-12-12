@@ -481,11 +481,15 @@ var TSOS;
             }
             else if (args.length > 0) {
                 var filename = args[0];
-                _DiskDrive.readFile(filename);
+                var x = _DiskDrive.readFile(filename);
+                x;
             }
             else {
                 console.log(args.length);
                 _StdOut.putText("<Usage>: Please supply a file name");
+            }
+            if (x != -1) {
+                _StdOut.putText("[ERROR] file not found");
             }
         };
         Shell.prototype.shellWrite = function (args) {
@@ -506,6 +510,12 @@ var TSOS;
             else {
                 _StdOut.putText("<Usage>: Please supply a file name and data in quotes");
             }
+            if (_DiskDrive.writeFile(fileName, fileInfo) != -1) {
+                _StdOut.putText("[ERROR] file not found");
+            }
+            else {
+                _StdOut.putText("Success");
+            }
         };
         Shell.prototype.shellDelete = function (args) {
             if (!_formattedDisk) {
@@ -513,11 +523,17 @@ var TSOS;
             }
             else if (args.length > 0) {
                 var filename = args[0];
-                _DiskDrive.deleteFile(filename);
+                var x = _DiskDrive.deleteFile(filename);
+                x;
             }
             else {
-                console.log(args.length);
                 _StdOut.putText("<Usage>: Please supply a file name");
+            }
+            if (x != -1) {
+                _StdOut.putText("[ERROR] file not found");
+            }
+            else {
+                _StdOut.putText("File with name " + filename + " is deleted");
             }
         };
         Shell.prototype.shellFormat = function (args) {
