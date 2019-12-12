@@ -511,6 +511,14 @@ var TSOS;
             if (!_formattedDisk) {
                 _StdOut.putText("Must format disk before performing this operation");
             }
+            else if (args.length > 0) {
+                var filename = args[0];
+                _DiskDrive.deleteFile(filename);
+            }
+            else {
+                console.log(args.length);
+                _StdOut.putText("<Usage>: Please supply a file name");
+            }
         };
         Shell.prototype.shellFormat = function (args) {
             if (_CPU.isExecuting == true) {

@@ -200,6 +200,49 @@ var TSOS;
             }
         };
         DeviceDriverDisk.prototype.deleteFile = function (name) {
+            var hexName = this.convertToAscii(name);
+            for (var j = 0; j < this.disk.sectors; j++) {
+                for (var k = 0; k < this.disk.blocks; k++) {
+                    //skip over mbr when checking for free blocks
+                    if (j == 0 && k == 0) {
+                        continue;
+                    }
+                    console.log("hex data " + hexName);
+                    var tsb = "0" + ":" + j + ":" + k;
+                    var itemAtTSB = JSON.parse(sessionStorage.getItem(tsb));
+                    //we want to find an in use file and then check for a matching name
+                    var found = true;
+                    if (itemAtTSB.inUse == "1") {
+                        for (var k_4 = 0; k_4 < hexName.length; k_4++) {
+                            if (itemAtTSB.data[k_4] != hexName[k_4]) {
+                                found = false;
+                            }
+                        }
+                        //i encountered a bug where I created a file called t and test and t was overwriting data saved to test
+                        //i realized it is because my for loop goes to the length of the hex, so t of t does = t of test
+                        //to fix it, check one more after the array ends and make sure the data is done
+                        if (itemAtTSB.data[hexName.length + 1] != "00") {
+                            found = false;
+                        }
+                        if (found == true) {
+                            var newTSB = itemAtTSB.next;
+                            var dataBlock = JSON.parse(sessionStorage.getItem(newTSB));
+                            dataBlock.inUse = "0";
+                            itemAtTSB.inUse = "0";
+                            itemAtTSB.next = "0:0:0";
+                            var dataToAdd = [];
+                            for (var i = 0; i < _Disk.blocksize; i++) {
+                                dataToAdd.push("00");
+                            }
+                            itemAtTSB.data = dataToAdd;
+                            dataBlock.data = dataToAdd;
+                            sessionStorage.setItem(tsb, JSON.stringify(itemAtTSB));
+                            sessionStorage.setItem(newTSB, JSON.stringify(dataBlock));
+                            TSOS.Control.updateDisk();
+                        }
+                    }
+                }
+            }
         };
         DeviceDriverDisk.prototype.ls = function () {
         };
