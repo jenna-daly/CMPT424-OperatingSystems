@@ -48,6 +48,7 @@ var TSOS;
         };
         Cpu.prototype.cycle = function () {
             _Kernel.krnTrace('CPU cycle');
+            console.log("READY QUEUE SIZE " + _Scheduler.readyQueue.getSize());
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             //console.log("RDYQueue " + _Scheduler.readyQueue.getSize());

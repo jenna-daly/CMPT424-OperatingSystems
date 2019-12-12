@@ -52,6 +52,19 @@ var TSOS;
                 }
             }
             if (this.algorithm == 'priority') {
+                var highestPriority = this.readyQueue.dequeue();
+                var compareTo = this.readyQueue.dequeue();
+                for (var i = 0; i <= this.readyQueue.getSize(); i++) {
+                    if (compareTo.priority < highestPriority.priority) {
+                        console.log("rdy queue " + compareTo.priority + " high " + highestPriority.priority);
+                        this.readyQueue.enqueue(highestPriority);
+                        highestPriority = compareTo;
+                    }
+                    this.readyQueue.enqueue(compareTo);
+                    compareTo = this.readyQueue.dequeue();
+                }
+                runningProcess = highestPriority;
+                this.readyQueue.enqueue(highestPriority);
             }
         };
         Scheduler.prototype.contextSwitch = function () {
