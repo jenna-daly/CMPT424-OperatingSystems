@@ -518,9 +518,16 @@ module TSOS {
             for(let i=0; i < _PCBStored.length; i++) {
                 _Scheduler.setReadyQueue(_PCBStored[i]);
             }
+            if(_Scheduler.algorithm == 'priority'){
+                _CPU.isExecuting = true;
+
+                _Scheduler.scheduleProcesses(_Scheduler.readyQueue);
+            }
+            else{
             _CPU.isExecuting = true;
             runningProcess = _Scheduler.readyQueue.dequeue();
             runningProcess.State = "Running";
+            }
         }
 
         //list running or resident processes

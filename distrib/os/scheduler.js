@@ -52,6 +52,7 @@ var TSOS;
                 }
             }
             if (this.algorithm == 'priority') {
+                //   if(this.readyQueue.getSize() > 1) {
                 var size = this.readyQueue.getSize();
                 var highestPriority = this.readyQueue.dequeue();
                 var compareTo = this.readyQueue.dequeue();
@@ -68,14 +69,6 @@ var TSOS;
                     }
                 }
                 runningProcess = highestPriority;
-                var highestPriority = this.readyQueue.q[0];
-                // for(let i=1; i< this.readyQueue.getSize(); i++){
-                //     if(this.readyQueue.q[i].priority < highestPriority.priority) {
-                //         highestPriority = this.readyQueue.q[i]
-                //     }
-                // }
-                // runningProcess = highestPriority;
-                // this.readyQueue.q.splice(this.readyQueue.q.indexOf(runningProcess), 1);
             }
         };
         Scheduler.prototype.contextSwitch = function () {

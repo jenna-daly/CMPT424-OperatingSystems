@@ -393,9 +393,15 @@ var TSOS;
             for (var i = 0; i < _PCBStored.length; i++) {
                 _Scheduler.setReadyQueue(_PCBStored[i]);
             }
-            _CPU.isExecuting = true;
-            runningProcess = _Scheduler.readyQueue.dequeue();
-            runningProcess.State = "Running";
+            if (_Scheduler.algorithm == 'priority') {
+                _CPU.isExecuting = true;
+                _Scheduler.scheduleProcesses(_Scheduler.readyQueue);
+            }
+            else {
+                _CPU.isExecuting = true;
+                runningProcess = _Scheduler.readyQueue.dequeue();
+                runningProcess.State = "Running";
+            }
         };
         //list running or resident processes
         Shell.prototype.shellPS = function (args) {

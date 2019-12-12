@@ -51,7 +51,7 @@ module TSOS {
             // Do the real work here. Be sure to set this.isExecuting appropriately.
 
             //console.log("RDYQueue " + _Scheduler.readyQueue.getSize());
-            if(_Scheduler.readyQueue.getSize() > 0) {
+            if(_Scheduler.algorithm != 'priority' && _Scheduler.readyQueue.getSize() > 0) {
                 _Scheduler.scheduleProcesses(_Scheduler.readyQueue);
                 //_Scheduler.getTimes();
             }
@@ -355,9 +355,24 @@ module TSOS {
                 if(_Scheduler.algorithm == 'rr') {
                     var switchQueue = _Scheduler.readyQueue.dequeue();
                     _Scheduler.readyQueue.enqueue(switchQueue);
+                    _Scheduler.startNewPCB();
+                    _Scheduler.currentStep = 0;
                 }
-                _Scheduler.startNewPCB();
-                _Scheduler.currentStep = 0;
+                else if(_Scheduler.algorithm == 'priority'){
+                    if(_Scheduler.readyQueue.getSize() > 1) {
+                        console.log(JSON.stringify(_Scheduler.readyQueue));
+
+                        _Scheduler.readyQueue.dequeue();
+                        _Scheduler.scheduleProcesses(_Scheduler.readyQueue);
+                    }
+                    else{
+                        runningProcess = _Scheduler.readyQueue.dequeue();
+                    }
+                }
+                else{
+                    _Scheduler.startNewPCB();
+                    _Scheduler.currentStep = 0;
+                }
             }
         }
         //this function accounts for op codes with two spaces for memory, little endian requires you flip to get the location
