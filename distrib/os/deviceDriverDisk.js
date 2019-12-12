@@ -113,8 +113,6 @@ var TSOS;
             }
         };
         DeviceDriverDisk.prototype.readFile = function (name) {
-        };
-        DeviceDriverDisk.prototype.writeFile = function (name, data) {
             var hexName = this.convertToAscii(name);
             for (var j = 0; j < this.disk.sectors; j++) {
                 for (var k = 0; k < this.disk.blocks; k++) {
@@ -133,6 +131,45 @@ var TSOS;
                                 found = false;
                             }
                         }
+                        //i encountered a bug where I created a file called t and test and t was overwriting data saved to test
+                        //i realized it is because my for loop goes to the length of the hex, so t of t does = t of test
+                        //to fix it, check one more after the array ends and make sure the data is done
+                        if (itemAtTSB.data[hexName.length + 1] != "00") {
+                            found = false;
+                        }
+                        if (found == true) {
+                            var newTSB = itemAtTSB.next;
+                            console.log("reading " + JSON.parse(sessionStorage.getItem(newTSB)).data);
+                        }
+                    }
+                }
+            }
+        };
+        DeviceDriverDisk.prototype.writeFile = function (name, data) {
+            var hexName = this.convertToAscii(name);
+            for (var j = 0; j < this.disk.sectors; j++) {
+                for (var k = 0; k < this.disk.blocks; k++) {
+                    //skip over mbr when checking for free blocks
+                    if (j == 0 && k == 0) {
+                        continue;
+                    }
+                    console.log("hex data " + hexName);
+                    var tsb = "0" + ":" + j + ":" + k;
+                    var itemAtTSB = JSON.parse(sessionStorage.getItem(tsb));
+                    //we want to find an in use file and then check for a matching name
+                    var found = true;
+                    if (itemAtTSB.inUse == "1") {
+                        for (var k_3 = 0; k_3 < hexName.length; k_3++) {
+                            if (itemAtTSB.data[k_3] != hexName[k_3]) {
+                                found = false;
+                            }
+                        }
+                        //i encountered a bug where I created a file called t and test and t was overwriting data saved to test
+                        //i realized it is because my for loop goes to the length of the hex, so t of t does = t of test
+                        //to fix it, check one more after the array ends and make sure the data is done
+                        if (itemAtTSB.data[hexName.length + 1] != "00") {
+                            found = false;
+                        }
                         if (found == true) {
                             var newTSB = itemAtTSB.next;
                             var dataHex = this.convertToAscii(data);
@@ -143,7 +180,10 @@ var TSOS;
                             console.log("new tsb for data " + newTSB);
                             sessionStorage.setItem(newTSB, JSON.stringify(dataBlock));
                             TSOS.Control.updateDisk();
+                            _StdOut.putText("Success");
+                            return -1;
                         }
+                        //future fix: add error file not found
                     }
                 }
             }

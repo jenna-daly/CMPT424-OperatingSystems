@@ -611,7 +611,15 @@ module TSOS {
         public shellRead(args) {
             if(!_formattedDisk) {
                 _StdOut.putText("Must format disk before performing this operation");
-            }        
+            }    
+            else if(args.length > 0) {
+                var filename = args[0];
+                _DiskDrive.readFile(filename);
+            }   
+            else {
+                console.log(args.length);
+                _StdOut.putText("<Usage>: Please supply a file name");
+            } 
         }
 
         public shellWrite(args) {
@@ -625,6 +633,8 @@ module TSOS {
                 var fileInfo = args.join(' ');
                 // console.log(fileInfo + " file info");
                 // console.log(fileName + "name of file");
+                _StdOut.putText("Writing to file ..");
+                _StdOut.advanceLine();
                 _DiskDrive.writeFile(fileName, fileInfo);
             }   
             else {
