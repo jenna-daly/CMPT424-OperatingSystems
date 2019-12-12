@@ -74,9 +74,7 @@ var TSOS;
                         itemAtTSB.inUse = "1";
                         freeBlock.inUse = "1";
                         itemAtTSB.next = findBlockTSB;
-                        //freeBlock = this.clearData(freeBlock);
                         var newHex = this.convertToAscii(name);
-                        //test = this.clearData(test);
                         for (var k_1 = 0; k_1 < newHex.length; k_1++) {
                             itemAtTSB.data[k_1] = newHex[k_1];
                         }
@@ -90,9 +88,11 @@ var TSOS;
         };
         //gets name of file in ascii
         DeviceDriverDisk.prototype.convertToAscii = function (string) {
-            var newStr = "";
+            // var newStr = "";
+            var newStr = [];
             for (var i = 0; i < string.length; i++) {
-                newStr += string.charCodeAt(i);
+                //newStr += string.charCodeAt(i);
+                newStr.push(string.charCodeAt(i));
             }
             console.log("new str " + newStr);
             return newStr;
@@ -139,7 +139,18 @@ var TSOS;
                         }
                         if (found == true) {
                             var newTSB = itemAtTSB.next;
+                            var dataBlock = JSON.parse(sessionStorage.getItem(newTSB));
                             console.log("reading " + JSON.parse(sessionStorage.getItem(newTSB)).data);
+                            var readStr = "";
+                            for (var i = 0; i < 60; i++) {
+                                if (dataBlock.data[i] != "00") {
+                                    readStr += String.fromCharCode(dataBlock.data[i]);
+                                }
+                                else {
+                                    _StdOut.putText(readStr);
+                                    return -1;
+                                }
+                            }
                         }
                     }
                 }

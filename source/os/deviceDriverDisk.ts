@@ -86,9 +86,11 @@ module TSOS {
             }
             //gets name of file in ascii
             public convertToAscii(string){
-                var newStr = ""
+                // var newStr = "";
+                var newStr = [];
                 for(let i=0; i < string.length; i++){
-                    newStr += string.charCodeAt(i);
+                    //newStr += string.charCodeAt(i);
+                    newStr.push(string.charCodeAt(i));
                 }
                 console.log("new str " + newStr);
                 return newStr;
@@ -136,10 +138,16 @@ module TSOS {
                             }
                             if(found == true) {
                                 var newTSB = itemAtTSB.next;
+                                var dataBlock = JSON.parse(sessionStorage.getItem(newTSB));
                                 console.log("reading " + JSON.parse(sessionStorage.getItem(newTSB)).data);
+                                var readStr = "";
                                 for(let i = 0; i < 60; i++) {
-                                    if(itemAtTSB.data != "00") {
-
+                                    if(dataBlock.data[i] != "00") {
+                                        readStr += String.fromCharCode(dataBlock.data[i]);
+                                    }
+                                    else{
+                                        _StdOut.putText(readStr);
+                                        return -1;
                                     }
                                 }
                             }
