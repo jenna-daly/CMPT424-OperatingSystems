@@ -623,8 +623,9 @@ module TSOS {
                 args.splice(0,1);
                 //replaces , with a space when saving user input
                 var fileInfo = args.join(' ');
-                console.log(fileInfo + " file info");
-                _DiskDrive.writeFile(args[0], fileInfo);
+                // console.log(fileInfo + " file info");
+                // console.log(fileName + "name of file");
+                _DiskDrive.writeFile(fileName, fileInfo);
             }   
             else {
                 _StdOut.putText("<Usage>: Please supply a file name and data in quotes");

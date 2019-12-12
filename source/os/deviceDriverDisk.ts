@@ -92,6 +92,7 @@ module TSOS {
                 for(let i=0; i < string.length; i++){
                     newStr += string.charCodeAt(i);
                 }
+                console.log("new str " + newStr);
                 return newStr;
             }
             //find free block to write data to
@@ -115,30 +116,33 @@ module TSOS {
             }
 
             public writeFile(name, data) {
-                var newHex = this.convertToAscii(name);
+                var hexName = this.convertToAscii(name);
                 for (let j = 0; j < this.disk.sectors; j++) {
                     for (let k = 0; k < this.disk.blocks; k++) {
                         //skip over mbr when checking for free blocks
                         if(j == 0 && k == 0) {
                             continue;
                         }
+                        console.log("hex data " + hexName);
                         var tsb = "0" + ":" + j + ":" + k;
                         var itemAtTSB = JSON.parse(sessionStorage.getItem(tsb));
                         //we want to find an in use file and then check for a matching name
-                        var found = false;
+                        var found = true;
                         if(itemAtTSB.inUse == "1"){
-                            for(let k=0; k< newHex.length; k++){
-                                if(itemAtTSB.data[k] = newHex[k]) {
-                                    found = true
+                            for(let k=0; k< hexName.length; k++){
+                                if(itemAtTSB.data[k] != hexName[k]) {
+                                    found = false;
                                 }
                             }
                             if(found == true) {
+                                var newTSB = itemAtTSB.next;
                                 var dataHex = this.convertToAscii(data);
-                                var dataBlock = JSON.parse(sessionStorage.getItem(itemAtTSB.next));
+                                var dataBlock = JSON.parse(sessionStorage.getItem(newTSB));
                                 for(let i=0; i<dataHex.length; i++) {
                                     dataBlock.data[i] = dataHex[i];
                                 }
-                                sessionStorage.setItem(itemAtTSB.next, JSON.stringify(dataBlock));
+                                console.log("new tsb for data " + newTSB);
+                                sessionStorage.setItem(newTSB, JSON.stringify(dataBlock));
                                 TSOS.Control.updateDisk();
                             }
                         }
