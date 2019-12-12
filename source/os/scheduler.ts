@@ -63,7 +63,8 @@ module TSOS {
             var size = this.readyQueue.getSize();
             var highestPriority = this.readyQueue.dequeue();
             var compareTo = this.readyQueue.dequeue();
-            for(let i=0; i<= size; i++) {
+
+            for(let i=0; i< size; i++) {
                 if(compareTo.priority < highestPriority.priority) {
                     this.readyQueue.enqueue(highestPriority);
                     highestPriority = compareTo;
@@ -77,6 +78,7 @@ module TSOS {
                     compareTo = this.readyQueue.dequeue();
                 }
             }
+            console.log(JSON.stringify(this.readyQueue) + " ready q in schedule");
             runningProcess = highestPriority;
     
       }

@@ -520,13 +520,12 @@ module TSOS {
             }
             if(_Scheduler.algorithm == 'priority'){
                 _CPU.isExecuting = true;
-
                 _Scheduler.scheduleProcesses(_Scheduler.readyQueue);
             }
             else{
-            _CPU.isExecuting = true;
-            runningProcess = _Scheduler.readyQueue.dequeue();
-            runningProcess.State = "Running";
+                _CPU.isExecuting = true;
+                runningProcess = _Scheduler.readyQueue.dequeue();
+                runningProcess.State = "Running";
             }
         }
 

@@ -360,9 +360,8 @@ module TSOS {
                 }
                 else if(_Scheduler.algorithm == 'priority'){
                     if(_Scheduler.readyQueue.getSize() > 1) {
-                        console.log(JSON.stringify(_Scheduler.readyQueue));
-
                         _Scheduler.readyQueue.dequeue();
+                        console.log("sz "+ _Scheduler.readyQueue.getSize());
                         _Scheduler.scheduleProcesses(_Scheduler.readyQueue);
                     }
                     else{
