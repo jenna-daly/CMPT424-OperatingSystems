@@ -158,9 +158,7 @@ module TSOS {
                     }
                 }
             }
-            console.log("contain disk " + containDisk);
             accessDisk.innerHTML = containDisk;
-
         }
     
 

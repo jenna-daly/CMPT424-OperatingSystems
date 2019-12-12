@@ -464,16 +464,31 @@ var TSOS;
             }
         };
         Shell.prototype.shellCreate = function (args) {
-            _StdOut.putText("Coming soon");
+            if (!_formattedDisk) {
+                _StdOut.putText("Must format disk before performing this operation");
+            }
+            else if (args.length > 0) {
+                _DiskDrive.createFile(args[0]);
+                _StdOut.putText("File created named: " + args[0]);
+            }
+            else {
+                _StdOut.putText("<Usage>: Please supply a file name");
+            }
         };
         Shell.prototype.shellRead = function (args) {
-            _StdOut.putText("Coming soon");
+            if (!_formattedDisk) {
+                _StdOut.putText("Must format disk before performing this operation");
+            }
         };
         Shell.prototype.shellWrite = function (args) {
-            _StdOut.putText("Coming soon");
+            if (!_formattedDisk) {
+                _StdOut.putText("Must format disk before performing this operation");
+            }
         };
         Shell.prototype.shellDelete = function (args) {
-            _StdOut.putText("Coming soon");
+            if (!_formattedDisk) {
+                _StdOut.putText("Must format disk before performing this operation");
+            }
         };
         Shell.prototype.shellFormat = function (args) {
             if (_CPU.isExecuting == true) {

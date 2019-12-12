@@ -77,6 +77,7 @@ var _Scheduler: any = null;
 //var for performing operations on disk
 var _Disk: any = null;
 var _DiskDrive: any = null;
+var _formattedDisk: any = false;
 
 //PCB updates, declaring global array to store values in
 var _Pcb: TSOS.Pcb;

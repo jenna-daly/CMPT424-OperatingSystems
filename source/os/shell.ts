@@ -597,20 +597,32 @@ module TSOS {
         }
 
         public shellCreate(args) {
-            _StdOut.putText("Coming soon");
+            if(!_formattedDisk) {
+                _StdOut.putText("Must format disk before performing this operation");
+            }
+            else if(args.length > 0){
+                _DiskDrive.createFile(args[0]);
+                _StdOut.putText("File created named: " + args[0]) 
+            }
+            else{
+                _StdOut.putText("<Usage>: Please supply a file name");
+            }
         }
 
         public shellRead(args) {
-            _StdOut.putText("Coming soon");
-        }
+            if(!_formattedDisk) {
+                _StdOut.putText("Must format disk before performing this operation");
+            }        }
 
         public shellWrite(args) {
-            _StdOut.putText("Coming soon");
-        }
+            if(!_formattedDisk) {
+                _StdOut.putText("Must format disk before performing this operation");
+            }        }
 
         public shellDelete(args) {
-            _StdOut.putText("Coming soon");
-        }
+            if(!_formattedDisk) {
+                _StdOut.putText("Must format disk before performing this operation");
+            }        }
 
         public shellFormat(args) {
             if(_CPU.isExecuting == true) {

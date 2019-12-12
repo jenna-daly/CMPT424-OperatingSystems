@@ -60,6 +60,7 @@ var _Scheduler = null;
 //var for performing operations on disk
 var _Disk = null;
 var _DiskDrive = null;
+var _formattedDisk = false;
 //PCB updates, declaring global array to store values in
 var _Pcb;
 var _PCBStored = [];

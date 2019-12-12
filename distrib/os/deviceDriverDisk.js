@@ -52,6 +52,56 @@ var TSOS;
                 }
             }
             console.log("reached");
+            _formattedDisk = true;
+            console.log(_formattedDisk);
+        };
+        DeviceDriverDisk.prototype.createFile = function (name) {
+            for (var j = 0; j < this.disk.sectors; j++) {
+                for (var k = 0; k < this.disk.blocks; k++) {
+                    //skip over mbr when checking for free blocks
+                    if (j == 0 && k == 0) {
+                        continue;
+                    }
+                    var tsb = "0" + ":" + j + ":" + k;
+                    var test = JSON.parse(sessionStorage.getItem(tsb));
+                    console.log(test);
+                    //this finds a not in use area to then point to our data block, which we need to locate in the if
+                    if (test.inUse == "0") {
+                        console.log(tsb);
+                        var findBlockTSB = this.findFreeBlock();
+                        var freeBlock = JSON.parse(sessionStorage.getItem(findBlockTSB));
+                        test.inUse = "1";
+                        freeBlock.inUse = "1";
+                        freeBlock.next = findBlockTSB;
+                        //freeBlock = this.clearData(freeBlock);
+                        var newHex = this.convertToAscii(name);
+                        //test = this.clearData(test);
+                        for (var k_1 = 0; k_1 < newHex.length; k_1++) {
+                            test.data[k_1] = newHex[k_1];
+                        }
+                        sessionStorage.setItem(tsb, JSON.stringify(test));
+                        sessionStorage.setItem(findBlockTSB, JSON.stringify(freeBlock));
+                        TSOS.Control.updateDisk();
+                        return -1;
+                    }
+                }
+            }
+        };
+        DeviceDriverDisk.prototype.convertToAscii = function (string) {
+            var newStr = "";
+            for (var i = 0; i < string.length; i++) {
+                newStr += string.charCodeAt(i);
+            }
+            return newStr;
+        };
+        DeviceDriverDisk.prototype.findFreeBlock = function () {
+            return "1:0:0";
+        };
+        DeviceDriverDisk.prototype.readFile = function (name) {
+        };
+        DeviceDriverDisk.prototype.writeFile = function (data, name) {
+        };
+        DeviceDriverDisk.prototype.ls = function () {
         };
         return DeviceDriverDisk;
     }(TSOS.DeviceDriver));

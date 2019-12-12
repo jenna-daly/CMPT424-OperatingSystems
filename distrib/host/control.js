@@ -136,7 +136,6 @@ var TSOS;
                     }
                 }
             }
-            console.log("contain disk " + containDisk);
             accessDisk.innerHTML = containDisk;
         };
         //PCB
