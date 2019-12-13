@@ -94,7 +94,7 @@ module TSOS {
             this.startNewPCB();
         }
         public removeOldPCB(){
-            runningProcess.State = "Waiting";
+            runningProcess.State = "Ready";
             this.readyQueue.enqueue(runningProcess);
         }
         public startNewPCB(){
@@ -114,6 +114,13 @@ module TSOS {
                 }
             }
 
+        }
+
+        public swapIn(){
+            //swap in disk program
+        }
+        public swapOut(){
+            //when you swap in, choose a process to swap out to disk
         }
     }
 }

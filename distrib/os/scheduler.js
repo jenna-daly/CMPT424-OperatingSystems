@@ -81,7 +81,7 @@ var TSOS;
             this.startNewPCB();
         };
         Scheduler.prototype.removeOldPCB = function () {
-            runningProcess.State = "Waiting";
+            runningProcess.State = "Ready";
             this.readyQueue.enqueue(runningProcess);
         };
         Scheduler.prototype.startNewPCB = function () {
@@ -99,6 +99,12 @@ var TSOS;
                     this.readyQueue.enqueue(increment);
                 }
             }
+        };
+        Scheduler.prototype.swapIn = function () {
+            //swap in disk program
+        };
+        Scheduler.prototype.swapOut = function () {
+            //when you swap in, choose a process to swap out to disk
         };
         return Scheduler;
     }());

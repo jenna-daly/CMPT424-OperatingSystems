@@ -540,7 +540,10 @@ module TSOS {
 
         public shellRunall(args) {
             for(let i=0; i < _PCBStored.length; i++) {
-                _Scheduler.setReadyQueue(_PCBStored[i]);
+                //couldn't figure out swap in and out so I am adding this if so the program at least runs the first 3 for ip4
+                if(_PCBStored[i].location != 'Disk'){
+                    _Scheduler.setReadyQueue(_PCBStored[i]);
+                }
             }
             if(_Scheduler.algorithm == 'priority'){
                 _CPU.isExecuting = true;
