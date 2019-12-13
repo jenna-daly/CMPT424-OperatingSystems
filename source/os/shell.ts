@@ -416,12 +416,26 @@ module TSOS {
                     if(!_formattedDisk) {
                         _StdOut.putText("Memory is full. Must format disk to load additional data.");
                         return;
+                    }
+                    else if(_DiskDrive.findFreeBlock() == null){
+                        _StdOut.putText("Disk is full. Free up memory or disk space to load new data");   
                     }   
                     else{
                         _StdOut.putText("Attempting to load to disk");
                         _StdOut.advanceLine();
                         _DiskDrive.createFile("file");
                         _DiskDrive.writeFile("file", validateText);
+                        _StdOut.putText("Program loaded successfuly with PID " + _PID);
+
+                        _currentPID = _PID;
+                        var newPCB = new TSOS.Pcb(_currentPID);
+                        console.log("NEW PCB " + JSON.stringify(newPCB));
+                        //resident list
+                        _PCBStored.push(newPCB);
+                        _PCBStored[_currentPID].location = "Disk";
+                        TSOS.Control.accessPCB();
+
+                        return;
                     }
                 }
                 _StdOut.putText("Program loaded successfuly with PID " + _PID);

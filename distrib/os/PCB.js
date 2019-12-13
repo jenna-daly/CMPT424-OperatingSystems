@@ -6,7 +6,7 @@ var TSOS;
         function Pcb(//pid first, we have that as a global var updating with load
         Pid, IR, PC, Acc, Xreg, Yreg, Zflag, 
         //public isExecuting: boolean = false,
-        State, base, limit, turnaround, waitTime, priority) {
+        State, base, limit, turnaround, waitTime, priority, location) {
             if (Pid === void 0) { Pid = 0; }
             if (IR === void 0) { IR = "IR"; }
             if (PC === void 0) { PC = 0; }
@@ -20,6 +20,7 @@ var TSOS;
             if (turnaround === void 0) { turnaround = 0; }
             if (waitTime === void 0) { waitTime = 0; }
             if (priority === void 0) { priority = 99; }
+            if (location === void 0) { location = "Memory"; }
             this.Pid = Pid;
             this.IR = IR;
             this.PC = PC;
@@ -33,6 +34,7 @@ var TSOS;
             this.turnaround = turnaround;
             this.waitTime = waitTime;
             this.priority = priority;
+            this.location = location;
         }
         Pcb.prototype.init = function () {
             this.Pid = _currentPID;
@@ -49,6 +51,7 @@ var TSOS;
             this.turnaround = 0;
             this.waitTime = 0;
             this.priority = 99;
+            this.location = "Memory";
         };
         Pcb.prototype.storeNewVals = function () {
             /*_PID;

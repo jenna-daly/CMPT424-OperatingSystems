@@ -19,7 +19,8 @@ module TSOS {
           public limit: number = 0,
           public turnaround: number = 0,
           public waitTime: number = 0,
-          public priority: number = 99) {
+          public priority: number = 99,
+          public location: string = "Memory") {
 
         }
 
@@ -38,6 +39,7 @@ module TSOS {
         this.turnaround = 0;
         this.waitTime = 0;
         this.priority = 99;
+        this.location = "Memory";
       } 
 
       public storeNewVals(){

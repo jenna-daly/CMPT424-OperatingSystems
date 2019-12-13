@@ -190,13 +190,35 @@ module TSOS {
                                 var dataHex = this.convertToAscii(data);
                                 var dataBlock = JSON.parse(sessionStorage.getItem(newTSB));
                                 dataBlock.data = dataToAdd;
+                                //attempting to push data more than 60 characters to a new tsb
+                                // if(dataHex.length > this.disk.blocksize) {
+                                //     for(let i=0; i < this.disk.blocksize; i++) {
+                                //         dataBlock.data[i] = dataHex[i];
+                                //     }
+                                //     sessionStorage.setItem(newTSB, JSON.stringify(dataBlock));
+                                    
+                                //     var newdataHex = dataHex.slice(60, 120);
+                                //     console.log(newdataHex + "hex");
+                                //     var additionalBlock = JSON.parse(sessionStorage.getItem(this.findFreeBlock()));
+                                //     additionalBlock.inUse = "1";
+                                //     console.log(additionalBlock);
+                                //     for(let i=0; i<newdataHex.length; i++) {
+                                //         additionalBlock.data[i] = newdataHex[i];
+                                //     }
+                                //     sessionStorage.setItem(additionalBlock, JSON.stringify(additionalBlock));
+
+                                //     TSOS.Control.updateDisk();
+                                //     return;
+                                // }
+                                // else {
                                 for(let i=0; i<dataHex.length; i++) {
                                     dataBlock.data[i] = dataHex[i];
                                 }
+                                //}
                                 console.log("new tsb for data " + newTSB);
                                 sessionStorage.setItem(newTSB, JSON.stringify(dataBlock));
                                 TSOS.Control.updateDisk();
-                                // _StdOut.putText("Success");
+                                //_StdOut.putText("Success");
                                 return -1;
                             }
                         }

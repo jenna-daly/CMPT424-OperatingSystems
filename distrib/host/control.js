@@ -149,7 +149,7 @@ var TSOS;
             accessBlock.innerHTML = containPCB;*/
             for (var i = 0; i < _PCBStored.length; i++) {
                 //containPCB += "<td>" + _PCBStored[i] + "</td>" +
-                containPCB += "<td>" + _PCBStored[i].Pid + "</td><td>" + _PCBStored[i].State + "</td><td>" + _PCBStored[i].PC + "</td><td>" + _PCBStored[i].IR + "</td><td>" + _PCBStored[i].Acc + "</td><td>" + _PCBStored[i].Xreg + "</td><td>" + _PCBStored[i].Yreg + "</td><td>" + _PCBStored[i].Zflag + "</td></tr>";
+                containPCB += "<td>" + _PCBStored[i].Pid + "</td><td>" + _PCBStored[i].State + "</td><td>" + _PCBStored[i].PC + "</td><td>" + _PCBStored[i].IR + "</td><td>" + _PCBStored[i].Acc + "</td><td>" + _PCBStored[i].Xreg + "</td><td>" + _PCBStored[i].Yreg + "</td><td>" + _PCBStored[i].Zflag + "</td><td>" + _PCBStored[i].location + "</td></tr>";
                 //containPCB += "<td>" + runningProcess.Pid + "</td><td>" + runningProcess.State + "</td><td>" + runningProcess.PC + "</td><td>" + runningProcess.IR + "</td><td>" + runningProcess.Acc + "</td><td>" + runningProcess.Xreg + "</td><td>" + runningProcess.Yreg + "</td><td>" + runningProcess.Zflag + "</td></tr>";
             }
             accessBlock.innerHTML = containPCB;
